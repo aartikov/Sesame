@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Android Architecture</string>
+
+    <!-- Menu -->
+    <string name="counter_button">Counter</string>
+    <string name="profile_button">Profile</string>
+
+    <!-- Profile -->
+    <string name="retry_button">Retry</string>
+</resources>
