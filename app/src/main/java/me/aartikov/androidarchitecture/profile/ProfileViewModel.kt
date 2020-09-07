@@ -2,7 +2,9 @@ package me.aartikov.androidarchitecture.profile
 
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.viewModelScope
+import me.aartikov.androidarchitecture.Back
 import me.aartikov.androidarchitecture.base.BaseViewModel
+import me.aartikov.androidarchitecture.profile.domain.LogoutInteractor
 import me.aartikov.androidarchitecture.profile.domain.Profile
 import me.aartikov.lib.data_binding.computed
 import me.aartikov.lib.data_binding.stateFromFlow
@@ -12,7 +14,8 @@ import me.aartikov.lib.loading.simple.startIn
 import me.aartikov.lib.loading.simple.uiState
 
 class ProfileViewModel @ViewModelInject constructor(
-    private val profileLoading: Loading<Profile>
+    private val profileLoading: Loading<Profile>,
+    private val logoutInteractor: LogoutInteractor
 ) : BaseViewModel() {
 
     private val profileState by stateFromFlow(profileLoading.stateFlow)
@@ -33,5 +36,12 @@ class ProfileViewModel @ViewModelInject constructor(
 
     fun onRetryClicked() {
         profileLoading.refresh()
+    }
+
+    fun onLogoutClicked() {
+        launchWithErrorHandling {
+            logoutInteractor.execute()
+            navigate(Back)
+        }
     }
 }

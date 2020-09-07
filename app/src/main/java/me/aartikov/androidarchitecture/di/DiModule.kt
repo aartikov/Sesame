@@ -1,30 +1,40 @@
 package me.aartikov.androidarchitecture.di
 
-import android.content.Context
-import android.content.SharedPreferences
+import com.dropbox.android.external.store4.Fetcher
+import com.dropbox.android.external.store4.SourceOfTruth
+import com.dropbox.android.external.store4.Store
+import com.dropbox.android.external.store4.StoreBuilder
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ApplicationComponent
-import dagger.hilt.android.qualifiers.ApplicationContext
+import me.aartikov.androidarchitecture.base.StoreLoading
 import me.aartikov.androidarchitecture.profile.data.ProfileGateway
+import me.aartikov.androidarchitecture.profile.data.ProfileStorage
 import me.aartikov.androidarchitecture.profile.domain.Profile
 import me.aartikov.lib.loading.simple.Loading
-import me.aartikov.lib.loading.simple.OrdinaryLoading
-import javax.inject.Singleton
 
 @Module
 @InstallIn(ApplicationComponent::class)
 object DiModule {
 
-    @Singleton
     @Provides
-    fun provideSharedPreferences(@ApplicationContext context: Context): SharedPreferences {
-        return context.getSharedPreferences("prefs", Context.MODE_PRIVATE)
+    fun provideProfileStore(profileGateway: ProfileGateway, profileStorage: ProfileStorage): Store<Unit, Profile> {
+        return StoreBuilder
+            .from<Unit, Profile, Profile>(
+                fetcher = Fetcher.of { profileGateway.loadProfile() },
+                sourceOfTruth = SourceOfTruth.of(
+                    reader = { profileStorage.getProfile() },
+                    writer = { _, profile -> profileStorage.saveProfile(profile) },
+                    delete = { profileStorage.removeProfile() },
+                    deleteAll = { profileStorage.removeProfile() }
+                )
+            )
+            .build()
     }
 
     @Provides
-    fun provideProfileLoading(profileGateway: ProfileGateway): Loading<Profile> {
-        return OrdinaryLoading(profileGateway::loadProfile)
+    fun provideProfileLoading(profileStore: Store<Unit, Profile>): Loading<Profile> {
+        return StoreLoading(profileStore)
     }
 }

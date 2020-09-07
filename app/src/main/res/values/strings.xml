@@ -7,4 +7,5 @@
 
     <!-- Profile -->
     <string name="retry_button">Retry</string>
+    <string name="logout_button">Logout</string>
 </resources>

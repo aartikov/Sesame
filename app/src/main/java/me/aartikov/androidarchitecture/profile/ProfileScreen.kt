@@ -18,6 +18,7 @@ class ProfileScreen : BaseScreen<ProfileViewModel>(R.layout.screen_profile, Prof
 
         swipeRefresh.setOnRefreshListener { vm.onPullToRefresh() }
         retryButton.setOnClickListener { vm.onRetryClicked() }
+        logoutButton.setOnClickListener { vm.onLogoutClicked() }
 
         vm::profileUiState bind { state ->
             state.setToView(
