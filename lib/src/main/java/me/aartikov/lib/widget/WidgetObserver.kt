@@ -17,14 +17,19 @@ interface WidgetObserver : LifecycleOwner {
                 dialog = null
             }
 
-            displayed.collect {
-                if (it is DialogControl.Display.Displayed) {
-                    dialog = createDialog(it.data, this@bind)
-                    dialog?.setOnDismissListener { dismiss() }
-                    dialog?.show()
-                } else if (it is DialogControl.Display.Absent) {
-                    closeDialog()
+            try {
+                displayed.collect {
+                    if (it is DialogControl.Display.Displayed) {
+                        closeDialog()
+                        dialog = createDialog(it.data, this@bind)
+                        dialog?.setOnDismissListener { dismiss() }
+                        dialog?.show()
+                    } else if (it is DialogControl.Display.Absent) {
+                        closeDialog()
+                    }
                 }
+            } finally {
+                closeDialog()
             }
         }
     }
