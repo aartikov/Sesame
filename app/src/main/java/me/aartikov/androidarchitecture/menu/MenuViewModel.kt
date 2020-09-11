@@ -18,7 +18,7 @@ class MenuViewModel @ViewModelInject constructor() : BaseViewModel() {
         navigate(OpenProfileScreen)
     }
 
-    fun showDialog() {
+    fun onDialogButtonClicked() {
         dialog.show("Test show dialog")
     }
 }

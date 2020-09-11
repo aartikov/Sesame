@@ -1,11 +1,10 @@
 package me.aartikov.lib.widget.dialog_control
 
-import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 
 class DialogControl<T, R> {
 
-    val displayed = MutableStateFlow<Display>(Display.Absent)
+    internal val displayed = MutableStateFlow<Display<T>>(Display.Absent)
 
     fun show(data: T) {
         dismiss()
@@ -13,18 +12,17 @@ class DialogControl<T, R> {
     }
 
     fun dismiss() {
-        if (displayed.value is Display.Displayed<*>) {
+        if (displayed.value is Display.Displayed) {
             displayed.value = Display.Absent
-
         }
     }
 
-    sealed class Display {
-        data class Displayed<T>(val data: T) : Display()
-        object Absent : Display()
+    sealed class Display<out T> {
+        data class Displayed<T>(val data: T) : Display<T>()
+        object Absent : Display<Nothing>()
     }
 }
 
-fun<T, R> dialogControl(): DialogControl<T, R> {
+fun <T, R> dialogControl(): DialogControl<T, R> {
     return DialogControl()
 }
