@@ -5,10 +5,12 @@ import androidx.lifecycle.viewModelScope
 import me.aartikov.lib.data_binding.PropertyHost
 import me.aartikov.lib.data_binding.command
 import me.aartikov.lib.navigation.NavigationMessage
+import me.aartikov.lib.widget.WidgetHost
 
-open class BaseViewModel : ViewModel(), PropertyHost {
+open class BaseViewModel : ViewModel(), PropertyHost, WidgetHost {
 
     override val propertyHostScope get() = viewModelScope
+    override val widgetHostScope get() = viewModelScope
 
     val navigationMessages = command<NavigationMessage>()
     val showErrorCommand = command<String>()
