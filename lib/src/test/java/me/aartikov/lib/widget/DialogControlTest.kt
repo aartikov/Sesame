@@ -7,7 +7,6 @@ import kotlinx.coroutines.test.runBlockingTest
 import me.aartikov.lib.widget.dialog_control.DialogControl
 import me.aartikov.lib.widget.dialog_control.dialogControl
 import org.junit.Assert.assertEquals
-import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 
@@ -27,25 +26,25 @@ class DialogControlTest : ViewModel(), WidgetHost {
     }
 
     @Test
-    fun `displayed on show`() = runBlockingTest {
+    fun `show dialog`() = runBlockingTest {
         val job = launch {
-            dialogControl.showForResult(TEST_SHOW_DIALOG)
+            dialogControl.show(TEST_SHOW_DIALOG)
         }
 
-        assertTrue(dialogControl.displayed.value is DialogControl.Display.Displayed<*>)
+        assertEquals(dialogControl.data.value, TEST_SHOW_DIALOG)
 
         job.cancel()
     }
 
     @Test
-    fun `removed on result`() = runBlockingTest {
+    fun `show for result dialog`() = runBlockingTest {
         val job = launch {
             dialogControl.showForResult(TEST_SHOW_DIALOG)
         }
 
-        dialogControl.sendResult("Value")
+        assertEquals(dialogControl.data.value, TEST_SHOW_DIALOG)
 
-        assertTrue(dialogControl.displayed.value === DialogControl.Display.Absent)
+        job.cancel()
     }
 
     @Test
@@ -56,7 +55,22 @@ class DialogControlTest : ViewModel(), WidgetHost {
 
         dialogControl.dismiss()
 
-        assertTrue(dialogControl.displayed.value === DialogControl.Display.Absent)
+        assertEquals(dialogControl.data.value, null)
+
+        job.cancel()
+    }
+
+    @Test
+    fun `accept result`() = runBlockingTest {
+        var expected: String? = null
+
+        val job = launch {
+            expected = dialogControl.showForResult(TEST_SHOW_DIALOG)
+        }
+
+        dialogControl.sendResult("Value 1")
+
+        assertEquals(expected, "Value 1")
 
         job.cancel()
     }
