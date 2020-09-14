@@ -3,42 +3,32 @@ package me.aartikov.lib.widget.dialog_control
 import kotlinx.coroutines.channels.*
 import kotlinx.coroutines.flow.*
 
-class DialogControl<T, R> {
+class DialogControl<T: Any, R: Any> {
 
-    internal val displayed = MutableStateFlow<Display<T>>(Display.Absent)
-    private val result = Channel<R>(Channel.UNLIMITED)
+    internal val data = MutableStateFlow<T?>(null)
+    private val resultChannel = Channel<R?>(Channel.RENDEZVOUS)
 
     fun show(data: T) {
-        dismiss()
-        displayed.value = Display.Displayed(data)
+        this.data.value = data
     }
 
     suspend fun showForResult(data: T): R? {
 
-        dismiss()
+        this.data.value = data
 
-        displayed.value = Display.Displayed(data)
-
-        return result.receive()
+        return resultChannel.receive()
     }
 
     fun sendResult(result: R) {
-        this.result.offer(result)
-        dismiss()
+        this.resultChannel.offer(result)
     }
 
     fun dismiss() {
-        if (displayed.value is Display.Displayed) {
-            displayed.value = Display.Absent
-        }
-    }
-
-    sealed class Display<out T> {
-        data class Displayed<T>(val data: T) : Display<T>()
-        object Absent : Display<Nothing>()
+        data.value = null
+        resultChannel.offer(null)
     }
 }
 
-fun <T, R> dialogControl(): DialogControl<T, R> {
+fun <T: Any, R: Any> dialogControl(): DialogControl<T, R> {
     return DialogControl()
 }

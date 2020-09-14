@@ -8,7 +8,7 @@ import me.aartikov.lib.widget.dialog_control.DialogControl
 
 interface WidgetObserver : LifecycleOwner {
 
-    infix fun <T, R> DialogControl<T, R>.bind(createDialog: (data: T, dc: DialogControl<T, R>) -> Dialog) {
+    infix fun <T: Any, R: Any> DialogControl<T, R>.bind(createDialog: (data: T, dc: DialogControl<T, R>) -> Dialog) {
         lifecycleScope.launchWhenStarted {
             var dialog: Dialog? = null
             val closeDialog = {
@@ -18,13 +18,13 @@ interface WidgetObserver : LifecycleOwner {
             }
 
             try {
-                displayed.collect {
-                    if (it is DialogControl.Display.Displayed) {
+                data.collect {
+                    if (it != null) {
                         closeDialog()
-                        dialog = createDialog(it.data, this@bind)
+                        dialog = createDialog(it, this@bind)
                         dialog?.setOnDismissListener { dismiss() }
                         dialog?.show()
-                    } else if (it is DialogControl.Display.Absent) {
+                    } else {
                         closeDialog()
                     }
                 }
