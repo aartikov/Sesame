@@ -1,14 +1,30 @@
 package me.aartikov.lib.widget.dialog_control
 
-import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.channels.*
+import kotlinx.coroutines.flow.*
 
 class DialogControl<T, R> {
 
     internal val displayed = MutableStateFlow<Display<T>>(Display.Absent)
+    private val result = Channel<R>(Channel.UNLIMITED)
 
     fun show(data: T) {
         dismiss()
         displayed.value = Display.Displayed(data)
+    }
+
+    suspend fun showForResult(data: T): R? {
+
+        dismiss()
+
+        displayed.value = Display.Displayed(data)
+
+        return result.receive()
+    }
+
+    fun sendResult(result: R) {
+        this.result.offer(result)
+        dismiss()
     }
 
     fun dismiss() {
