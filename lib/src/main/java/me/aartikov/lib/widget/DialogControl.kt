@@ -1,4 +1,4 @@
-package me.aartikov.lib.widget.dialog_control
+package me.aartikov.lib.widget
 
 import kotlinx.coroutines.channels.*
 import kotlinx.coroutines.flow.*

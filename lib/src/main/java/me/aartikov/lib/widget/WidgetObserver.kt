@@ -4,7 +4,6 @@ import android.app.Dialog
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.flow.collect
-import me.aartikov.lib.widget.dialog_control.DialogControl
 
 interface WidgetObserver : LifecycleOwner {
 
