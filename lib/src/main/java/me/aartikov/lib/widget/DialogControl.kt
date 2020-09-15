@@ -13,9 +13,7 @@ class DialogControl<T: Any, R: Any> {
     }
 
     suspend fun showForResult(data: T): R? {
-
         this.data.value = data
-
         return resultChannel.receive()
     }
 

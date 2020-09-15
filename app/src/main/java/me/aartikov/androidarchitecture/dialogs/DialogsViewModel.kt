@@ -23,7 +23,7 @@ class DialogsViewModel : BaseViewModel() {
             if(result != null && result.isNotEmpty()) {
                 showMessage.send(result)
             } else {
-                showMessage.send("Result not found")
+                showMessage.send("Canceled")
             }
         }
     }

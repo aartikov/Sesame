@@ -23,7 +23,6 @@ class DialogsScreen : BaseScreen<DialogsViewModel>(R.layout.screen_dialogs, Dial
         vm.dialog bind { text, dc ->
             AlertDialog.Builder(requireContext())
                 .setTitle(text)
-                .setCancelable(false)
                 .setNegativeButton(R.string.cancel_button) { _, _ ->
                     dc.dismiss()
                 }
@@ -39,9 +38,8 @@ class DialogsScreen : BaseScreen<DialogsViewModel>(R.layout.screen_dialogs, Dial
 
             AlertDialog.Builder(context)
                 .setView(dialogView)
-                .setCancelable(false)
-                .setNegativeButton(R.string.cancel_button) { dialog, _ ->
-                    dialog.cancel()
+                .setNegativeButton(R.string.cancel_button) { _, _ ->
+                    dc.dismiss()
                 }
                 .setPositiveButton(R.string.send_button) { _, _ ->
                     dc.sendResult(dialogView.resultInput.text.toString())
