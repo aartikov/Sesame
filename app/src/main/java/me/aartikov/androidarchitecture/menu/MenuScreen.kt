@@ -2,6 +2,7 @@ package me.aartikov.androidarchitecture.menu
 
 import android.os.Bundle
 import android.view.View
+import androidx.appcompat.app.AlertDialog
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.screen_menu.*
 import me.aartikov.androidarchitecture.R
@@ -15,6 +16,7 @@ class MenuScreen : BaseScreen<MenuViewModel>(R.layout.screen_menu, MenuViewModel
 
         counterButton.setOnClickListener { vm.onCounterButtonClicked() }
         profileButton.setOnClickListener { vm.onProfileButtonClicked() }
+        dialogsButton.setOnClickListener { vm.onDialogsButtonClicked() }
     }
 }
 

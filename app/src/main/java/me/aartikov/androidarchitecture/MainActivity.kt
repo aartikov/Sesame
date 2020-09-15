@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import dagger.hilt.android.AndroidEntryPoint
 import me.aartikov.androidarchitecture.counter.CounterScreen
+import me.aartikov.androidarchitecture.dialogs.DialogsScreen
 import me.aartikov.androidarchitecture.menu.MenuScreen
 import me.aartikov.androidarchitecture.profile.ProfileScreen
 import me.aartikov.lib.navigation.NavigationMessage
@@ -30,6 +31,7 @@ class MainActivity : AppCompatActivity(), NavigationMessageHandler {
             is Back -> navigator.back()
             is OpenCounterScreen -> navigator.goTo(CounterScreen())
             is OpenProfileScreen -> navigator.goTo(ProfileScreen())
+            is OpenDialogsScreen -> navigator.goTo(DialogsScreen())
         }
         return true
     }
