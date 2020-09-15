@@ -4,11 +4,16 @@
     <!-- Menu -->
     <string name="counter_button">Counter</string>
     <string name="profile_button">Profile</string>
-    <string name="dialog_button">Show Dialog</string>
+    <string name="dialogs_button">Dialogs</string>
 
     <!-- Profile -->
     <string name="retry_button">Retry</string>
 
-    <!-- Dialog -->
+    <!-- Dialogs -->
+    <string name="send_button">Send</string>
     <string name="cancel_button">Cancel</string>
+    <string name="show_dialog_button_text">Show Dialog</string>
+    <string name="show_for_result_button_text">Show For Result</string>
+    <string name="show_for_result_title">Show for result</string>
+    <string name="enter_result">Enter your result </string>
 </resources>

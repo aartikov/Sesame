@@ -16,17 +16,7 @@ class MenuScreen : BaseScreen<MenuViewModel>(R.layout.screen_menu, MenuViewModel
 
         counterButton.setOnClickListener { vm.onCounterButtonClicked() }
         profileButton.setOnClickListener { vm.onProfileButtonClicked() }
-        dialogButton.setOnClickListener { vm.onDialogButtonClicked() }
-
-        vm.dialog bind { text, dc ->
-            AlertDialog.Builder(requireContext())
-                .setTitle(text)
-                .setCancelable(false)
-                .setNegativeButton(R.string.cancel_button) { _, _ ->
-                    dc.dismiss()
-                }
-                .create()
-        }
+        dialogsButton.setOnClickListener { vm.onDialogsButtonClicked() }
     }
 }
 

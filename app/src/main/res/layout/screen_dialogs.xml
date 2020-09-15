@@ -12,24 +12,18 @@
         android:orientation="vertical">
 
         <Button
-            android:id="@+id/counterButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/counter_button" />
-
-        <Button
-            android:id="@+id/profileButton"
+            android:id="@+id/showDialogButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="@string/profile_button" />
+            android:text="@string/show_dialog_button_text" />
 
         <Button
-            android:id="@+id/dialogsButton"
+            android:id="@+id/showForResultButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="@string/dialogs_button" />
+            android:text="@string/show_for_result_button_text" />
     </LinearLayout>
 
 </FrameLayout>
