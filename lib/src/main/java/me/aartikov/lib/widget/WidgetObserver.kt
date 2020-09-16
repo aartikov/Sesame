@@ -5,10 +5,12 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.flow.collect
 
-interface WidgetObserver : LifecycleOwner {
+interface WidgetObserver {
 
-    infix fun <T: Any, R: Any> DialogControl<T, R>.bind(createDialog: (data: T, dc: DialogControl<T, R>) -> Dialog) {
-        lifecycleScope.launchWhenStarted {
+    val widgetObserverLifecycleOwner: LifecycleOwner
+
+    infix fun <T : Any, R : Any> DialogControl<T, R>.bind(createDialog: (data: T, dc: DialogControl<T, R>) -> Dialog) {
+        widgetObserverLifecycleOwner.lifecycleScope.launchWhenStarted {
             var dialog: Dialog? = null
             val closeDialog = {
                 dialog?.setOnDismissListener(null)

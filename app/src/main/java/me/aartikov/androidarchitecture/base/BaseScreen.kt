@@ -6,6 +6,7 @@ import android.widget.Toast
 import androidx.annotation.LayoutRes
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.createViewModelLazy
+import androidx.lifecycle.LifecycleOwner
 import me.aartikov.lib.data_binding.PropertyObserver
 import me.aartikov.lib.navigation.FragmentNavigationMessageDispatcher
 import me.aartikov.lib.widget.WidgetObserver
@@ -16,9 +17,11 @@ open class BaseScreen<VM : BaseViewModel>(
     vmClass: KClass<VM>
 ) : Fragment(contentLayoutId), PropertyObserver, WidgetObserver {
 
-    private val navigationMessageDispatcher = FragmentNavigationMessageDispatcher(this)
-
+    override val propertyObserverLifecycleOwner: LifecycleOwner get() = viewLifecycleOwner
+    override val widgetObserverLifecycleOwner: LifecycleOwner get() = viewLifecycleOwner
     val vm: VM by createViewModelLazy(vmClass, { viewModelStore })
+
+    private val navigationMessageDispatcher = FragmentNavigationMessageDispatcher(this)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

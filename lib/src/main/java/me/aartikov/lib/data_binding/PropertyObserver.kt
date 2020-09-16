@@ -6,10 +6,12 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collect
 import kotlin.reflect.KProperty0
 
-interface PropertyObserver : LifecycleOwner {
+interface PropertyObserver {
+
+    val propertyObserverLifecycleOwner: LifecycleOwner
 
     infix fun <T> StateFlow<T>.bind(consumer: (T) -> Unit) {
-        lifecycleScope.launchWhenStarted {
+        propertyObserverLifecycleOwner.lifecycleScope.launchWhenStarted {
             this@bind.collect {
                 consumer(it)
             }
@@ -21,7 +23,7 @@ interface PropertyObserver : LifecycleOwner {
     }
 
     infix fun <T> Command<T>.bind(consumer: (T) -> Unit) {
-        lifecycleScope.launchWhenStarted {
+        propertyObserverLifecycleOwner.lifecycleScope.launchWhenStarted {
             while (true) {
                 consumer(this@bind.receive())
             }
