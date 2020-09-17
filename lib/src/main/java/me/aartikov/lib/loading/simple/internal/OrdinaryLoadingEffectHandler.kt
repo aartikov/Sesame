@@ -3,6 +3,7 @@ package me.aartikov.lib.loading.simple.internal
 import me.aartikov.lib.state_machine.EffectHandler
 import me.aartikov.lib.loading.simple.OrdinaryLoader
 import me.aartikov.lib.loading.simple.dataIsEmpty
+import java.util.concurrent.CancellationException
 
 internal class OrdinaryLoadingEffectHandler<T : Any>(private val loader: OrdinaryLoader<T>) :
     EffectHandler<Effect, Action<T>> {
@@ -24,7 +25,9 @@ internal class OrdinaryLoadingEffectHandler<T : Any>(private val loader: Ordinar
                 actionConsumer(Action.FreshData(data))
             }
         } catch (e: Exception) {
-            actionConsumer(Action.LoadingError(e))
+            if (e !is CancellationException) {
+                actionConsumer(Action.LoadingError(e))
+            }
         }
     }
 }
