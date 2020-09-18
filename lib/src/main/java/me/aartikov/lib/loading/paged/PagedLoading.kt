@@ -20,9 +20,8 @@ interface PagedLoading<T : Any> {
         data class EmptyError(val throwable: Throwable) : State<Nothing>()
         data class Data<T>(val pageCount: Int, val data: List<T>) : State<T>()
         data class Refresh<T>(val pageCount: Int, val data: List<T>) : State<T>()
-        data class NewPageLoading<T>(val pageCount: Int, val data: List<T>) : State<T>()
+        data class LoadingMore<T>(val pageCount: Int, val data: List<T>) : State<T>()
         data class FullData<T>(val pageCount: Int, val data: List<T>) : State<T>()
-
     }
 
     sealed class Event {
