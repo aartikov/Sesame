@@ -163,7 +163,15 @@ class PagedLoadingTest {
 
     @Test
     fun `loads next page`() = runBlockingTest {
-        val loader = TestLoader(Result.Success(listOf("Value3", "Value4")))
+        val loader = TestLoader(
+            firstPageResult = Result.Success(listOf("Anything")),
+            nextPageResult = { pagingInfo ->
+                val pageSize = 2
+                val itemIndex1 = pageSize * pagingInfo.loadedPageCount + 1
+                val itemIndex2 = itemIndex1 + 1
+                Result.Success(listOf("Value$itemIndex1", "Value$itemIndex2"))
+            }
+        )
         val loading = PagedLoading(loader, initialState = State.Data(1, listOf("Value1", "Value2")))
 
         val job = loading.startIn(this)
@@ -176,7 +184,10 @@ class PagedLoadingTest {
 
     @Test
     fun `shows error when loading more failed`() = runBlockingTest {
-        val loader = TestLoader(Result.Error(LoadingFailedException()))
+        val loader = TestLoader(
+            firstPageResult = Result.Success(listOf("Anything")),
+            nextPageResult = { Result.Error(LoadingFailedException()) }
+        )
         val loading = PagedLoading(loader, initialState = State.Data(1, listOf("Value1", "Value2")))
         val events = mutableListOf<Event>()
 
@@ -195,7 +206,10 @@ class PagedLoadingTest {
 
     @Test
     fun `stop paging when end of data is reached`() = runBlockingTest {
-        val loader = TestLoader(Result.Success(emptyList()))
+        val loader = TestLoader(
+            firstPageResult = Result.Success(listOf("Anything")),
+            nextPageResult = { Result.Success(emptyList()) }
+        )
         val loading = PagedLoading(loader, initialState = State.Data(2, listOf("Value1", "Value2", "Value3")))
 
         val job = loading.startIn(this)
@@ -211,7 +225,7 @@ class PagedLoadingTest {
     fun `cancel loading more when refresh called`() = runBlockingTest {
         val loader = TestLoader(
             firstPageResult = Result.Success(listOf("Value1", "Value2")),
-            nextPageResult = Result.Success(listOf("Value3", "Value4"))
+            nextPageResult = { Result.Success(listOf("Value3", "Value4")) }
         )
         val loading = PagedLoading(loader, initialState = State.Data(1, listOf("Previous value1", "Previous value2")))
 
@@ -227,7 +241,7 @@ class PagedLoadingTest {
 
     private class TestLoader(
         private val firstPageResult: Result,
-        private val nextPageResult: Result = firstPageResult
+        private val nextPageResult: (PagingInfo<String>) -> Result = { Result.Success(emptyList()) }
     ) : PagedLoader<String> {
         companion object {
             const val LOAD_DELAY: Long = 100
@@ -252,7 +266,7 @@ class PagedLoadingTest {
 
         override suspend fun loadNextPage(pagingInfo: PagingInfo<String>): List<String> {
             loadNextPageCallCount++
-            return load(nextPageResult, true)
+            return load(nextPageResult(pagingInfo), true)
         }
 
         private suspend fun load(result: Result, fresh: Boolean): List<String> {
