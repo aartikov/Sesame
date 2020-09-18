@@ -25,7 +25,7 @@ interface PagedLoading<T : Any> {
     }
 
     sealed class Event {
-        class Error(val throwable: Throwable, val hasData: Boolean) : Event()
+        data class Error(val throwable: Throwable, val hasData: Boolean) : Event()
     }
 
     val stateFlow: StateFlow<State<T>>

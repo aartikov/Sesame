@@ -4,7 +4,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runBlockingTest
-import me.aartikov.lib.loading.SimpleLoadingTest.TestLoader.Result
+import me.aartikov.lib.loading.OrdinaryLoadingTest.TestLoader.Result
 import me.aartikov.lib.loading.simple.Loading.Event
 import me.aartikov.lib.loading.simple.Loading.State
 import me.aartikov.lib.loading.simple.OrdinaryLoader
@@ -12,11 +12,9 @@ import me.aartikov.lib.loading.simple.OrdinaryLoading
 import me.aartikov.lib.loading.simple.startIn
 import me.aartikov.lib.loading.simple.state
 import org.junit.Assert.assertEquals
-import org.junit.Assert.assertTrue
 import org.junit.Test
-import java.io.IOException
 
-class SimpleLoadingTest {
+class OrdinaryLoadingTest {
 
     @Test
     fun `is initially empty`() {
@@ -39,6 +37,18 @@ class SimpleLoadingTest {
     }
 
     @Test
+    fun `is empty when loaded data is empty`() = runBlockingTest {
+        val loader = suspend { emptyList<String>() }
+        val loading = OrdinaryLoading(loader)
+
+        val job = loading.startIn(this)
+        delay(TestLoader.LOAD_DELAY * 2)
+
+        assertEquals(State.Empty, loading.state)
+        job.cancel()
+    }
+
+    @Test
     fun `shows data when it is loaded`() = runBlockingTest {
         val loader = TestLoader(Result.Success("Value"))
         val loading = OrdinaryLoading(loader)
@@ -52,7 +62,7 @@ class SimpleLoadingTest {
 
     @Test
     fun `shows error when loader failed`() = runBlockingTest {
-        val loader = TestLoader(Result.Error(IOException("Failed")))
+        val loader = TestLoader(Result.Error(LoadingFailedException()))
         val loading = OrdinaryLoading(loader)
         val events = mutableListOf<Event>()
 
@@ -62,10 +72,8 @@ class SimpleLoadingTest {
         val job = loading.startIn(this)
         delay(TestLoader.LOAD_DELAY * 2)
 
-        assertTrue("state must be Error", loading.state is State.EmptyError)
-        assertEquals(1, events.size)
-        val event = events[0]
-        assertTrue("event must be Error(hasData = false)", event is Event.Error && !event.hasData)
+        assertEquals(State.EmptyError(LoadingFailedException()), loading.state)
+        assertEquals(listOf(Event.Error(LoadingFailedException(), hasData = false)), events)
         job.cancel()
         eventsJob.cancel()
     }
@@ -97,7 +105,7 @@ class SimpleLoadingTest {
 
     @Test
     fun `leaves previous data and shows error when refresh failed`() = runBlockingTest {
-        val loader = TestLoader(Result.Error(IOException("Failed")))
+        val loader = TestLoader(Result.Error(LoadingFailedException()))
         val loading = OrdinaryLoading(loader, initialState = State.Data("Previous value"))
         val events = mutableListOf<Event>()
 
@@ -109,9 +117,7 @@ class SimpleLoadingTest {
         delay(TestLoader.LOAD_DELAY * 2)
 
         assertEquals(State.Data("Previous value"), loading.state)
-        assertEquals(1, events.size)
-        val event = events[0]
-        assertTrue("event must be Error(hasData = true)", event is Event.Error && event.hasData)
+        assertEquals(listOf(Event.Error(LoadingFailedException(), hasData = true)), events)
         job.cancel()
         eventsJob.cancel()
     }
@@ -126,18 +132,6 @@ class SimpleLoadingTest {
         loading.refresh()
 
         assertEquals(1, loader.callCount)
-        job.cancel()
-    }
-
-    @Test
-    fun `is empty when loaded data is empty`() = runBlockingTest {
-        val loader = suspend { emptyList<String>() }
-        val loading = OrdinaryLoading(loader)
-
-        val job = loading.startIn(this)
-        delay(TestLoader.LOAD_DELAY * 2)
-
-        assertEquals(State.Empty, loading.state)
         job.cancel()
     }
 
