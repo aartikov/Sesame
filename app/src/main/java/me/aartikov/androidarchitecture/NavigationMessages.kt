@@ -6,3 +6,4 @@ object Back : NavigationMessage
 object OpenCounterScreen : NavigationMessage
 object OpenProfileScreen : NavigationMessage
 object OpenDialogsScreen : NavigationMessage
+object OpenListScreen : NavigationMessage
