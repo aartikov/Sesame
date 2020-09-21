@@ -11,6 +11,7 @@ class MovieItem(private val movie: Movie) : Item() {
     override fun getLayout() = R.layout.item_movie
 
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
+        viewHolder.id.text = movie.id.toString()
         viewHolder.title.text = movie.title
         viewHolder.overview.text = movie.overview
     }

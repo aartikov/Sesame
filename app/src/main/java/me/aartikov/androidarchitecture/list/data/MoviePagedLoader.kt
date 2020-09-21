@@ -16,9 +16,8 @@ class MoviePagedLoader @Inject constructor(private val service: MovieService) : 
         return service.getMovies(0)
     }
 
-
     override suspend fun loadNextPage(pagingInfo: PagingInfo<Movie>): List<Movie> {
-        Log.d("MovieLoader", "loadNextPage() invoked")
-        return service.getMovies(pagingInfo.loadedPageCount / 10)
+        Log.d("MovieLoader", "loadNextPage() invoked, pagingInfo = $pagingInfo")
+        return service.getMovies(pagingInfo.loadedPageCount)
     }
 }
