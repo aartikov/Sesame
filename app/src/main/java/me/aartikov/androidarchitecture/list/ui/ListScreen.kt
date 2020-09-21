@@ -30,9 +30,7 @@ class ListScreen : BaseScreen<ListViewModel>(R.layout.screen_list, ListViewModel
             state.setToView(
                 setData = adapter::setItems,
                 setDataVisible = itemsList::isVisible::set,
-                setError = {
-
-                },
+                setError = { listErrorMessage.text = it.message },
                 setErrorVisible = {
 
                 },
@@ -55,6 +53,9 @@ class ListScreen : BaseScreen<ListViewModel>(R.layout.screen_list, ListViewModel
 
                 }
             )
+
+            // Мб стоило разделить ошибки в начале и ошибки при дозагрузке данных? Тоже самое с дозагрузкой.
+            // Типо setEmptyLoadingVisible и setProgressLoadingVisible
 
 
         }
