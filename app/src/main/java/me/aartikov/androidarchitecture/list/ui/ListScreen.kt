@@ -1,24 +1,25 @@
 package me.aartikov.androidarchitecture.list.ui
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.hannesdorfmann.adapterdelegates4.ListDelegationAdapter
+import com.xwray.groupie.GroupAdapter
+import com.xwray.groupie.GroupieViewHolder
+import com.xwray.groupie.Section
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.screen_list.*
-import kotlinx.android.synthetic.main.screen_profile.*
 import me.aartikov.androidarchitecture.R
 import me.aartikov.androidarchitecture.base.BaseScreen
-import me.aartikov.androidarchitecture.profile.ProfileViewModel
 import me.aartikov.lib.loading.paged.setToView
 
 @AndroidEntryPoint
 class ListScreen : BaseScreen<ListViewModel>(R.layout.screen_list, ListViewModel::class) {
 
-    private val adapter = ListDelegationAdapter(
-        movieAdapterDelegate()
-    )
+    private val adapter = GroupAdapter<GroupieViewHolder>()
+    private val section = Section()
+    private val loadingFooter = LoadingItem()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -26,38 +27,43 @@ class ListScreen : BaseScreen<ListViewModel>(R.layout.screen_list, ListViewModel
         itemsList.adapter = adapter
         itemsList.layoutManager = LinearLayoutManager(requireContext())
 
+        listSwipeRefresh.setOnRefreshListener { vm.onPullToRefresh() }
+
+
+        Log.d("ListScreen", "state = ${vm.moviesUiState}")
         vm::moviesUiState bind { state ->
             state.setToView(
-                setData = adapter::setItems,
+                setData = {
+                    section.addAll(it.toGroupieItems())
+                    adapter.add(section)
+                },
                 setDataVisible = itemsList::isVisible::set,
                 setError = { listErrorMessage.text = it.message },
-                setErrorVisible = {
-
-                },
+                setErrorVisible = listErrorView::isVisible::set,
                 setEmptyVisible = {
+                    // Нужен ли вообще здесь этот обработчик?
 
                 },
-                setLoadingVisible = {
-
+                setLoadingVisible = listLoadingView::isVisible::set,
+                setRefreshVisible = listSwipeRefresh::setRefreshing,
+                setRefreshEnabled = listSwipeRefresh::setEnabled,
+                setLoadMoreVisible = { visible ->
+                    if (visible)
+                        section.setFooter(loadingFooter)
+                    else
+                        section.removeFooter()
                 },
-                setRefreshVisible = {
-
-                },
-                setRefreshEnabled = {
-
-                },
-                setLoadMoreVisible = {
-
-                },
-                setLoadMoreEnabled = {
-
+                setLoadMoreEnabled = { enabled ->
+                    if (enabled) {
+                        /*
+                    * Когда loadMoreEnabled == false (то есть в состоянии Refresh, LoadingMore, FullData)
+                    * дергать не надо.
+                    Вернее, это можно делать и ничего плохого не случится, н
+                    * о ты будешь с большой частотой закидывать в стейтмашину бесполезные экшены
+                    * */
+                    }
                 }
             )
-
-            // Мб стоило разделить ошибки в начале и ошибки при дозагрузке данных? Тоже самое с дозагрузкой.
-            // Типо setEmptyLoadingVisible и setProgressLoadingVisible
-
-
         }
 
     }
