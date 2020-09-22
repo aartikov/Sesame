@@ -9,9 +9,13 @@ import javax.inject.Singleton
 
 @Singleton
 class MovieService @Inject constructor() {
+
     suspend fun getMovies(page: Int): List<Movie> = withContext(Dispatchers.IO) {
         delay(1000L)
-        generateMovies(page)
+        if ((page + 1) % 3 != 0)
+            generateMovies(page)
+        else
+            throw RuntimeException("No internet connection")
     }
 
     private fun generateMovies(page: Int): List<Movie> =

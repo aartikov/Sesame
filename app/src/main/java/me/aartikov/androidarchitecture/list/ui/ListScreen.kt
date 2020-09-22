@@ -1,6 +1,7 @@
 package me.aartikov.androidarchitecture.list.ui
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -32,7 +33,8 @@ class ListScreen : BaseScreen<ListViewModel>(R.layout.screen_list, ListViewModel
             state.setToView(
                 setData = { movies ->
                     // TODO: properly add section
-                    adapter.updateAsync(movies.toGroupieItems())
+                    //adapter.updateAsync(movies.toGroupieItems())
+                    section.update(movies.toGroupieItems())
                 },
                 setDataVisible = itemsList::isVisible::set,
                 setError = { listErrorMessage.text = it.message },
@@ -42,10 +44,12 @@ class ListScreen : BaseScreen<ListViewModel>(R.layout.screen_list, ListViewModel
                 setRefreshEnabled = listSwipeRefresh::setEnabled,
                 setLoadMoreVisible = { visible ->
                     // TODO : add proper footer
-                    if (visible)
-                        section.setFooter(loadingFooter)
-                    else
+                    Log.d("MovieLoader", "setLoadMoreVisible = $visible")
+                    if (visible) {
+                        section.setFooter(LoadingItem())
+                    } else {
                         section.removeFooter()
+                    }
                 }
             )
         }

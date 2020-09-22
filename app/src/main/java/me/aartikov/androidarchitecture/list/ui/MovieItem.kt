@@ -11,13 +11,13 @@ class MovieItem(private val movie: Movie) : Item() {
 
     override fun getLayout() = R.layout.item_movie
 
+    override fun getId() = movie.id.toLong()
+
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
         viewHolder.id.text = movie.id.toString()
         viewHolder.title.text = movie.title
         viewHolder.overview.text = movie.overview
     }
-
-    override fun getId(): Long = movie.id.toLong()
 }
 
 fun List<Movie>.toGroupieItems() : List<MovieItem>
