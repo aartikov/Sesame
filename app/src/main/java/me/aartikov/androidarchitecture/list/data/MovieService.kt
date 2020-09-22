@@ -7,17 +7,26 @@ import me.aartikov.androidarchitecture.list.domain.Movie
 import javax.inject.Inject
 import javax.inject.Singleton
 
+
 @Singleton
 class MovieService @Inject constructor() {
 
+    companion object {
+        private const val PAGES_VOLUME = 20
+        private const val DELAY_MS = 2000L
+    }
+
+    private var counter = 0
+
     suspend fun getMovies(page: Int): List<Movie> = withContext(Dispatchers.IO) {
-        delay(1000L)
-        if ((page + 1) % 3 != 0)
+        delay(DELAY_MS)
+        val success = counter++ % 2 == 0
+        if (success)
             generateMovies(page)
         else
             throw RuntimeException("No internet connection")
     }
 
     private fun generateMovies(page: Int): List<Movie> =
-        (page*10 until (page + 1)*10).map { Movie(id = it) }
+        (page*PAGES_VOLUME until (page + 1)*PAGES_VOLUME).map { Movie(id = it) }
 }

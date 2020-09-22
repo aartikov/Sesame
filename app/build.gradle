@@ -49,8 +49,6 @@ dependencies {
     implementation 'androidx.fragment:fragment-ktx:1.2.5'
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
 
-    implementation 'com.hannesdorfmann:adapterdelegates4-kotlin-dsl-layoutcontainer:4.3.0'
-
     def groupieVersion = "2.8.1"
     implementation "com.xwray:groupie:$groupieVersion"
     implementation "com.xwray:groupie-kotlin-android-extensions:$groupieVersion"

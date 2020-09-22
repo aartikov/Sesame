@@ -15,13 +15,12 @@ import me.aartikov.androidarchitecture.base.BaseScreen
 import me.aartikov.androidarchitecture.list.utils.doAfterScrollToEnd
 import me.aartikov.lib.loading.paged.setToView
 
+
 @AndroidEntryPoint
 class ListScreen : BaseScreen<ListViewModel>(R.layout.screen_list, ListViewModel::class) {
 
-    private val adapter = GroupAdapter<GroupieViewHolder>()
-    private val section = Section()
-    private val loadingFooter = LoadingItem()
-    private val layoutManager by lazy { LinearLayoutManager(requireContext()) }
+    private val movieAdapter = GroupAdapter<GroupieViewHolder>()
+    private val listSection = Section()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -32,9 +31,8 @@ class ListScreen : BaseScreen<ListViewModel>(R.layout.screen_list, ListViewModel
         vm::moviesUiState bind { state ->
             state.setToView(
                 setData = { movies ->
-                    // TODO: properly add section
-                    //adapter.updateAsync(movies.toGroupieItems())
-                    section.update(movies.toGroupieItems())
+                    // TODO: calculate list diffs asynchronously (movieAdapter..updateAsync()
+                    listSection.update(movies.toGroupieItems())
                 },
                 setDataVisible = itemsList::isVisible::set,
                 setError = { listErrorMessage.text = it.message },
@@ -43,22 +41,25 @@ class ListScreen : BaseScreen<ListViewModel>(R.layout.screen_list, ListViewModel
                 setRefreshVisible = listSwipeRefresh::setRefreshing,
                 setRefreshEnabled = listSwipeRefresh::setEnabled,
                 setLoadMoreVisible = { visible ->
-                    // TODO : add proper footer
-                    Log.d("MovieLoader", "setLoadMoreVisible = $visible")
                     if (visible) {
-                        section.setFooter(LoadingItem())
+                        listSection.setFooter(LoadingItem())
                     } else {
-                        section.removeFooter()
+                        listSection.removeFooter()
                     }
-                }
+                },
+                setLoadMoreEnabled = { }
             )
         }
     }
 
     private fun initRecyclerView() {
-        adapter.add(section)
-        itemsList.adapter = adapter
-        itemsList.layoutManager = layoutManager
-        itemsList.doAfterScrollToEnd(layoutManager) { vm.onLoadMore() }
+        movieAdapter.add(listSection)
+        with(itemsList) {
+            adapter = movieAdapter
+            layoutManager = LinearLayoutManager(requireContext())
+            doAfterScrollToEnd {
+                vm.onLoadMore()
+            }
+        }
     }
 }

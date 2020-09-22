@@ -11,6 +11,7 @@ import me.aartikov.lib.loading.paged.handleErrors
 import me.aartikov.lib.loading.paged.startIn
 import me.aartikov.lib.loading.paged.uiState
 
+
 class ListViewModel @ViewModelInject constructor(
     private val moviesLoading: PagedLoading<Movie>
 ) : BaseViewModel() {
@@ -26,13 +27,10 @@ class ListViewModel @ViewModelInject constructor(
         moviesLoading.startIn(viewModelScope)
     }
 
-
     fun onPullToRefresh() = moviesLoading.refresh()
 
     fun onLoadMore() {
         if (moviesUiState.loadMoreEnabled)
             moviesLoading.loadMore()
     }
-
-
 }
