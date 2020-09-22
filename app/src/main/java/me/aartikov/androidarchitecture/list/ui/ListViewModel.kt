@@ -16,7 +16,7 @@ class ListViewModel @ViewModelInject constructor(
 ) : BaseViewModel() {
 
     private val moviesState by stateFromFlow(moviesLoading.stateFlow)
-    val moviesUiState by computed(::moviesState) { it.uiState }
+    val moviesUiState = moviesState.uiState
 
     init {
         moviesLoading.handleErrors(viewModelScope) {error ->
@@ -29,7 +29,10 @@ class ListViewModel @ViewModelInject constructor(
 
     fun onPullToRefresh() = moviesLoading.refresh()
 
-    fun onLoadMore() = moviesLoading.loadMore()
+    fun onLoadMore() {
+        if (moviesUiState.loadMoreEnabled)
+            moviesLoading.loadMore()
+    }
 
 
 }

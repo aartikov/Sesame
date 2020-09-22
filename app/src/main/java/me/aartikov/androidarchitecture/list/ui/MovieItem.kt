@@ -1,5 +1,6 @@
 package me.aartikov.androidarchitecture.list.ui
 
+import android.util.Log
 import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
 import com.xwray.groupie.kotlinandroidextensions.Item
 import kotlinx.android.synthetic.main.item_movie.*
@@ -16,6 +17,7 @@ class MovieItem(private val movie: Movie) : Item() {
         viewHolder.overview.text = movie.overview
     }
 
+    override fun getId(): Long = movie.id.toLong()
 }
 
 fun List<Movie>.toGroupieItems() : List<MovieItem>
