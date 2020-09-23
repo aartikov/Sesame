@@ -3,11 +3,15 @@ package me.aartikov.androidarchitecture.movies.ui
 import android.os.Bundle
 import android.view.View
 import androidx.core.view.isVisible
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import com.xwray.groupie.Section
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.android.synthetic.main.layout_empty_view.*
+import kotlinx.android.synthetic.main.layout_error_view.*
+import kotlinx.android.synthetic.main.layout_loading_view.*
 import kotlinx.android.synthetic.main.screen_movies.*
 import me.aartikov.androidarchitecture.R
 import me.aartikov.androidarchitecture.base.BaseScreen
@@ -34,10 +38,7 @@ class MoviesScreen : BaseScreen<MoviesViewModel>(R.layout.screen_movies, MoviesV
                     // TODO: calculate list diffs asynchronously (movieAdapter..updateAsync()
                     listSection.update(movies.toGroupieItems())
                 },
-                setEmptyVisible = { visible ->
-                    emptyPlaceholder.isVisible = visible
-                    retryButton.isVisible = visible
-                },
+                setEmptyVisible = emptyPlaceholder::isVisible::set,
                 setDataVisible = list::isVisible::set,
                 setError = { errorMessage.text = it.message },
                 setErrorVisible = errorView::isVisible::set,
@@ -58,8 +59,9 @@ class MoviesScreen : BaseScreen<MoviesViewModel>(R.layout.screen_movies, MoviesV
     private fun initRecyclerView() {
         movieAdapter.add(listSection)
         with(list) {
-            adapter = movieAdapter
             layoutManager = LinearLayoutManager(requireContext())
+            adapter = movieAdapter
+            addItemDecoration(DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL))
             doAfterScrollToEnd {
                 vm.onLoadMore()
             }
