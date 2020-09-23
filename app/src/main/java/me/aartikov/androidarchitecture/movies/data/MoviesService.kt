@@ -16,16 +16,15 @@ class MoviesService @Inject constructor() {
         private const val DELAY_MS = 2000L
     }
 
-    private var counter = -1
+    private var counter = 0
 
     suspend fun getMovies(page: Int): List<Movie> = withContext(Dispatchers.IO) {
         delay(DELAY_MS)
-        counter++
-        when {
-            counter % 2 == 0 -> generateMovies(page)
-            counter % 5 == 0 -> emptyList()
-            else -> throw RuntimeException("No internet connection")
-        }
+        val success = counter++ % 2 == 0
+        if (success)
+            generateMovies(page)
+        else
+            throw RuntimeException("No internet connection")
     }
 
     private fun generateMovies(page: Int): List<Movie> =
