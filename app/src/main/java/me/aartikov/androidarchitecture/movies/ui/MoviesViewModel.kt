@@ -9,7 +9,7 @@ import me.aartikov.lib.data_binding.stateFromFlow
 import me.aartikov.lib.loading.paged.PagedLoading
 import me.aartikov.lib.loading.paged.handleErrors
 import me.aartikov.lib.loading.paged.startIn
-import me.aartikov.lib.loading.paged.uiState
+import me.aartikov.lib.loading.paged.toUiState
 
 
 class MoviesViewModel @ViewModelInject constructor(
@@ -17,7 +17,7 @@ class MoviesViewModel @ViewModelInject constructor(
 ) : BaseViewModel() {
 
     private val moviesState by stateFromFlow(moviesLoading.stateFlow)
-    val moviesUiState by computed(::moviesState) { it.uiState }
+    val moviesUiState by computed(::moviesState) { it.toUiState() }
 
     init {
         moviesLoading.handleErrors(viewModelScope) {error ->

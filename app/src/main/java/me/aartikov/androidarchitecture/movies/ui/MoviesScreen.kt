@@ -34,17 +34,13 @@ class MoviesScreen : BaseScreen<MoviesViewModel>(R.layout.screen_movies, MoviesV
 
         vm::moviesUiState bind { state ->
             state.setToView(
-                setData = { movies ->
-                    // TODO: calculate list diffs asynchronously (movieAdapter..updateAsync()
-                    listSection.update(movies.toGroupieItems())
-                },
+                setData = { listSection.update(it.toGroupieItems()) },
+                setDataVisible = swipeRefresh::isVisible::set,
                 setEmptyVisible = emptyPlaceholder::isVisible::set,
-                setDataVisible = moviesList::isVisible::set,
                 setError = { errorMessage.text = it.message },
                 setErrorVisible = errorView::isVisible::set,
-                setLoadingVisible = loadingView::isVisible::set,
                 setRefreshVisible = swipeRefresh::setRefreshing,
-                setRefreshEnabled = swipeRefresh::setEnabled,
+                setLoadingVisible = loadingView::isVisible::set,
                 setLoadMoreVisible = { visible ->
                     val item = LoadingItem()
                     if (visible)

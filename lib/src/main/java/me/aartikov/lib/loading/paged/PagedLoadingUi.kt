@@ -45,6 +45,7 @@ fun <D, E> PagedLoadingUiState<D, E>.setToView(
     setError: (E) -> Unit = {},
     setErrorVisible: (Boolean) -> Unit = {},
     setEmptyVisible: (Boolean) -> Unit = {},
+    setRefreshVisible: (Boolean) -> Unit = {},
     setLoadingVisible: (Boolean) -> Unit = {},
     setLoadMoreVisible: (Boolean) -> Unit = {},
     setLoadMoreEnabled: (Boolean) -> Unit = {}
@@ -61,6 +62,7 @@ fun <D, E> PagedLoadingUiState<D, E>.setToView(
 
     setEmptyVisible(emptyVisible)
     setLoadingVisible(loadingVisible)
+    setRefreshVisible(refreshVisible)
     setLoadMoreVisible(loadMoreVisible)
     setLoadMoreEnabled(loadMoreEnabled)
 }
