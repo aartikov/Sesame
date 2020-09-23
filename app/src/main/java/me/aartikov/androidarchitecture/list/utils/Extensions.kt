@@ -14,6 +14,6 @@ fun RecyclerView.doAfterScrollToEnd(difference: Int = 10, onLoadMore: () -> Unit
                 (recyclerView.layoutManager as LinearLayoutManager).findLastVisibleItemPosition()
 
             if (dy > 0 && totalItemCount - lastVisibleItem < difference)
-                onLoadMore()
+                recyclerView.post { onLoadMore() }
         }
     })

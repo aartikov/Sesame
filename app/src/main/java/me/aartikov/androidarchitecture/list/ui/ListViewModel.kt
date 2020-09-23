@@ -29,6 +29,8 @@ class ListViewModel @ViewModelInject constructor(
 
     fun onPullToRefresh() = moviesLoading.refresh()
 
+    fun onRetryClicked() = moviesLoading.refresh()
+
     fun onLoadMore() {
         if (moviesUiState.loadMoreEnabled)
             moviesLoading.loadMore()

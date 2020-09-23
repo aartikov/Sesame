@@ -1,7 +1,6 @@
 package me.aartikov.androidarchitecture.list.ui
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -27,6 +26,7 @@ class ListScreen : BaseScreen<ListViewModel>(R.layout.screen_list, ListViewModel
 
         initRecyclerView()
         listSwipeRefresh.setOnRefreshListener { vm.onPullToRefresh() }
+        listRetryButton.setOnClickListener { vm.onRetryClicked() }
 
         vm::moviesUiState bind { state ->
             state.setToView(
