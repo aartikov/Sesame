@@ -39,7 +39,7 @@ class MoviesScreen : BaseScreen<MoviesViewModel>(R.layout.screen_movies, MoviesV
                     listSection.update(movies.toGroupieItems())
                 },
                 setEmptyVisible = emptyPlaceholder::isVisible::set,
-                setDataVisible = list::isVisible::set,
+                setDataVisible = moviesList::isVisible::set,
                 setError = { errorMessage.text = it.message },
                 setErrorVisible = errorView::isVisible::set,
                 setLoadingVisible = loadingView::isVisible::set,
@@ -58,7 +58,7 @@ class MoviesScreen : BaseScreen<MoviesViewModel>(R.layout.screen_movies, MoviesV
 
     private fun initRecyclerView() {
         movieAdapter.add(listSection)
-        with(list) {
+        with(moviesList) {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = movieAdapter
             addItemDecoration(DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL))
