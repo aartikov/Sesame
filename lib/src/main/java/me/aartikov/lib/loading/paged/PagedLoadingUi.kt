@@ -9,7 +9,6 @@ data class PagedLoadingUiState<T>(
     val emptyVisible: Boolean,
     val loadingVisible: Boolean,
     val refreshVisible: Boolean,
-    val refreshEnabled: Boolean,
     val loadMoreVisible: Boolean,
     val loadMoreEnabled: Boolean
 )
@@ -30,11 +29,8 @@ val <T> State<T>.uiState: PagedLoadingUiState<T>
         emptyVisible = this is State.Empty,
         loadingVisible = this is State.EmptyLoading,
         refreshVisible = this is State.Refresh,
-        refreshEnabled = this is State.Data || this is State.Refresh
-                || this is State.LoadingMore || this is State.FullData,
         loadMoreVisible = this is State.LoadingMore,
         loadMoreEnabled = this is State.Data
-
     )
 
 fun <T> PagedLoadingUiState<T>.setToView(
@@ -44,8 +40,6 @@ fun <T> PagedLoadingUiState<T>.setToView(
     setErrorVisible: (Boolean) -> Unit = {},
     setEmptyVisible: (Boolean) -> Unit = {},
     setLoadingVisible: (Boolean) -> Unit = {},
-    setRefreshVisible: (Boolean) -> Unit = {},
-    setRefreshEnabled: (Boolean) -> Unit = {},
     setLoadMoreVisible: (Boolean) -> Unit = {},
     setLoadMoreEnabled: (Boolean) -> Unit = {}
 ) {
@@ -62,8 +56,6 @@ fun <T> PagedLoadingUiState<T>.setToView(
 
     setEmptyVisible(emptyVisible)
     setLoadingVisible(loadingVisible)
-    setRefreshVisible(refreshVisible)
-    setRefreshEnabled(refreshEnabled)
     setLoadMoreVisible(loadMoreVisible)
     setLoadMoreEnabled(loadMoreEnabled)
 }

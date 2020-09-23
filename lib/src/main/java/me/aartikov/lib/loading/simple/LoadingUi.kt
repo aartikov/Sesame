@@ -7,8 +7,7 @@ data class LoadingUiState<T>(
     val error: Throwable?,
     val emptyVisible: Boolean,
     val loadingVisible: Boolean,
-    val refreshVisible: Boolean,
-    val refreshEnabled: Boolean
+    val refreshVisible: Boolean
 )
 
 val <T> State<T>.uiState: LoadingUiState<T>
@@ -24,8 +23,7 @@ val <T> State<T>.uiState: LoadingUiState<T>
         },
         emptyVisible = this is State.Empty,
         loadingVisible = this is State.EmptyLoading,
-        refreshVisible = this is State.Refresh,
-        refreshEnabled = this is State.Data || this is State.Refresh
+        refreshVisible = this is State.Refresh
     )
 
 fun <T> LoadingUiState<T>.setToView(
@@ -35,8 +33,7 @@ fun <T> LoadingUiState<T>.setToView(
     setErrorVisible: (Boolean) -> Unit = {},
     setEmptyVisible: (Boolean) -> Unit = {},
     setLoadingVisible: (Boolean) -> Unit = {},
-    setRefreshVisible: (Boolean) -> Unit = {},
-    setRefreshEnabled: (Boolean) -> Unit = {}
+    setRefreshVisible: (Boolean) -> Unit = {}
 ) {
 
     if (data != null) {
@@ -56,5 +53,4 @@ fun <T> LoadingUiState<T>.setToView(
     setEmptyVisible(emptyVisible)
     setLoadingVisible(loadingVisible)
     setRefreshVisible(refreshVisible)
-    setRefreshEnabled(refreshEnabled)
 }
