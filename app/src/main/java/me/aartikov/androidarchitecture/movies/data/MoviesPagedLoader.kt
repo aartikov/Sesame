@@ -1,6 +1,6 @@
-package me.aartikov.androidarchitecture.list.data
+package me.aartikov.androidarchitecture.movies.data
 
-import me.aartikov.androidarchitecture.list.domain.Movie
+import me.aartikov.androidarchitecture.movies.domain.Movie
 import me.aartikov.lib.loading.paged.PagedLoader
 import me.aartikov.lib.loading.paged.PagingInfo
 import javax.inject.Inject
@@ -8,7 +8,7 @@ import javax.inject.Singleton
 
 
 @Singleton
-class MoviePagedLoader @Inject constructor(private val service: MovieService) : PagedLoader<Movie> {
+class MoviesPagedLoader @Inject constructor(private val service: MoviesService) : PagedLoader<Movie> {
 
     override suspend fun loadFirstPage(fresh: Boolean): List<Movie> =
         service.getMovies(0)

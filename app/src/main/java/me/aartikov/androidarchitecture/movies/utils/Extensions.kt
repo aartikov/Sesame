@@ -1,4 +1,4 @@
-package me.aartikov.androidarchitecture.list.utils
+package me.aartikov.androidarchitecture.movies.utils
 
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView

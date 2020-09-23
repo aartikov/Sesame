@@ -1,42 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <ImageView
+        android:id="@+id/emptyPlaceholder"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:contentDescription="@string/movies_placeholder"
+        android:visibility="visible"
+        app:srcCompat="@drawable/img_empty_data"/>
+
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/listSwipeRefresh"
+        android:id="@+id/swipeRefresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent" >
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/itemsList"
+            android:id="@+id/list"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <FrameLayout
-        android:id="@+id/listLoadingView"
+        android:id="@+id/loadingView"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <ProgressBar
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center" />
+            android:layout_gravity="center"/>
     </FrameLayout>
 
     <LinearLayout
-        android:id="@+id/listErrorView"
+        android:id="@+id/errorView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/listErrorMessage"
+            android:id="@+id/errorMessage"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="18dp"
@@ -45,7 +54,7 @@
             tools:text="Error message" />
 
         <Button
-            android:id="@+id/listRetryButton"
+            android:id="@+id/retryButton"
             style="@style/Widget.MaterialComponents.Button.TextButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

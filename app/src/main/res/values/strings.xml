@@ -17,4 +17,7 @@
     <string name="show_for_result_button_text">Show For Result</string>
     <string name="show_for_result_title">Show for result</string>
     <string name="enter_result">Enter your result </string>
+
+    <!-- Movies -->
+    <string name="movies_placeholder">Movies placeholder</string>
 </resources>

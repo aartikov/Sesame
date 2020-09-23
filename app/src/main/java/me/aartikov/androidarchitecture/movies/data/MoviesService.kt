@@ -1,30 +1,31 @@
-package me.aartikov.androidarchitecture.list.data
+package me.aartikov.androidarchitecture.movies.data
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
-import me.aartikov.androidarchitecture.list.domain.Movie
+import me.aartikov.androidarchitecture.movies.domain.Movie
 import javax.inject.Inject
 import javax.inject.Singleton
 
 
 @Singleton
-class MovieService @Inject constructor() {
+class MoviesService @Inject constructor() {
 
     companion object {
         private const val PAGES_VOLUME = 20
         private const val DELAY_MS = 2000L
     }
 
-    private var counter = 0
+    private var counter = -1
 
     suspend fun getMovies(page: Int): List<Movie> = withContext(Dispatchers.IO) {
         delay(DELAY_MS)
-        val success = counter++ % 2 == 0
-        if (success)
-            generateMovies(page)
-        else
-            throw RuntimeException("No internet connection")
+        counter++
+        when {
+            counter % 2 == 0 -> generateMovies(page)
+            counter % 5 == 0 -> emptyList()
+            else -> throw RuntimeException("No internet connection")
+        }
     }
 
     private fun generateMovies(page: Int): List<Movie> =

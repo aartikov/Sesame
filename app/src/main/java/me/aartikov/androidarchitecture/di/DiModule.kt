@@ -7,9 +7,9 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ApplicationComponent
 import dagger.hilt.android.qualifiers.ApplicationContext
-import me.aartikov.androidarchitecture.list.data.MoviePagedLoader
-import me.aartikov.androidarchitecture.list.data.MovieService
-import me.aartikov.androidarchitecture.list.domain.Movie
+import me.aartikov.androidarchitecture.movies.data.MoviesPagedLoader
+import me.aartikov.androidarchitecture.movies.data.MoviesService
+import me.aartikov.androidarchitecture.movies.domain.Movie
 import me.aartikov.androidarchitecture.profile.data.ProfileGateway
 import me.aartikov.androidarchitecture.profile.domain.Profile
 import me.aartikov.lib.loading.paged.PagedLoading
@@ -33,7 +33,7 @@ object DiModule {
     }
 
     @Provides
-    fun provideMovieLoader(movieService: MovieService) : PagedLoading<Movie> {
-        return PagedLoading(MoviePagedLoader(movieService))
+    fun provideMovieLoader(moviesService: MoviesService) : PagedLoading<Movie> {
+        return PagedLoading(MoviesPagedLoader(moviesService))
     }
 }

@@ -1,4 +1,4 @@
-package me.aartikov.androidarchitecture.list.ui
+package me.aartikov.androidarchitecture.movies.ui
 
 import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
 import com.xwray.groupie.kotlinandroidextensions.Item

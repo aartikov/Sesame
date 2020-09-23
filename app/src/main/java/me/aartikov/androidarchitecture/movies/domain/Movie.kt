@@ -1,4 +1,4 @@
-package me.aartikov.androidarchitecture.list.domain
+package me.aartikov.androidarchitecture.movies.domain
 
 data class Movie(
     val title: String = "test title",

@@ -1,4 +1,4 @@
-package me.aartikov.androidarchitecture.list.ui
+package me.aartikov.androidarchitecture.movies.ui
 
 import android.os.Bundle
 import android.view.View
@@ -8,15 +8,15 @@ import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import com.xwray.groupie.Section
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.screen_list.*
+import kotlinx.android.synthetic.main.screen_movies.*
 import me.aartikov.androidarchitecture.R
 import me.aartikov.androidarchitecture.base.BaseScreen
-import me.aartikov.androidarchitecture.list.utils.doAfterScrollToEnd
+import me.aartikov.androidarchitecture.movies.utils.doAfterScrollToEnd
 import me.aartikov.lib.loading.paged.setToView
 
 
 @AndroidEntryPoint
-class ListScreen : BaseScreen<ListViewModel>(R.layout.screen_list, ListViewModel::class) {
+class MoviesScreen : BaseScreen<MoviesViewModel>(R.layout.screen_movies, MoviesViewModel::class) {
 
     private val movieAdapter = GroupAdapter<GroupieViewHolder>()
     private val listSection = Section()
@@ -25,8 +25,8 @@ class ListScreen : BaseScreen<ListViewModel>(R.layout.screen_list, ListViewModel
         super.onViewCreated(view, savedInstanceState)
 
         initRecyclerView()
-        listSwipeRefresh.setOnRefreshListener { vm.onPullToRefresh() }
-        listRetryButton.setOnClickListener { vm.onRetryClicked() }
+        swipeRefresh.setOnRefreshListener { vm.onPullToRefresh() }
+        retryButton.setOnClickListener { vm.onRetryClicked() }
 
         vm::moviesUiState bind { state ->
             state.setToView(
@@ -34,27 +34,30 @@ class ListScreen : BaseScreen<ListViewModel>(R.layout.screen_list, ListViewModel
                     // TODO: calculate list diffs asynchronously (movieAdapter..updateAsync()
                     listSection.update(movies.toGroupieItems())
                 },
-                setDataVisible = itemsList::isVisible::set,
-                setError = { listErrorMessage.text = it.message },
-                setErrorVisible = listErrorView::isVisible::set,
-                setLoadingVisible = listLoadingView::isVisible::set,
-                setRefreshVisible = listSwipeRefresh::setRefreshing,
-                setRefreshEnabled = listSwipeRefresh::setEnabled,
-                setLoadMoreVisible = { visible ->
-                    if (visible) {
-                        listSection.setFooter(LoadingItem())
-                    } else {
-                        listSection.removeFooter()
-                    }
+                setEmptyVisible = { visible ->
+                    emptyPlaceholder.isVisible = visible
+                    retryButton.isVisible = visible
                 },
-                setLoadMoreEnabled = { }
+                setDataVisible = list::isVisible::set,
+                setError = { errorMessage.text = it.message },
+                setErrorVisible = errorView::isVisible::set,
+                setLoadingVisible = loadingView::isVisible::set,
+                setRefreshVisible = swipeRefresh::setRefreshing,
+                setRefreshEnabled = swipeRefresh::setEnabled,
+                setLoadMoreVisible = { visible ->
+                    val item = LoadingItem()
+                    if (visible)
+                        listSection.setFooter(item)
+                    else
+                        listSection.removeFooter()
+                }
             )
         }
     }
 
     private fun initRecyclerView() {
         movieAdapter.add(listSection)
-        with(itemsList) {
+        with(list) {
             adapter = movieAdapter
             layoutManager = LinearLayoutManager(requireContext())
             doAfterScrollToEnd {

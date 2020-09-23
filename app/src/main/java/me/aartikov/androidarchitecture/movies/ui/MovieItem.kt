@@ -1,10 +1,10 @@
-package me.aartikov.androidarchitecture.list.ui
+package me.aartikov.androidarchitecture.movies.ui
 
 import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
 import com.xwray.groupie.kotlinandroidextensions.Item
 import kotlinx.android.synthetic.main.item_movie.*
 import me.aartikov.androidarchitecture.R
-import me.aartikov.androidarchitecture.list.domain.Movie
+import me.aartikov.androidarchitecture.movies.domain.Movie
 
 
 class MovieItem(private val movie: Movie) : Item() {
