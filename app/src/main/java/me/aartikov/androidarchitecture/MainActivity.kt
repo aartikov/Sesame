@@ -6,7 +6,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import me.aartikov.androidarchitecture.counter.CounterScreen
 import me.aartikov.androidarchitecture.dialogs.DialogsScreen
 import me.aartikov.androidarchitecture.menu.MenuScreen
-import me.aartikov.androidarchitecture.profile.ProfileScreen
+import me.aartikov.androidarchitecture.profile.ui.ProfileScreen
 import me.aartikov.lib.navigation.NavigationMessage
 import me.aartikov.lib.navigation.NavigationMessageHandler
 

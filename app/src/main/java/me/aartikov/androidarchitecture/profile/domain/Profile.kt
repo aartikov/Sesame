@@ -1,6 +1,7 @@
 package me.aartikov.androidarchitecture.profile.domain
 
 data class Profile(
-    val name: String,
+    val firstName: String,
+    val lastName: String,
     val avatarUrl: String
 )

@@ -1,4 +1,4 @@
-package me.aartikov.androidarchitecture.profile
+package me.aartikov.androidarchitecture.profile.ui
 
 import android.os.Bundle
 import android.view.View
