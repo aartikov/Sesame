@@ -39,7 +39,23 @@ class DataBindingTest {
     }
 
     @Test
-    fun `receives values after lifecycle on_start event`() {
+    fun `receives nothing when destroyed`() = runBlockingTest {
+        val lifecycleOwner = TestLifecycleOwner()
+        val propertyObserver = TestPropertyObserver(lifecycleOwner)
+        val state = state(0)
+        val values = mutableListOf<Int>()
+
+        with(propertyObserver) { state bind { values.add(it) } }
+        lifecycleOwner.onStart()
+
+        lifecycleOwner.onDestroy()
+        with(propertyObserver) { state bind { values.add(it) } }
+
+        assert(values.size == 1)
+    }
+
+    @Test
+    fun `receives values after starting`() {
         val lifecycleOwner = TestLifecycleOwner()
         val propertyObserver = TestPropertyObserver(lifecycleOwner)
         val state = state(0)
