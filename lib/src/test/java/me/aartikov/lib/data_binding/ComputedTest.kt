@@ -44,6 +44,24 @@ class ComputedTest {
         assertEquals(6, testPropertyHost.value)
     }
 
+    // FIXME : works correctly when states changed only 1 time
+    @Test
+    fun `update computed value after three states changed`() {
+        val testPropertyHost = object : TestPropertyHost() {
+            var state1 by state(1)
+            var state2 by state(2)
+            var state3 by state(3)
+            val value by computed(::state1, ::state2, ::state3) { i1, i2, i3 ->
+                 i1 + i2 + i3 }
+        }
+
+        repeat(3) { testPropertyHost.state1++ }
+        repeat(2) { testPropertyHost.state2++ }
+        repeat(1) { testPropertyHost.state3++ }
+
+        assertEquals(12, testPropertyHost.value)
+    }
+
     @Test
     fun `update computed value after another computed`() {
         val testPropertyHost = object : TestPropertyHost() {
@@ -53,7 +71,6 @@ class ComputedTest {
         }
 
         repeat(3) { testPropertyHost.state++ }
-
 
         assertEquals(7, testPropertyHost.value2)
     }
