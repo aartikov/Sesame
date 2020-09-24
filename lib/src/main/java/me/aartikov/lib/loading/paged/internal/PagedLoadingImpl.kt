@@ -1,27 +1,27 @@
-package me.aartikov.lib.loading.simple.internal
+package me.aartikov.lib.loading.paged.internal
 
 import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asFlow
-import me.aartikov.lib.state_machine.EffectHandler
-import me.aartikov.lib.loading.simple.Loading
-import me.aartikov.lib.loading.simple.Loading.Event
-import me.aartikov.lib.loading.simple.Loading.State
+import me.aartikov.lib.loading.paged.PagedLoader
+import me.aartikov.lib.loading.paged.PagedLoading
+import me.aartikov.lib.loading.paged.PagedLoading.Event
+import me.aartikov.lib.loading.paged.PagedLoading.State
 
-internal class LoadingImpl<T : Any>(
-    loadingEffectHandler: EffectHandler<Effect, Action<T>>,
+internal class PagedLoadingImpl<T : Any>(
+    loader: PagedLoader<T>,
     initialState: State<T> = State.Empty
-) : Loading<T> {
+) : PagedLoading<T> {
 
     private val eventChannel = BroadcastChannel<Event>(capacity = 100)
 
-    private val stateMachine: LoadingStateMachine<T> = LoadingStateMachine(
+    private val stateMachine: PagedLoadingStateMachine<T> = PagedLoadingStateMachine(
         initialState = initialState,
-        reducer = LoadingReducer(),
+        reducer = PagedLoadingReducer(),
         actionSources = emptyList(),
         effectHandlers = listOf(
-            loadingEffectHandler,
+            PagedLoadingEffectHandler(loader),
             EventEffectHandler(eventChannel)
         )
     )
@@ -39,5 +39,9 @@ internal class LoadingImpl<T : Any>(
 
     override fun refresh() {
         stateMachine.dispatch(Action.Refresh)
+    }
+
+    override fun loadMore() {
+        stateMachine.dispatch(Action.LoadMore)
     }
 }

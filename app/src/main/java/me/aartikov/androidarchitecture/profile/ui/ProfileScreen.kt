@@ -1,4 +1,4 @@
-package me.aartikov.androidarchitecture.profile
+package me.aartikov.androidarchitecture.profile.ui
 
 import android.os.Bundle
 import android.view.View
@@ -35,8 +35,7 @@ class ProfileScreen : BaseScreen<ProfileViewModel>(R.layout.screen_profile, Prof
                 },
                 setErrorVisible = errorView::isVisible::set,
                 setLoadingVisible = loadingView::isVisible::set,
-                setRefreshVisible = swipeRefresh::setRefreshing,
-                setRefreshEnabled = swipeRefresh::setEnabled
+                setRefreshVisible = swipeRefresh::setRefreshing
             )
         }
     }

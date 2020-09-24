@@ -3,6 +3,7 @@ package me.aartikov.androidarchitecture.menu
 import androidx.hilt.lifecycle.ViewModelInject
 import me.aartikov.androidarchitecture.OpenCounterScreen
 import me.aartikov.androidarchitecture.OpenDialogsScreen
+import me.aartikov.androidarchitecture.OpenMoviesScreen
 import me.aartikov.androidarchitecture.OpenProfileScreen
 import me.aartikov.androidarchitecture.base.BaseViewModel
 
@@ -18,5 +19,9 @@ class MenuViewModel @ViewModelInject constructor() : BaseViewModel() {
 
     fun onDialogsButtonClicked() {
         navigate(OpenDialogsScreen)
+    }
+
+    fun onMoviesButtonClicked() {
+        navigate(OpenMoviesScreen)
     }
 }

@@ -2,41 +2,42 @@ package me.aartikov.lib.loading.simple
 
 import me.aartikov.lib.loading.simple.Loading.State
 
-data class LoadingUiState<T>(
-    val data: T?,
-    val error: Throwable?,
+data class LoadingUiState<D, E>(
+    val data: D?,
+    val error: E?,
     val emptyVisible: Boolean,
     val loadingVisible: Boolean,
-    val refreshVisible: Boolean,
-    val refreshEnabled: Boolean
+    val refreshVisible: Boolean
 )
 
-val <T> State<T>.uiState: LoadingUiState<T>
-    get() = LoadingUiState(
+fun <T, D, E> State<T>.toUiState(dataMapper: (T) -> D, errorMapper: (Throwable) -> E): LoadingUiState<D, E> =
+    LoadingUiState(
         data = when (this) {
-            is State.Data -> this.data
-            is State.Refresh -> this.data
+            is State.Data -> dataMapper(this.data)
+            is State.Refresh -> dataMapper(this.data)
             else -> null
         },
         error = when (this) {
-            is State.EmptyError -> this.throwable
+            is State.EmptyError -> errorMapper(this.throwable)
             else -> null
         },
         emptyVisible = this is State.Empty,
         loadingVisible = this is State.EmptyLoading,
-        refreshVisible = this is State.Refresh,
-        refreshEnabled = this is State.Data || this is State.Refresh
+        refreshVisible = this is State.Refresh
     )
 
-fun <T> LoadingUiState<T>.setToView(
-    setData: (T) -> Unit = {},
+fun <T, D> State<T>.toUiState(dataMapper: (T) -> D): LoadingUiState<D, Throwable> = toUiState(dataMapper, { it })
+
+fun <T> State<T>.toUiState(): LoadingUiState<T, Throwable> = toUiState({ it }, { it })
+
+fun <D, E> LoadingUiState<D, E>.setToView(
+    setData: (D) -> Unit = {},
     setDataVisible: (Boolean) -> Unit = {},
-    setError: (Throwable) -> Unit = {},
+    setError: (E) -> Unit = {},
     setErrorVisible: (Boolean) -> Unit = {},
     setEmptyVisible: (Boolean) -> Unit = {},
     setLoadingVisible: (Boolean) -> Unit = {},
-    setRefreshVisible: (Boolean) -> Unit = {},
-    setRefreshEnabled: (Boolean) -> Unit = {}
+    setRefreshVisible: (Boolean) -> Unit = {}
 ) {
 
     if (data != null) {
@@ -53,7 +54,7 @@ fun <T> LoadingUiState<T>.setToView(
         setErrorVisible(false)
     }
 
+    setEmptyVisible(emptyVisible)
     setLoadingVisible(loadingVisible)
     setRefreshVisible(refreshVisible)
-    setRefreshEnabled(refreshEnabled)
 }
