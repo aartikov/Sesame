@@ -32,10 +32,12 @@ class StateTest {
 
         propertyObserver.propertyObserverLifecycleOwner.onStart()
         state.value++
+        propertyObserver.propertyObserverLifecycleOwner.onResume()
+        state.value++
         propertyObserver.propertyObserverLifecycleOwner.onPause()
         state.value++
 
-        assertEquals(listOf(0, 1, 2), values)
+        assertEquals(listOf(0, 1, 2, 3), values)
     }
 
     @Test

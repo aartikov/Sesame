@@ -36,8 +36,6 @@ class CommandTest {
         command.send(1)
         propertyObserver.propertyObserverLifecycleOwner.onPause()
         command.send(2)
-        propertyObserver.propertyObserverLifecycleOwner.onStop()
-        command.send(3)
 
         assertEquals(listOf(0, 1, 2), values)
     }
