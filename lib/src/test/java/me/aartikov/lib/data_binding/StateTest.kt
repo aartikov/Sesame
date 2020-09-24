@@ -24,7 +24,7 @@ class StateTest {
     }
 
     @Test
-    fun `receives values after starting`() {
+    fun `receives values whet started`() {
         val propertyObserver = TestPropertyObserver()
         val state = state(0)
         val values = mutableListOf<Int>()
@@ -39,7 +39,7 @@ class StateTest {
     }
 
     @Test
-    fun `receives only last state after restarting`() {
+    fun `receives only last state when restarted`() {
         val propertyObserver = TestPropertyObserver()
         val state = state(0)
         val values = mutableListOf<Int>()

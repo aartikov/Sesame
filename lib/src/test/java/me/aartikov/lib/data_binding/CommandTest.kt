@@ -24,7 +24,7 @@ class CommandTest {
     }
 
     @Test
-    fun `receives command after starting`() {
+    fun `receives command when started`() {
         val propertyObserver = TestPropertyObserver()
         val command = command<Int>()
         val values = mutableListOf<Int>()
@@ -50,7 +50,7 @@ class CommandTest {
     }
 
     @Test
-    fun `saves commands after stopping`() {
+    fun `saves commands whet stopped`() {
         val propertyObserver = TestPropertyObserver()
         val command = command<Int>()
         val values = mutableListOf<Int>()
