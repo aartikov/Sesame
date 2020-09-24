@@ -35,11 +35,11 @@ class StateTest {
         propertyObserver.propertyObserverLifecycleOwner.onPause()
         state.value++
 
-        assertEquals(3, values.size)
+        assertEquals(listOf(0, 1, 2), values)
     }
 
     @Test
-    fun `receives only last state after stopping`() {
+    fun `receives only last state after restarting`() {
         val propertyObserver = TestPropertyObserver()
         val state = state(0)
         val values = mutableListOf<Int>()
@@ -53,7 +53,7 @@ class StateTest {
     }
 
     @Test
-    fun `receives nothing when destroyed`() = runBlockingTest {
+    fun `receives nothing when stopped`() = runBlockingTest {
         val propertyObserver = TestPropertyObserver()
         val state = state(0)
         val values = mutableListOf<Int>()
