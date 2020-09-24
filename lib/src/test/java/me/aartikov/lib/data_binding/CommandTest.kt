@@ -9,7 +9,7 @@ import org.junit.Test
 class CommandTest {
 
     @get:Rule
-    val coroutinesTestRule = DispatchersTestRule()
+    val dispatchersTestRule = DispatchersTestRule()
 
     @Test
     fun `doesn't receive command when not started`() = runBlockingTest {
@@ -20,7 +20,7 @@ class CommandTest {
 
         command.send(0)
 
-        assertEquals(values, emptyList<Int>())
+        assertEquals(emptyList<Int>(), values)
     }
 
     @Test
@@ -33,7 +33,7 @@ class CommandTest {
         command.send(0)
         propertyObserver.propertyObserverLifecycleOwner.onStart()
 
-        assertEquals(values, listOf(0))
+        assertEquals(listOf(0), values)
     }
 
     @Test
@@ -46,7 +46,7 @@ class CommandTest {
         propertyObserver.propertyObserverLifecycleOwner.onStop()
         command.send(0)
 
-        assertEquals(values, emptyList<Int>())
+        assertEquals(emptyList<Int>(), values)
     }
 
     @Test
@@ -60,7 +60,7 @@ class CommandTest {
         repeat(3) { command.send(0) }
         propertyObserver.propertyObserverLifecycleOwner.onStart()
 
-        assertEquals(values, listOf(0, 0, 0))
+        assertEquals(listOf(0, 0, 0), values)
     }
 
     @Test
@@ -73,6 +73,6 @@ class CommandTest {
         repeat(3) { command.send(0) }
         propertyObserver.propertyObserverLifecycleOwner.onStart()
 
-        assertEquals(values, listOf(0, 0, 0))
+        assertEquals(listOf(0, 0, 0), values)
     }
 }

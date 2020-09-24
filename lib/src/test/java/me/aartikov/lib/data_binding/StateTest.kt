@@ -2,7 +2,7 @@ package me.aartikov.lib.data_binding
 
 import kotlinx.coroutines.test.runBlockingTest
 import me.aartikov.lib.utils.DispatchersTestRule
-import org.junit.Assert
+import org.junit.Assert.assertEquals
 import org.junit.Rule
 import org.junit.Test
 
@@ -20,7 +20,7 @@ class StateTest {
 
         state.value++
 
-        Assert.assertEquals(values, emptyList<Int>())
+        assertEquals(emptyList<Int>(), values)
     }
 
     @Test
@@ -35,7 +35,7 @@ class StateTest {
         propertyObserver.propertyObserverLifecycleOwner.onPause()
         state.value++
 
-        Assert.assertEquals(values.size, 3)
+        assertEquals(3, values.size)
     }
 
     @Test
@@ -49,7 +49,7 @@ class StateTest {
         repeat(3) { state.value++ }
         propertyObserver.propertyObserverLifecycleOwner.onStart()
 
-        Assert.assertEquals(values, listOf(3))
+        assertEquals(listOf(3), values)
     }
 
     @Test
@@ -64,6 +64,6 @@ class StateTest {
         propertyObserver.propertyObserverLifecycleOwner.onDestroy()
         state.value++
 
-        Assert.assertEquals(values, listOf(0, 1))
+        assertEquals(listOf(0, 1), values)
     }
 }
