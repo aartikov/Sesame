@@ -1,7 +1,9 @@
 package me.aartikov.lib.data_binding
 
-import androidx.lifecycle.LifecycleOwner
+import me.aartikov.lib.utils.TestLifecycleOwner
 
 class TestPropertyObserver(
-    override val propertyObserverLifecycleOwner: LifecycleOwner
-) : PropertyObserver
+    override val propertyObserverLifecycleOwner: TestLifecycleOwner = TestLifecycleOwner()
+) : PropertyObserver {
+
+}
