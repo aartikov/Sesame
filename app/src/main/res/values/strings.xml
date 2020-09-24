@@ -5,7 +5,7 @@
     <string name="counter_button">Counter</string>
     <string name="profile_button">Profile</string>
     <string name="dialogs_button">Dialogs</string>
-    <string name="list_button">List</string>
+    <string name="movies_button">Movies</string>
 
     <!-- Profile -->
     <string name="retry_button">Retry</string>

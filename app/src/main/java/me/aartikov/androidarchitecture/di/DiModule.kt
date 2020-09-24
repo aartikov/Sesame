@@ -33,7 +33,7 @@ object DiModule {
     }
 
     @Provides
-    fun provideMovieLoader(moviesService: MoviesService) : PagedLoading<Movie> {
+    fun provideMoviesLoading(moviesService: MoviesService): PagedLoading<Movie> {
         return PagedLoading(MoviesPagedLoader(moviesService))
     }
 }

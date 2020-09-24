@@ -21,7 +21,7 @@ class MenuViewModel @ViewModelInject constructor() : BaseViewModel() {
         navigate(OpenDialogsScreen)
     }
 
-    fun onListButtonClicked() {
+    fun onMoviesButtonClicked() {
         navigate(OpenMoviesScreen)
     }
 }

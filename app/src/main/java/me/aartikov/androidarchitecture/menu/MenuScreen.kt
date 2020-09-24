@@ -17,7 +17,7 @@ class MenuScreen : BaseScreen<MenuViewModel>(R.layout.screen_menu, MenuViewModel
         counterButton.setOnClickListener { vm.onCounterButtonClicked() }
         profileButton.setOnClickListener { vm.onProfileButtonClicked() }
         dialogsButton.setOnClickListener { vm.onDialogsButtonClicked() }
-        listButton.setOnClickListener { vm.onListButtonClicked() }
+        moviesButton.setOnClickListener { vm.onMoviesButtonClicked() }
     }
 }
 

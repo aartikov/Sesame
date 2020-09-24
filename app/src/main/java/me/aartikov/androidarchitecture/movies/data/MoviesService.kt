@@ -28,5 +28,5 @@ class MoviesService @Inject constructor() {
     }
 
     private fun generateMovies(page: Int): List<Movie> =
-        (page*PAGES_VOLUME until (page + 1)*PAGES_VOLUME).map { Movie(id = it) }
+        (page * PAGES_VOLUME until (page + 1) * PAGES_VOLUME).map { Movie(id = it) }
 }
