@@ -32,26 +32,11 @@ class DataBindingTest {
         val propertyObserver = TestPropertyObserver(TestLifecycleOwner())
         val state = state(0)
         val values = mutableListOf<Int>()
-
         with(propertyObserver) { state bind { values.add(it) } }
+
+        state.value++
 
         assert(values.isEmpty())
-    }
-
-    @Test
-    fun `receives nothing when destroyed`() = runBlockingTest {
-        val lifecycleOwner = TestLifecycleOwner()
-        val propertyObserver = TestPropertyObserver(lifecycleOwner)
-        val state = state(0)
-        val values = mutableListOf<Int>()
-
-        with(propertyObserver) { state bind { values.add(it) } }
-        lifecycleOwner.onStart()
-
-        lifecycleOwner.onDestroy()
-        with(propertyObserver) { state bind { values.add(it) } }
-
-        assert(values.size == 1)
     }
 
     @Test
@@ -60,27 +45,137 @@ class DataBindingTest {
         val propertyObserver = TestPropertyObserver(lifecycleOwner)
         val state = state(0)
         val values = mutableListOf<Int>()
-
         with(propertyObserver) { state bind { values.add(it) } }
+
+        lifecycleOwner.onStart()
+        state.value++
+        lifecycleOwner.onPause()
+        state.value++
+
+        assert(values.size == 3)
+    }
+
+    @Test
+    fun `receives only last state after stopping`() {
+        val lifecycleOwner = TestLifecycleOwner()
+        val propertyObserver = TestPropertyObserver(lifecycleOwner)
+        val state = state(0)
+        val values = mutableListOf<Int>()
+        with(propertyObserver) { state bind { values.add(it) } }
+
+        println(values)
+        lifecycleOwner.onStop()
+        repeat(3) { state.value++ }
         lifecycleOwner.onStart()
 
-        assert(values.contains(state.value))
+        println(values)
+
+        assert(values.size == 1)
+    }
+
+    @Test
+    fun `receives nothing when destroyed`() = runBlockingTest {
+        val lifecycleOwner = TestLifecycleOwner()
+        val propertyObserver = TestPropertyObserver(lifecycleOwner)
+        val state = state(0)
+        val values = mutableListOf<Int>()
+        with(propertyObserver) { state bind { values.add(it) } }
+
+        lifecycleOwner.onStart()
+        state.value++
+        lifecycleOwner.onDestroy()
+        state.value++
+
+        assert(values.size == 2)
+    }
+
+    @Test
+    fun `doesn't receive command when not started`() = runBlockingTest {
+        val lifecycleOwner = TestLifecycleOwner()
+        val propertyObserver = TestPropertyObserver(lifecycleOwner)
+        val command = command<Int>()
+        val values = mutableListOf<Int>()
+        with(propertyObserver) { command bind { values.add(it) } }
+
+        command.send(0)
+
+        assert(values.isEmpty())
+    }
+
+    @Test
+    fun `receives command after starting`() {
+        val lifecycleOwner = TestLifecycleOwner()
+        val propertyObserver = TestPropertyObserver(lifecycleOwner)
+        val command = command<Int>()
+        val values = mutableListOf<Int>()
+        with(propertyObserver) { command bind { values.add(it) } }
+
+        command.send(0)
+        lifecycleOwner.onStart()
+
+        assert(values.isNotEmpty())
+    }
+
+    @Test
+    fun `don't receive command when stopped`() {
+        val lifecycleOwner = TestLifecycleOwner()
+        val propertyObserver = TestPropertyObserver(lifecycleOwner)
+        val command = command<Int>()
+        val values = mutableListOf<Int>()
+        with(propertyObserver) { command bind { values.add(it) } }
+
+        lifecycleOwner.onStop()
+        command.send(0)
+
+        assert(values.isEmpty())
+    }
+
+    @Test
+    fun `save commands after stopping`() {
+        val lifecycleOwner = TestLifecycleOwner()
+        val propertyObserver = TestPropertyObserver(lifecycleOwner)
+        val command = command<Int>()
+        val values = mutableListOf<Int>()
+        with(propertyObserver) { command bind { values.add(it) } }
+
+        lifecycleOwner.onStop()
+        repeat(3) { command.send(0) }
+        lifecycleOwner.onStart()
+
+        assert(values.size == 3)
+    }
+
+    @Test
+    fun `save commands before starting`() {
+        val lifecycleOwner = TestLifecycleOwner()
+        val propertyObserver = TestPropertyObserver(lifecycleOwner)
+        val command = command<Int>()
+        val values = mutableListOf<Int>()
+        with(propertyObserver) { command bind { values.add(it) } }
+
+        repeat(3) { command.send(0) }
+        lifecycleOwner.onStart()
+
+        assert(values.size == 3)
     }
 }
 
 private class TestLifecycleOwner : LifecycleOwner {
     private val lifecycle = LifecycleRegistry(this)
 
+    override fun getLifecycle() = lifecycle
+
     fun onCreate() = lifecycle.handleLifecycleEvent(Lifecycle.Event.ON_CREATE)
 
     fun onStart() = lifecycle.handleLifecycleEvent(Lifecycle.Event.ON_START)
 
+    fun onPause() = lifecycle.handleLifecycleEvent(Lifecycle.Event.ON_PAUSE)
+
     fun onResume() = lifecycle.handleLifecycleEvent(Lifecycle.Event.ON_RESUME)
 
+    fun onStop() = lifecycle.handleLifecycleEvent(Lifecycle.Event.ON_STOP)
+
     fun onDestroy() = lifecycle.handleLifecycleEvent(Lifecycle.Event.ON_DESTROY)
-
-
-    override fun getLifecycle() = lifecycle
 }
 
 private class TestPropertyObserver(
