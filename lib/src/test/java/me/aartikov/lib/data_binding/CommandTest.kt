@@ -30,10 +30,16 @@ class CommandTest {
         val values = mutableListOf<Int>()
         with(propertyObserver) { command bind { values.add(it) } }
 
-        command.send(0)
         propertyObserver.propertyObserverLifecycleOwner.onStart()
+        command.send(0)
+        propertyObserver.propertyObserverLifecycleOwner.onResume()
+        command.send(1)
+        propertyObserver.propertyObserverLifecycleOwner.onPause()
+        command.send(2)
+        propertyObserver.propertyObserverLifecycleOwner.onStop()
+        command.send(3)
 
-        assertEquals(listOf(0), values)
+        assertEquals(listOf(0, 1, 2), values)
     }
 
     @Test
@@ -50,7 +56,7 @@ class CommandTest {
     }
 
     @Test
-    fun `saves commands whet stopped`() {
+    fun `saves commands when stopped`() {
         val propertyObserver = TestPropertyObserver()
         val command = command<Int>()
         val values = mutableListOf<Int>()
