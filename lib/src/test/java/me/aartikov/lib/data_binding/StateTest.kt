@@ -1,6 +1,5 @@
 package me.aartikov.lib.data_binding
 
-import kotlinx.coroutines.test.runBlockingTest
 import me.aartikov.lib.utils.DispatchersTestRule
 import org.junit.Assert.assertEquals
 import org.junit.Rule
@@ -12,7 +11,7 @@ class StateTest {
     val coroutinesTestRule = DispatchersTestRule()
 
     @Test
-    fun `receives nothing when not started`() = runBlockingTest {
+    fun `receives nothing when not started`() {
         val propertyObserver = TestPropertyObserver()
         val state = state(0)
         val values = mutableListOf<Int>()
@@ -24,7 +23,7 @@ class StateTest {
     }
 
     @Test
-    fun `receives values whet started`() {
+    fun `receives values when started`() {
         val propertyObserver = TestPropertyObserver()
         val state = state(0)
         val values = mutableListOf<Int>()
@@ -55,7 +54,7 @@ class StateTest {
     }
 
     @Test
-    fun `receives nothing when stopped`() = runBlockingTest {
+    fun `receives nothing when stopped`() {
         val propertyObserver = TestPropertyObserver()
         val state = state(0)
         val values = mutableListOf<Int>()
