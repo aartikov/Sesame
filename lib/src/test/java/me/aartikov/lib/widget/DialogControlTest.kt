@@ -32,7 +32,7 @@ class DialogControlTest {
         }
         dialogControl.sendResult("Value 2")
 
-        assertEquals(actual, "Value 2")
+        assertEquals("Value 2", actual)
         job.cancel()
     }
 }
