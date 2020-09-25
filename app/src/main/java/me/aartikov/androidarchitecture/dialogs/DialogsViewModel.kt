@@ -20,6 +20,7 @@ class DialogsViewModel : BaseViewModel() {
     fun onShowForResultButtonClicked() {
         viewModelScope.launch {
             val result = dialogForResult.showForResult(Unit)
+
             if(result != null && result.isNotEmpty()) {
                 showMessage.send(result)
             } else {
