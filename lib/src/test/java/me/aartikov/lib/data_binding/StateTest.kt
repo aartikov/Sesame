@@ -63,7 +63,7 @@ class StateTest {
 
         propertyObserver.propertyObserverLifecycleOwner.onStart()
         state.value++
-        propertyObserver.propertyObserverLifecycleOwner.onDestroy()
+        propertyObserver.propertyObserverLifecycleOwner.onStop()
         state.value++
 
         assertEquals(listOf(0, 1), values)

@@ -108,7 +108,7 @@ class ComputedTest {
 
         propertyObserver.propertyObserverLifecycleOwner.onStart()
         propertyHost.state++
-        propertyObserver.propertyObserverLifecycleOwner.onDestroy()
+        propertyObserver.propertyObserverLifecycleOwner.onStop()
         repeat(3) { propertyHost.state++ }
 
         assertEquals(listOf(0, 1), values)
