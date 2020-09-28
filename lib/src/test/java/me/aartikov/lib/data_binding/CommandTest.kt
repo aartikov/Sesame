@@ -1,6 +1,5 @@
 package me.aartikov.lib.data_binding
 
-import kotlinx.coroutines.test.runBlockingTest
 import me.aartikov.lib.utils.DispatchersTestRule
 import org.junit.Assert.assertEquals
 import org.junit.Rule
@@ -12,7 +11,7 @@ class CommandTest {
     val dispatchersTestRule = DispatchersTestRule()
 
     @Test
-    fun `doesn't receive command when not started`() = runBlockingTest {
+    fun `doesn't receive command when not started`()  {
         val propertyObserver = TestPropertyObserver()
         val command = command<Int>()
         val values = mutableListOf<Int>()

@@ -1,6 +1,5 @@
 package me.aartikov.lib.data_binding
 
-import kotlinx.coroutines.test.runBlockingTest
 import me.aartikov.lib.utils.DispatchersTestRule
 import org.junit.Assert.assertEquals
 import org.junit.Rule
@@ -81,7 +80,7 @@ class ComputedTest {
     }
 
     @Test
-    fun `updates computed value in binding when started`() = runBlockingTest {
+    fun `updates computed value in binding when started`() {
         val propertyObserver = TestPropertyObserver()
         val propertyHost = object : TestPropertyHost() {
             var state by state(0)
@@ -97,7 +96,7 @@ class ComputedTest {
     }
 
     @Test
-    fun `doesn't update computed value in binding when stopped`() = runBlockingTest {
+    fun `doesn't update computed value in binding when stopped`() {
         val propertyObserver = TestPropertyObserver()
         val propertyHost = object : TestPropertyHost() {
             var state by state(0)
