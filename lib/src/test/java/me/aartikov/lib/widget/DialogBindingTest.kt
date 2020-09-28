@@ -32,6 +32,8 @@ class DialogBindingTest {
 
     @Test
     fun `shows dialog when started`() {
+        val widgetObserver = TestWidgetObserver()
+        val mockedDialog = mock<Dialog>()
         val dialogControl = dialogControl<Unit, Unit>()
         with(widgetObserver) { dialogControl bind { _, _ -> mockedDialog } }
 
@@ -44,6 +46,8 @@ class DialogBindingTest {
 
     @Test
     fun `closes dialog when started`() {
+        val widgetObserver = TestWidgetObserver()
+        val mockedDialog = mock<Dialog>()
         val dialogControl = dialogControl<Unit, Unit>()
         with(widgetObserver) { dialogControl bind { _, _ -> mockedDialog } }
 
