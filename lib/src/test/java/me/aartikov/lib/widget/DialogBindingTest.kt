@@ -17,11 +17,10 @@ class DialogBindingTest {
     @get:Rule
     val coroutinesTestRule = DispatchersTestRule()
 
-    private val widgetObserver = TestWidgetObserver()
-    private val mockedDialog = mock<Dialog>()
-
     @Test
     fun `doesn't show dialog when not started`() {
+        val widgetObserver = TestWidgetObserver()
+        val mockedDialog = mock<Dialog>()
         val dialogControl = dialogControl<Unit, Unit>()
         with(widgetObserver) { dialogControl bind { _, _ -> mockedDialog } }
 
@@ -61,6 +60,8 @@ class DialogBindingTest {
 
     @Test
     fun `shows only last dialog when restarted`()  {
+        val widgetObserver = TestWidgetObserver()
+        val mockedDialog = mock<Dialog>()
         val dialogControl = dialogControl<Int, Unit>()
         val values = mutableListOf<Int>()
         with(widgetObserver) {
@@ -83,6 +84,8 @@ class DialogBindingTest {
 
     @Test
     fun `shows only last dialog when not started`()  {
+        val widgetObserver = TestWidgetObserver()
+        val mockedDialog = mock<Dialog>()
         val dialogControl = dialogControl<Int, Unit>()
         val values = mutableListOf<Int>()
         with(widgetObserver) {
@@ -104,6 +107,8 @@ class DialogBindingTest {
 
     @Test
     fun `doesn't show dialog when stopped`() {
+        val widgetObserver = TestWidgetObserver()
+        val mockedDialog = mock<Dialog>()
         val dialogControl = dialogControl<Unit, Unit>()
         with(widgetObserver) { dialogControl bind { _, _ -> mockedDialog } }
 
@@ -115,6 +120,8 @@ class DialogBindingTest {
 
     @Test
     fun `show result dialog when started`() = runBlockingTest {
+        val widgetObserver = TestWidgetObserver()
+        val mockedDialog = mock<Dialog>()
         val dialogControl = dialogControl<Unit, Unit>()
         with(widgetObserver) { dialogControl bind { _, _ -> mockedDialog } }
 
@@ -127,6 +134,8 @@ class DialogBindingTest {
 
     @Test
     fun `doesn't show result dialog when stopped`() = runBlockingTest {
+        val widgetObserver = TestWidgetObserver()
+        val mockedDialog = mock<Dialog>()
         val dialogControl = dialogControl<Unit, Unit>()
         with(widgetObserver) { dialogControl bind { _, _ -> mockedDialog } }
 
