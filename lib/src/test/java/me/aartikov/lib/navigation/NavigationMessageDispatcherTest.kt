@@ -40,20 +40,8 @@ class NavigationMessageDispatcherTest {
 
     private fun createDispatcher(handlers: List<Any>): NavigationMessageDispatcher {
         return object : NavigationMessageDispatcher(Unit) {
-
-            var k = 0
-
-            override fun getParent(node: Any?): Any? {
-
-                val result: Any? = try {
-                    handlers[k]
-                } catch (e: ArrayIndexOutOfBoundsException) {
-                    null
-                }
-                k++
-
-                return result
-            }
+            var counter = 0
+            override fun getParent(node: Any?): Any? = handlers.getOrNull(counter++)
         }
     }
 }
