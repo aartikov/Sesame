@@ -41,6 +41,7 @@ dependencies {
     def mockitoKotlinVersion = "2.2.0"
     testImplementation "junit:junit:$junitVersion"
     testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:$mockitoKotlinVersion"
+    testImplementation "org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version"
 
     def espressoVersion = "3.3.0"
     androidTestImplementation "androidx.test.ext:junit:1.1.2"
