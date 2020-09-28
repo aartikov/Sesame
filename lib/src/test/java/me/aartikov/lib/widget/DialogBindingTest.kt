@@ -2,7 +2,7 @@ package me.aartikov.lib.widget
 
 import android.app.Dialog
 import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.times
+import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.verifyZeroInteractions
 import kotlinx.coroutines.launch
@@ -40,8 +40,8 @@ class DialogBindingTest {
         dialogControl.show(Unit)
         dialogControl.dismiss()
 
-        verify(mockedDialog, times(1)).show()
-        verify(mockedDialog, times(1)).dismiss()
+        verify(mockedDialog).show()
+        verify(mockedDialog).dismiss()
     }
 
     @Test
@@ -63,8 +63,8 @@ class DialogBindingTest {
             onStart()
         }
 
-        verify(mockedDialog, times(1)).show()
-        verify(mockedDialog, times(0)).dismiss()
+        verify(mockedDialog).show()
+        verify(mockedDialog, never()).dismiss()
         assertEquals(listOf(2), values)
     }
 
@@ -86,8 +86,8 @@ class DialogBindingTest {
             onStart()
         }
 
-        verify(mockedDialog, times(1)).show()
-        verify(mockedDialog, times(0)).dismiss()
+        verify(mockedDialog).show()
+        verify(mockedDialog, never()).dismiss()
         assertEquals(listOf(2), values)
     }
 
@@ -114,7 +114,7 @@ class DialogBindingTest {
         widgetObserver.widgetObserverLifecycleOwner.onStart()
         val job = launch { dialogControl.showForResult(Unit) }
 
-        verify(mockedDialog, times(1)).show()
+        verify(mockedDialog).show()
         job.cancel()
     }
 
