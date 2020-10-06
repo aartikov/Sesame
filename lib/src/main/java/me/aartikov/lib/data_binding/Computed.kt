@@ -2,7 +2,6 @@ package me.aartikov.lib.data_binding
 
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.combineTransform
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.launch
 import kotlin.reflect.KProperty0
@@ -23,50 +22,101 @@ fun <T, R> PropertyHost.computed(
     return StateDelegate(resultFlow)
 }
 
+@Suppress("UNCHECKED_CAST")
 fun <T1, T2, R> PropertyHost.computed(
     property1: KProperty0<T1>,
     property2: KProperty0<T2>,
     transform: (T1, T2) -> R
 ): StateDelegate<R> {
-    val flow1 = property1.flow
-    val flow2 = property2.flow
-    val resultFlow = MutableStateFlow(transform(flow1.value, flow2.value))
-    var firstSkipped = false
-    propertyHostScope.launch {
-        combineTransform(flow1, flow2) { v1, v2 ->
-            if (firstSkipped) {
-                emit(transform(v1, v2))
-            } else {
-                firstSkipped = true
-            }
-        }.collect {
-            resultFlow.value = it
-        }
+    return computedImpl(property1, property2) { args: List<*> ->
+        transform(
+            args[0] as T1,
+            args[1] as T2
+        )
     }
-    return StateDelegate(resultFlow)
 }
 
+@Suppress("UNCHECKED_CAST")
 fun <T1, T2, T3, R> PropertyHost.computed(
     property1: KProperty0<T1>,
     property2: KProperty0<T2>,
     property3: KProperty0<T3>,
     transform: (T1, T2, T3) -> R
 ): StateDelegate<R> {
-    val flow1 = property1.flow
-    val flow2 = property2.flow
-    val flow3 = property3.flow
-    val resultFlow = MutableStateFlow(transform(flow1.value, flow2.value, flow3.value))
-    var firstSkipped = false
-    propertyHostScope.launch {
-        combineTransform(flow1, flow2, flow3) { v1, v2, v3 ->
-            if (firstSkipped) {
-                emit(transform(v1, v2, v3))
-            } else {
-                firstSkipped = true
-            }
-        }.collect {
-            resultFlow.value = it
+    return computedImpl(property1, property2, property3) { args: List<*> ->
+        transform(
+            args[0] as T1,
+            args[1] as T2,
+            args[2] as T3
+        )
+    }
+}
+
+@Suppress("UNCHECKED_CAST")
+fun <T1, T2, T3, T4, R> PropertyHost.computed(
+    property1: KProperty0<T1>,
+    property2: KProperty0<T2>,
+    property3: KProperty0<T3>,
+    property4: KProperty0<T4>,
+    transform: (T1, T2, T3, T4) -> R
+): StateDelegate<R> {
+    return computedImpl(property1, property2, property3, property4) { args: List<*> ->
+        transform(
+            args[0] as T1,
+            args[1] as T2,
+            args[2] as T3,
+            args[3] as T4
+        )
+    }
+}
+
+@Suppress("UNCHECKED_CAST")
+fun <T1, T2, T3, T4, T5, R> PropertyHost.computed(
+    property1: KProperty0<T1>,
+    property2: KProperty0<T2>,
+    property3: KProperty0<T3>,
+    property4: KProperty0<T4>,
+    property5: KProperty0<T5>,
+    transform: (T1, T2, T3, T4, T5) -> R
+): StateDelegate<R> {
+    return computedImpl(property1, property2, property3, property4, property5) { args: List<*> ->
+        transform(
+            args[0] as T1,
+            args[1] as T2,
+            args[2] as T3,
+            args[3] as T4,
+            args[4] as T5
+        )
+    }
+}
+
+private inline fun <T, R> PropertyHost.computedImpl(
+    vararg properties: KProperty0<T>,
+    crossinline transform: (List<T>) -> R
+): StateDelegate<R> {
+
+    val flows = properties.map { it.flow }
+    val initialValues = flows.map { it.value }
+    val elementsFlow = MutableStateFlow(initialValues)
+    val resultFlow = MutableStateFlow(transform(initialValues))
+
+    flows.forEachIndexed { index, flow ->
+        propertyHostScope.launch {
+            flow
+                .drop(1)
+                .collect {
+                    elementsFlow.value = elementsFlow.value.toMutableList().apply { this[index] = it }
+                }
         }
     }
+
+    propertyHostScope.launch {
+        elementsFlow
+            .drop(1)
+            .collect {
+                resultFlow.value = transform(it)
+            }
+    }
+
     return StateDelegate(resultFlow)
 }
