@@ -33,7 +33,6 @@ class ComputedTest {
         assertEquals(4, propertyHost.value)
     }
 
-    // FIXME : works correctly when states changed only 1 time
     @Test
     fun `updates computed value after two states changed`() {
         val propertyHost = object : TestPropertyHost() {
@@ -48,7 +47,6 @@ class ComputedTest {
         assertEquals(8, propertyHost.value)
     }
 
-    // FIXME : works correctly when states changed only 1 time
     @Test
     fun `updates computed value after three states changed`() {
         val propertyHost = object : TestPropertyHost() {
@@ -70,8 +68,8 @@ class ComputedTest {
     fun `updates computed value after another computed`() {
         val propertyHost = object : TestPropertyHost() {
             var state by state(1)
-            val value1 by computed(::state ) { it }
-            val value2 by computed(::value1 ) { it + 3 }
+            val value1 by computed(::state) { it }
+            val value2 by computed(::value1) { it + 3 }
         }
 
         repeat(3) { propertyHost.state++ }
@@ -84,7 +82,7 @@ class ComputedTest {
         val propertyObserver = TestPropertyObserver()
         val propertyHost = object : TestPropertyHost() {
             var state by state(0)
-            val value by computed(::state ) { it }
+            val value by computed(::state) { it }
         }
         val values = mutableListOf<Int>()
         with(propertyObserver) { propertyHost::value bind { values.add(it) } }
@@ -100,7 +98,7 @@ class ComputedTest {
         val propertyObserver = TestPropertyObserver()
         val propertyHost = object : TestPropertyHost() {
             var state by state(0)
-            val value by computed(::state ) { it }
+            val value by computed(::state) { it }
         }
         val values = mutableListOf<Int>()
         with(propertyObserver) { propertyHost::value bind { values.add(it) } }

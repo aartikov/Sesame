@@ -2,7 +2,6 @@ package me.aartikov.lib.data_binding
 
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.combineTransform
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.launch
 import kotlin.reflect.KProperty0
@@ -30,19 +29,34 @@ fun <T1, T2, R> PropertyHost.computed(
 ): StateDelegate<R> {
     val flow1 = property1.flow
     val flow2 = property2.flow
+
+    val pairFlow = MutableStateFlow(Pair(flow1.value, flow2.value))
     val resultFlow = MutableStateFlow(transform(flow1.value, flow2.value))
-    var firstSkipped = false
+
     propertyHostScope.launch {
-        combineTransform(flow1, flow2) { v1, v2 ->
-            if (firstSkipped) {
-                emit(transform(v1, v2))
-            } else {
-                firstSkipped = true
+        flow1
+            .drop(1)
+            .collect {
+                pairFlow.value = pairFlow.value.copy(first = it)
             }
-        }.collect {
-            resultFlow.value = it
-        }
     }
+
+    propertyHostScope.launch {
+        flow2
+            .drop(1)
+            .collect {
+                pairFlow.value = pairFlow.value.copy(second = it)
+            }
+    }
+
+    propertyHostScope.launch {
+        pairFlow
+            .drop(1)
+            .collect {
+                resultFlow.value = transform(it.first, it.second)
+            }
+    }
+
     return StateDelegate(resultFlow)
 }
 
@@ -55,18 +69,41 @@ fun <T1, T2, T3, R> PropertyHost.computed(
     val flow1 = property1.flow
     val flow2 = property2.flow
     val flow3 = property3.flow
+
+    val tripleFlow = MutableStateFlow(Triple(flow1.value, flow2.value, flow3.value))
     val resultFlow = MutableStateFlow(transform(flow1.value, flow2.value, flow3.value))
-    var firstSkipped = false
+
     propertyHostScope.launch {
-        combineTransform(flow1, flow2, flow3) { v1, v2, v3 ->
-            if (firstSkipped) {
-                emit(transform(v1, v2, v3))
-            } else {
-                firstSkipped = true
+        flow1
+            .drop(1)
+            .collect {
+                tripleFlow.value = tripleFlow.value.copy(first = it)
             }
-        }.collect {
-            resultFlow.value = it
-        }
     }
+
+    propertyHostScope.launch {
+        flow2
+            .drop(1)
+            .collect {
+                tripleFlow.value = tripleFlow.value.copy(second = it)
+            }
+    }
+
+    propertyHostScope.launch {
+        flow3
+            .drop(1)
+            .collect {
+                tripleFlow.value = tripleFlow.value.copy(third = it)
+            }
+    }
+
+    propertyHostScope.launch {
+        tripleFlow
+            .drop(1)
+            .collect {
+                resultFlow.value = transform(it.first, it.second, it.third)
+            }
+    }
+
     return StateDelegate(resultFlow)
 }
