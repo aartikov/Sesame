@@ -35,7 +35,7 @@ class MutableStateDelegate<T> internal constructor(
     }
 }
 
-fun <T> state(initialValue: T): MutableStateDelegate<T> {
+fun <T> PropertyHost.state(initialValue: T): MutableStateDelegate<T> {
     return MutableStateDelegate(MutableStateFlow(initialValue))
 }
 
@@ -49,10 +49,10 @@ fun <T> PropertyHost.stateFromFlow(initialValue: T, flow: Flow<T>): StateDelegat
     return StateDelegate(resultFlow)
 }
 
-fun <T> stateFromFlow(stateFlow: StateFlow<T>): StateDelegate<T> {
+fun <T> PropertyHost.stateFromFlow(stateFlow: StateFlow<T>): StateDelegate<T> {
     return StateDelegate(stateFlow)
 }
 
-fun <T> stateFromFlow(mutableStateFlow: MutableStateFlow<T>): MutableStateDelegate<T> {
+fun <T> PropertyHost.stateFromFlow(mutableStateFlow: MutableStateFlow<T>): MutableStateDelegate<T> {
     return MutableStateDelegate(mutableStateFlow)
 }

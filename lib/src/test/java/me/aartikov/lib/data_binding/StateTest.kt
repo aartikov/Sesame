@@ -13,11 +13,15 @@ class StateTest {
     @Test
     fun `receives nothing when not started`() {
         val propertyObserver = TestPropertyObserver()
-        val state = state(0)
+        val propertyHost = object : TestPropertyHost() {
+            var state by state(0)
+        }
         val values = mutableListOf<Int>()
-        with(propertyObserver) { state bind { values.add(it) } }
+        with(propertyObserver) {
+            propertyHost::state bind { values.add(it) }
+        }
 
-        state.value++
+        propertyHost.state++
 
         assertEquals(emptyList<Int>(), values)
     }
@@ -25,16 +29,20 @@ class StateTest {
     @Test
     fun `receives values when started`() {
         val propertyObserver = TestPropertyObserver()
-        val state = state(0)
+        val propertyHost = object : TestPropertyHost() {
+            var state by state(0)
+        }
         val values = mutableListOf<Int>()
-        with(propertyObserver) { state bind { values.add(it) } }
+        with(propertyObserver) {
+            propertyHost::state bind { values.add(it) }
+        }
 
         propertyObserver.propertyObserverLifecycleOwner.onStart()
-        state.value++
+        propertyHost.state++
         propertyObserver.propertyObserverLifecycleOwner.onResume()
-        state.value++
+        propertyHost.state++
         propertyObserver.propertyObserverLifecycleOwner.onPause()
-        state.value++
+        propertyHost.state++
 
         assertEquals(listOf(0, 1, 2, 3), values)
     }
@@ -42,12 +50,16 @@ class StateTest {
     @Test
     fun `receives only last state when restarted`() {
         val propertyObserver = TestPropertyObserver()
-        val state = state(0)
+        val propertyHost = object : TestPropertyHost() {
+            var state by state(0)
+        }
         val values = mutableListOf<Int>()
-        with(propertyObserver) { state bind { values.add(it) } }
+        with(propertyObserver) {
+            propertyHost::state bind { values.add(it) }
+        }
 
         propertyObserver.propertyObserverLifecycleOwner.onStop()
-        repeat(3) { state.value++ }
+        repeat(3) { propertyHost.state++ }
         propertyObserver.propertyObserverLifecycleOwner.onStart()
 
         assertEquals(listOf(3), values)
@@ -56,14 +68,18 @@ class StateTest {
     @Test
     fun `receives nothing when stopped`() {
         val propertyObserver = TestPropertyObserver()
-        val state = state(0)
+        val propertyHost = object : TestPropertyHost() {
+            var state by state(0)
+        }
         val values = mutableListOf<Int>()
-        with(propertyObserver) { state bind { values.add(it) } }
+        with(propertyObserver) {
+            propertyHost::state bind { values.add(it) }
+        }
 
         propertyObserver.propertyObserverLifecycleOwner.onStart()
-        state.value++
+        propertyHost.state++
         propertyObserver.propertyObserverLifecycleOwner.onStop()
-        state.value++
+        propertyHost.state++
 
         assertEquals(listOf(0, 1), values)
     }
