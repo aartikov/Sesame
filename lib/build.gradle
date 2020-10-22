@@ -1,6 +1,8 @@
 apply plugin: "com.android.library"
 apply plugin: "kotlin-android"
 apply plugin: "kotlin-android-extensions"
+apply plugin: 'maven'
+group = 'com.github.aartikov'
 
 android {
     compileSdkVersion 30
@@ -46,4 +48,13 @@ dependencies {
     def espressoVersion = "3.3.0"
     androidTestImplementation "androidx.test.ext:junit:1.1.2"
     androidTestImplementation "androidx.test.espresso:espresso-core:$espressoVersion"
+}
+
+task sourcesJar(type: Jar) {
+    from android.sourceSets.main.java.srcDirs
+    classifier = 'sources'
+}
+
+artifacts {
+    archives sourcesJar
 }
