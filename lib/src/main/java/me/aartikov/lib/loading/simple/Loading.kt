@@ -9,10 +9,9 @@ interface Loading<T : Any> {
 
     sealed class State<out T> {
         object Empty : State<Nothing>()
-        object EmptyLoading : State<Nothing>()
-        data class EmptyError(val throwable: Throwable) : State<Nothing>()
-        data class Data<T>(val data: T) : State<T>()
-        data class Refresh<T>(val data: T) : State<T>()
+        object Loading : State<Nothing>()
+        data class Error(val throwable: Throwable) : State<Nothing>()
+        data class Data<T>(val data: T, val refreshing: Boolean = false) : State<T>()
     }
 
     sealed class Event {

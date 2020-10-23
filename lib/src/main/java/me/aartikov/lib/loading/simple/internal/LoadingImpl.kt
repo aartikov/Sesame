@@ -1,9 +1,9 @@
 package me.aartikov.lib.loading.simple.internal
 
 import kotlinx.coroutines.channels.BroadcastChannel
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asFlow
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
 import me.aartikov.lib.loading.simple.Loading
 import me.aartikov.lib.loading.simple.Loading.Event
 import me.aartikov.lib.loading.simple.Loading.State
@@ -16,10 +16,11 @@ internal class LoadingImpl<T : Any>(
     initialState: State<T>
 ) : Loading<T> {
 
+    private val mutableStateFlow = MutableStateFlow(initialState)
     private val eventChannel = BroadcastChannel<Event>(capacity = 100)
 
     private val stateMachine: LoadingStateMachine<T> = LoadingStateMachine(
-        initialState = initialState,
+        initialState = initialState.toInternalState(),
         reducer = LoadingReducer(),
         actionSources = listOfNotNull(
             loadingActionSource
@@ -31,12 +32,17 @@ internal class LoadingImpl<T : Any>(
     )
 
     override val stateFlow: StateFlow<State<T>>
-        get() = stateMachine.stateFlow
+        get() = mutableStateFlow
 
     override val eventFlow: Flow<Event>
         get() = eventChannel.asFlow()
 
-    override suspend fun start(fresh: Boolean) {
+    override suspend fun start(fresh: Boolean) = coroutineScope {
+        launch {
+            stateMachine.stateFlow.collect {
+                mutableStateFlow.value = it.toPublicState()
+            }
+        }
         stateMachine.dispatch(Action.Load(fresh))
         stateMachine.start()
     }

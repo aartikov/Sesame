@@ -1,8 +1,15 @@
 package me.aartikov.lib.loading.simple.internal
 
 import me.aartikov.lib.loading.simple.Loading.Event
-import me.aartikov.lib.loading.simple.Loading.State
 import me.aartikov.lib.state_machine.*
+
+internal sealed class State<out T> {
+    object Empty : State<Nothing>()
+    object Loading : State<Nothing>()
+    data class Error(val throwable: Throwable) : State<Nothing>()
+    data class Data<T>(val data: T) : State<T>()
+    data class Refresh<T>(val data: T) : State<T>()
+}
 
 internal sealed class Action<out T> {
     data class Load(val fresh: Boolean) : Action<Nothing>()
@@ -31,7 +38,7 @@ internal class LoadingReducer<T> : Reducer<State<T>, Action<T>, Effect> {
         is Action.Load -> {
             when (state) {
                 is State.Empty -> next(
-                    State.EmptyLoading,
+                    State.Loading,
                     Effect.Load(action.fresh)
                 )
                 else -> nothing()
@@ -41,11 +48,11 @@ internal class LoadingReducer<T> : Reducer<State<T>, Action<T>, Effect> {
         is Action.Refresh -> {
             when (state) {
                 is State.Empty -> next(
-                    State.EmptyLoading,
+                    State.Loading,
                     Effect.Refresh
                 )
-                is State.EmptyError -> next(
-                    State.EmptyLoading,
+                is State.Error -> next(
+                    State.Loading,
                     Effect.Refresh
                 )
                 is State.Data -> next(
@@ -58,7 +65,7 @@ internal class LoadingReducer<T> : Reducer<State<T>, Action<T>, Effect> {
 
         is Action.DataLoaded -> {
             when (state) {
-                is State.EmptyLoading -> next(State.Data(action.data))
+                is State.Loading -> next(State.Data(action.data))
                 is State.Refresh -> next(State.Data(action.data))
                 else -> nothing()
             }
@@ -66,7 +73,7 @@ internal class LoadingReducer<T> : Reducer<State<T>, Action<T>, Effect> {
 
         is Action.EmptyDataLoaded -> {
             when (state) {
-                is State.EmptyLoading -> next(State.Empty)
+                is State.Loading -> next(State.Empty)
                 is State.Refresh -> next(State.Empty)
                 else -> nothing()
             }
@@ -74,8 +81,8 @@ internal class LoadingReducer<T> : Reducer<State<T>, Action<T>, Effect> {
 
         is Action.LoadingError -> {
             when (state) {
-                is State.EmptyLoading -> next(
-                    State.EmptyError(action.throwable),
+                is State.Loading -> next(
+                    State.Error(action.throwable),
                     Effect.EmitEvent(Event.Error(action.throwable, hasData = false))
                 )
                 is State.Refresh -> next(
@@ -89,8 +96,8 @@ internal class LoadingReducer<T> : Reducer<State<T>, Action<T>, Effect> {
         is Action.DataObserved -> {
             when (state) {
                 is State.Empty -> next(State.Data(action.data))
-                is State.EmptyLoading -> next(State.Refresh(action.data))
-                is State.EmptyError -> next(State.Data(action.data))    // TODO: Effect.EmitEvent(Event.Error(action.throwable, hasData = true)) ???
+                is State.Loading -> next(State.Refresh(action.data))
+                is State.Error -> next(State.Data(action.data))    // TODO: Effect.EmitEvent(Event.Error(action.throwable, hasData = true)) ???
                 is State.Refresh -> next(State.Refresh(action.data))
                 is State.Data -> next(State.Data(action.data))
                 else -> nothing()
@@ -99,7 +106,7 @@ internal class LoadingReducer<T> : Reducer<State<T>, Action<T>, Effect> {
 
         is Action.EmptyDataObserved -> {
             when (state) {
-                is State.Refresh -> next(State.EmptyLoading)
+                is State.Refresh -> next(State.Loading)
                 is State.Data -> next(State.Empty)
                 else -> nothing()
             }

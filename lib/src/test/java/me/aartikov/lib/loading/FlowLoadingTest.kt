@@ -31,7 +31,7 @@ class FlowLoadingTest {
 
         val job = loading.startIn(this)
 
-        assertEquals(Loading.State.Refresh("Cached value"), loading.state)
+        assertEquals(Loading.State.Data("Cached value", refreshing = true), loading.state)
         job.cancel()
     }
 
