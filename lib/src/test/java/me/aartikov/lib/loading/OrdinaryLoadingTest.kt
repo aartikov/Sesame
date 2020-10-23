@@ -136,7 +136,7 @@ class OrdinaryLoadingTest {
     }
 
     @Test
-    fun `loads not fresh data when it is specified`() = runBlockingTest {
+    fun `loads cached data when it is specified`() = runBlockingTest {
         val loader = TestLoader(Result.Success("Value"))
         val loading = OrdinaryLoading(loader)
 

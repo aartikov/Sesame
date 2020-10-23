@@ -4,14 +4,16 @@ import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asFlow
-import me.aartikov.lib.state_machine.EffectHandler
 import me.aartikov.lib.loading.simple.Loading
 import me.aartikov.lib.loading.simple.Loading.Event
 import me.aartikov.lib.loading.simple.Loading.State
+import me.aartikov.lib.state_machine.ActionSource
+import me.aartikov.lib.state_machine.EffectHandler
 
 internal class LoadingImpl<T : Any>(
     loadingEffectHandler: EffectHandler<Effect, Action<T>>,
-    initialState: State<T> = State.Empty
+    loadingActionSource: ActionSource<Action<T>>?,
+    initialState: State<T>
 ) : Loading<T> {
 
     private val eventChannel = BroadcastChannel<Event>(capacity = 100)
@@ -19,7 +21,9 @@ internal class LoadingImpl<T : Any>(
     private val stateMachine: LoadingStateMachine<T> = LoadingStateMachine(
         initialState = initialState,
         reducer = LoadingReducer(),
-        actionSources = emptyList(),
+        actionSources = listOfNotNull(
+            loadingActionSource
+        ),
         effectHandlers = listOf(
             loadingEffectHandler,
             EventEffectHandler(eventChannel)
