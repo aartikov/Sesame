@@ -11,7 +11,7 @@ import me.aartikov.lib.loading.paged.PagedLoading.State
 
 internal class PagedLoadingImpl<T : Any>(
     loader: PagedLoader<T>,
-    initialState: State<T> = State.Empty
+    initialState: State<T>
 ) : PagedLoading<T> {
 
     private val eventChannel = BroadcastChannel<Event>(capacity = 100)

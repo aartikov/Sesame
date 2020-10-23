@@ -8,7 +8,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.screen_profile.*
 import me.aartikov.androidarchitecture.R
 import me.aartikov.androidarchitecture.base.BaseScreen
-import me.aartikov.lib.loading.simple.setToView
+import me.aartikov.lib.loading.simple.Loading
 
 @AndroidEntryPoint
 class ProfileScreen : BaseScreen<ProfileViewModel>(R.layout.screen_profile, ProfileViewModel::class) {
@@ -19,24 +19,27 @@ class ProfileScreen : BaseScreen<ProfileViewModel>(R.layout.screen_profile, Prof
         swipeRefresh.setOnRefreshListener { vm.onPullToRefresh() }
         retryButton.setOnClickListener { vm.onRetryClicked() }
 
-        vm::profileUiState bind { state ->
-            state.setToView(
-                setData = { profile ->
+        vm::profileState bind { state ->
+            swipeRefresh.isVisible = state is Loading.State.Data
+            errorView.isVisible = state is Loading.State.Error
+            loadingView.isVisible = state is Loading.State.Loading
+
+            when (state) {
+                is Loading.State.Data -> {
+                    swipeRefresh.isRefreshing = state.refreshing
+                    val profile = state.data
                     name.text = profile.name
                     Glide.with(avatar)
                         .load(profile.avatarUrl)
                         .placeholder(R.drawable.bg_avatar)
                         .circleCrop()
                         .into(avatar)
-                },
-                setDataVisible = swipeRefresh::isVisible::set,
-                setError = {
-                    errorMessage.text = it.message
-                },
-                setErrorVisible = errorView::isVisible::set,
-                setLoadingVisible = loadingView::isVisible::set,
-                setRefreshVisible = swipeRefresh::setRefreshing
-            )
+                }
+
+                is Loading.State.Error -> {
+                    errorMessage.text = state.throwable.message
+                }
+            }
         }
     }
 }

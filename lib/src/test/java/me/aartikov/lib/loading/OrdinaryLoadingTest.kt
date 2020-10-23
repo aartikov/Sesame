@@ -31,7 +31,7 @@ class OrdinaryLoadingTest {
 
         val job = loading.startIn(this)
 
-        assertEquals(State.EmptyLoading, loading.state)
+        assertEquals(State.Loading, loading.state)
         assertEquals(loader.callCount, 1)
         job.cancel()
     }
@@ -72,7 +72,7 @@ class OrdinaryLoadingTest {
         val job = loading.startIn(this)
         delay(TestLoader.LOAD_DELAY * 2)
 
-        assertEquals(State.EmptyError(LoadingFailedException()), loading.state)
+        assertEquals(State.Error(LoadingFailedException()), loading.state)
         assertEquals(listOf(Event.Error(LoadingFailedException(), hasData = false)), events)
         job.cancel()
         eventsJob.cancel()
@@ -86,7 +86,7 @@ class OrdinaryLoadingTest {
         val job = loading.startIn(this)
         loading.refresh()
 
-        assertEquals(State.Refresh("Previous value"), loading.state)
+        assertEquals(State.Data("Previous value", refreshing = true), loading.state)
         job.cancel()
     }
 
@@ -136,7 +136,7 @@ class OrdinaryLoadingTest {
     }
 
     @Test
-    fun `loads not fresh data when it is specified`() = runBlockingTest {
+    fun `loads cached data when it is specified`() = runBlockingTest {
         val loader = TestLoader(Result.Success("Value"))
         val loading = OrdinaryLoading(loader)
 

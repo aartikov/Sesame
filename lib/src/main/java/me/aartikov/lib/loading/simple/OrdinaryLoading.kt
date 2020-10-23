@@ -1,7 +1,7 @@
 package me.aartikov.lib.loading.simple
 
+import me.aartikov.lib.loading.simple.internal.LoadingEffectHandler
 import me.aartikov.lib.loading.simple.internal.LoadingImpl
-import me.aartikov.lib.loading.simple.internal.OrdinaryLoadingEffectHandler
 
 interface OrdinaryLoader<T : Any> {
     suspend fun load(fresh: Boolean): T
@@ -11,33 +11,19 @@ fun <T : Any> OrdinaryLoading(
     loader: OrdinaryLoader<T>,
     initialState: Loading.State<T> = Loading.State.Empty
 ): Loading<T> {
-    return LoadingImpl(OrdinaryLoadingEffectHandler(loader), initialState)
+    return OrdinaryLoading(loader::load, initialState)
 }
 
 fun <T : Any> OrdinaryLoading(
     loader: suspend (fresh: Boolean) -> T,
     initialState: Loading.State<T> = Loading.State.Empty
 ): Loading<T> {
-    return OrdinaryLoading(
-        object : OrdinaryLoader<T> {
-            override suspend fun load(fresh: Boolean): T {
-                return loader(fresh)
-            }
-        },
-        initialState
-    )
+    return LoadingImpl(LoadingEffectHandler(loader), null, initialState)
 }
 
 fun <T : Any> OrdinaryLoading(
     loader: suspend () -> T,
     initialState: Loading.State<T> = Loading.State.Empty
 ): Loading<T> {
-    return OrdinaryLoading(
-        object : OrdinaryLoader<T> {
-            override suspend fun load(fresh: Boolean): T {
-                return loader()
-            }
-        },
-        initialState
-    )
+    return OrdinaryLoading({ _ -> loader() }, initialState)
 }

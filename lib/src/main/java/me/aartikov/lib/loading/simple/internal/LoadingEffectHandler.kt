@@ -1,11 +1,10 @@
 package me.aartikov.lib.loading.simple.internal
 
-import me.aartikov.lib.state_machine.EffectHandler
-import me.aartikov.lib.loading.simple.OrdinaryLoader
 import me.aartikov.lib.loading.simple.dataIsEmpty
+import me.aartikov.lib.state_machine.EffectHandler
 import java.util.concurrent.CancellationException
 
-internal class OrdinaryLoadingEffectHandler<T : Any>(private val loader: OrdinaryLoader<T>) :
+internal class LoadingEffectHandler<T : Any>(private val loader: suspend (fresh: Boolean) -> T) :
     EffectHandler<Effect, Action<T>> {
 
     override suspend fun handleEffect(effect: Effect, actionConsumer: (Action<T>) -> Unit) {
@@ -17,12 +16,11 @@ internal class OrdinaryLoadingEffectHandler<T : Any>(private val loader: Ordinar
 
     private suspend fun load(fresh: Boolean, actionConsumer: (Action<T>) -> Unit) {
         try {
-            actionConsumer(Action.LoadingStarted)
-            val data = loader.load(fresh)
+            val data = loader(fresh)
             if (dataIsEmpty(data)) {
-                actionConsumer(Action.FreshEmptyData)
+                actionConsumer(Action.EmptyDataLoaded)
             } else {
-                actionConsumer(Action.FreshData(data))
+                actionConsumer(Action.DataLoaded(data))
             }
         } catch (e: Exception) {
             if (e !is CancellationException) {
