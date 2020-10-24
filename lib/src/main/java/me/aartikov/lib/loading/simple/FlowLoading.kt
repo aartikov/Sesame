@@ -13,9 +13,23 @@ interface FlowLoader<T : Any> {
 }
 
 fun <T : Any> FlowLoading(loader: FlowLoader<T>): Loading<T> {
+    return FlowLoading(loader::load, loader::observe)
+}
+
+fun <T : Any> FlowLoading(
+    load: suspend (fresh: Boolean) -> T,
+    observe: () -> Flow<T>
+): Loading<T> {
     return LoadingImpl(
-        LoadingEffectHandler(loader::load),
-        LoadingActionSource(loader.observe()),
+        LoadingEffectHandler(load),
+        LoadingActionSource(observe()),
         Loading.State.Empty
     )
+}
+
+fun <T : Any> FlowLoading(
+    load: suspend () -> T,
+    observe: () -> Flow<T>
+): Loading<T> {
+    return FlowLoading({ _ -> load() }, observe)
 }

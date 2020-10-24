@@ -57,6 +57,32 @@ fun <T : Any> PagedLoading(
     return PagedLoadingImpl(loader, initialState)
 }
 
+fun <T : Any> PagedLoading(
+    loadFirstPage: suspend (fresh: Boolean) -> List<T>,
+    loadNextPage: suspend (pagingInfo: PagingInfo<T>) -> List<T>,
+    initialState: PagedLoading.State<T> = PagedLoading.State.Empty
+): PagedLoading<T> {
+    val loader = object : PagedLoader<T> {
+        override suspend fun loadFirstPage(fresh: Boolean): List<T> = loadFirstPage(fresh)
+
+        override suspend fun loadNextPage(pagingInfo: PagingInfo<T>): List<T> = loadNextPage(pagingInfo)
+    }
+    return PagedLoading(loader, initialState)
+}
+
+fun <T : Any> PagedLoading(
+    loadFirstPage: suspend () -> List<T>,
+    loadNextPage: suspend (pagingInfo: PagingInfo<T>) -> List<T>,
+    initialState: PagedLoading.State<T> = PagedLoading.State.Empty
+): PagedLoading<T> {
+    val loader = object : PagedLoader<T> {
+        override suspend fun loadFirstPage(fresh: Boolean): List<T> = loadFirstPage()
+
+        override suspend fun loadNextPage(pagingInfo: PagingInfo<T>): List<T> = loadNextPage(pagingInfo)
+    }
+    return PagedLoading(loader, initialState)
+}
+
 val <T : Any> PagedLoading<T>.state: PagedLoading.State<T> get() = stateFlow.value
 
 fun <T : Any> PagedLoading<T>.startIn(scope: CoroutineScope, fresh: Boolean = true): Job {
