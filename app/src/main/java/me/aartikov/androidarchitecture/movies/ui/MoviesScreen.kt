@@ -9,14 +9,12 @@ import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import com.xwray.groupie.Section
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.layout_empty_view.*
 import kotlinx.android.synthetic.main.layout_error_view.*
-import kotlinx.android.synthetic.main.layout_loading_view.*
 import kotlinx.android.synthetic.main.screen_movies.*
 import me.aartikov.androidarchitecture.R
 import me.aartikov.androidarchitecture.base.BaseScreen
-import me.aartikov.androidarchitecture.movies.utils.doAfterScrollToEnd
-import me.aartikov.lib.loading.paged.setToView
+import me.aartikov.androidarchitecture.movies.utils.doOnScrollToEnd
+import me.aartikov.lib.loading.paged.PagedLoading
 
 
 @AndroidEntryPoint
@@ -24,6 +22,7 @@ class MoviesScreen : BaseScreen<MoviesViewModel>(R.layout.screen_movies, MoviesV
 
     private val movieAdapter = GroupAdapter<GroupieViewHolder>()
     private val listSection = Section()
+    private var scrollToEndListenerEnabled: Boolean = true
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -32,23 +31,30 @@ class MoviesScreen : BaseScreen<MoviesViewModel>(R.layout.screen_movies, MoviesV
         swipeRefresh.setOnRefreshListener { vm.onPullToRefresh() }
         retryButton.setOnClickListener { vm.onRetryClicked() }
 
-        vm::moviesUiState bind { state ->
-            state.setToView(
-                setData = { listSection.update(it.toGroupieItems()) },
-                setDataVisible = swipeRefresh::isVisible::set,
-                setEmptyVisible = emptyPlaceholder::isVisible::set,
-                setError = { errorMessage.text = it.message },
-                setErrorVisible = errorView::isVisible::set,
-                setRefreshVisible = swipeRefresh::setRefreshing,
-                setLoadingVisible = loadingView::isVisible::set,
-                setLoadMoreVisible = { visible ->
-                    val item = LoadingItem()
-                    if (visible)
-                        listSection.setFooter(item)
-                    else
+        vm::moviesState bind { state ->
+            swipeRefresh.isVisible = state is PagedLoading.State.Data
+            emptyView.isVisible = state is PagedLoading.State.Empty
+            loadingView.isVisible = state is PagedLoading.State.Loading
+            errorView.isVisible = state is PagedLoading.State.Error
+
+            when (state) {
+                is PagedLoading.State.Data -> {
+                    listSection.update(state.data.toGroupieItems())
+                    swipeRefresh.isRefreshing = state.refreshing
+
+                    if (state.loadingMore) {
+                        listSection.setFooter(LoadingItem())
+                    } else {
                         listSection.removeFooter()
+                    }
+
+                    scrollToEndListenerEnabled = !state.fullData
                 }
-            )
+
+                is PagedLoading.State.Error -> {
+                    errorMessage.text = state.throwable.message
+                }
+            }
         }
     }
 
@@ -58,8 +64,8 @@ class MoviesScreen : BaseScreen<MoviesViewModel>(R.layout.screen_movies, MoviesV
             layoutManager = LinearLayoutManager(requireContext())
             adapter = movieAdapter
             addItemDecoration(DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL))
-            doAfterScrollToEnd {
-                vm.onLoadMore()
+            doOnScrollToEnd {
+                if (scrollToEndListenerEnabled) vm.onLoadMore()
             }
         }
     }

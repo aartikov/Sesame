@@ -101,7 +101,7 @@ class FlowLoadingTest {
             }
 
             delay(LOAD_DELAY)
-            return when (val result = result) {
+            return when (result) {
                 is Result.Success -> result.value
                 is Result.Error -> throw result.throwable
             }.also {

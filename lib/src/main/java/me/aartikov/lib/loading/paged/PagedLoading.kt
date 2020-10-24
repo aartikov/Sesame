@@ -7,6 +7,7 @@ import kotlinx.coroutines.launch
 import me.aartikov.lib.loading.paged.internal.PagedLoadingImpl
 
 interface PagedLoader<T : Any> {
+
     suspend fun loadFirstPage(fresh: Boolean): List<T>
 
     suspend fun loadNextPage(pagingInfo: PagingInfo<T>): List<T>
@@ -16,12 +17,21 @@ interface PagedLoading<T : Any> {
 
     sealed class State<out T> {
         object Empty : State<Nothing>()
-        object EmptyLoading : State<Nothing>()
-        data class EmptyError(val throwable: Throwable) : State<Nothing>()
-        data class Data<T>(val pageCount: Int, val data: List<T>) : State<T>()
-        data class Refresh<T>(val pageCount: Int, val data: List<T>) : State<T>()
-        data class LoadingMore<T>(val pageCount: Int, val data: List<T>) : State<T>()
-        data class FullData<T>(val pageCount: Int, val data: List<T>) : State<T>()
+        object Loading : State<Nothing>()
+        data class Error(val throwable: Throwable) : State<Nothing>()
+        data class Data<T>(
+            val pageCount: Int,
+            val data: List<T>,
+            val status: DataStatus = DataStatus.NORMAL
+        ) : State<T>() {
+            val refreshing: Boolean get() = status == DataStatus.REFRESHING
+            val loadingMore: Boolean get() = status == DataStatus.LOADING_MORE
+            val fullData: Boolean get() = status == DataStatus.FULL_DATA
+        }
+    }
+
+    enum class DataStatus {
+        NORMAL, REFRESHING, LOADING_MORE, FULL_DATA
     }
 
     sealed class Event {

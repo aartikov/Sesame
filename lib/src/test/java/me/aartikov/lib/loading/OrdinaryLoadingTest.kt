@@ -163,7 +163,7 @@ class OrdinaryLoadingTest {
         override suspend fun load(fresh: Boolean): String {
             callCount++
             delay(LOAD_DELAY)
-            return when (val result = result) {
+            return when (result) {
                 is Result.Success -> if (fresh) result.value else "${result.value} (cached)"
                 is Result.Error -> throw result.throwable
             }

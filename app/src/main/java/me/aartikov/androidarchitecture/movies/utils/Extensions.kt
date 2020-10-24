@@ -3,7 +3,7 @@ package me.aartikov.androidarchitecture.movies.utils
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
-fun RecyclerView.doAfterScrollToEnd(difference: Int = 10, onLoadMore: () -> Unit) =
+fun RecyclerView.doOnScrollToEnd(difference: Int = 10, listener: () -> Unit) =
     addOnScrollListener(object : RecyclerView.OnScrollListener() {
 
         override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
@@ -14,6 +14,6 @@ fun RecyclerView.doAfterScrollToEnd(difference: Int = 10, onLoadMore: () -> Unit
                 (recyclerView.layoutManager as LinearLayoutManager).findLastVisibleItemPosition()
 
             if (dy > 0 && totalItemCount - lastVisibleItem < difference)
-                recyclerView.post { onLoadMore() }
+                recyclerView.post { listener() }
         }
     })

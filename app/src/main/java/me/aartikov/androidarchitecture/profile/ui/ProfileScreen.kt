@@ -5,6 +5,7 @@ import android.view.View
 import androidx.core.view.isVisible
 import com.bumptech.glide.Glide
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.android.synthetic.main.layout_error_view.*
 import kotlinx.android.synthetic.main.screen_profile.*
 import me.aartikov.androidarchitecture.R
 import me.aartikov.androidarchitecture.base.BaseScreen

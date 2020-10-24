@@ -7,8 +7,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runBlockingTest
 import me.aartikov.lib.loading.PagedLoadingTest.TestLoader.Result
 import me.aartikov.lib.loading.paged.*
-import me.aartikov.lib.loading.paged.PagedLoading.Event
-import me.aartikov.lib.loading.paged.PagedLoading.State
+import me.aartikov.lib.loading.paged.PagedLoading.*
 import org.junit.Test
 
 class PagedLoadingTest {
@@ -28,7 +27,7 @@ class PagedLoadingTest {
 
         val job = loading.startIn(this)
 
-        assertEquals(State.EmptyLoading, loading.state)
+        assertEquals(State.Loading, loading.state)
         assertEquals(loader.loadFirstPageCallCount, 1)
         assertEquals(loader.loadNextPageCallCount, 0)
         job.cancel()
@@ -70,7 +69,7 @@ class PagedLoadingTest {
         val job = loading.startIn(this)
         delay(TestLoader.LOAD_DELAY * 2)
 
-        assertEquals(State.EmptyError(LoadingFailedException()), loading.state)
+        assertEquals(State.Error(LoadingFailedException()), loading.state)
         assertEquals(listOf(Event.Error(LoadingFailedException(), hasData = false)), events)
         job.cancel()
         eventsJob.cancel()
@@ -84,7 +83,7 @@ class PagedLoadingTest {
         val job = loading.startIn(this)
         loading.refresh()
 
-        assertEquals(State.Refresh(1, listOf("Previous value1", "Previous value2")), loading.state)
+        assertEquals(State.Data(1, listOf("Previous value1", "Previous value2"), DataStatus.REFRESHING), loading.state)
         job.cancel()
     }
 
@@ -157,7 +156,7 @@ class PagedLoadingTest {
         loading.loadMore()
         delay(TestLoader.LOAD_DELAY / 2)
 
-        assertEquals(State.LoadingMore(1, listOf("Value1", "Value2")), loading.state)
+        assertEquals(State.Data(1, listOf("Value1", "Value2"), DataStatus.LOADING_MORE), loading.state)
         job.cancel()
     }
 
@@ -216,7 +215,7 @@ class PagedLoadingTest {
         loading.loadMore()
         delay(TestLoader.LOAD_DELAY * 2)
 
-        assertEquals(State.FullData(2, listOf("Value1", "Value2", "Value3")), loading.state)
+        assertEquals(State.Data(2, listOf("Value1", "Value2", "Value3"), DataStatus.FULL_DATA), loading.state)
         job.cancel()
     }
 
@@ -271,7 +270,7 @@ class PagedLoadingTest {
 
         private suspend fun load(result: Result, fresh: Boolean): List<String> {
             delay(LOAD_DELAY)
-            return when (val result = result) {
+            return when (result) {
                 is Result.Success -> if (fresh) result.values else result.values.map { "$it (cached)" }
                 is Result.Error -> throw result.throwable
             }
