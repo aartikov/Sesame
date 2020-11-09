@@ -4,7 +4,7 @@ import me.aartikov.lib.loading.simple.dataIsEmpty
 import me.aartikov.lib.state_machine.EffectHandler
 import java.util.concurrent.CancellationException
 
-internal class LoadingEffectHandler<T : Any>(private val loader: suspend (fresh: Boolean) -> T) :
+internal class LoadingEffectHandler<T : Any>(private val loader: suspend (fresh: Boolean) -> T?) :
     EffectHandler<Effect, Action<T>> {
 
     override suspend fun handleEffect(effect: Effect, actionConsumer: (Action<T>) -> Unit) {
@@ -17,7 +17,7 @@ internal class LoadingEffectHandler<T : Any>(private val loader: suspend (fresh:
     private suspend fun load(fresh: Boolean, actionConsumer: (Action<T>) -> Unit) {
         try {
             val data = loader(fresh)
-            if (dataIsEmpty(data)) {
+            if (data == null || dataIsEmpty(data)) {
                 actionConsumer(Action.EmptyDataLoaded)
             } else {
                 actionConsumer(Action.DataLoaded(data))

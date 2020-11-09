@@ -49,6 +49,18 @@ class OrdinaryLoadingTest {
     }
 
     @Test
+    fun `treat null as empty`() = runBlockingTest {
+        val loader = suspend { null }
+        val loading = OrdinaryLoading(loader)
+
+        val job = loading.startIn(this)
+        delay(TestLoader.LOAD_DELAY * 2)
+
+        assertEquals(State.Empty, loading.state)
+        job.cancel()
+    }
+
+    @Test
     fun `shows data when it is loaded`() = runBlockingTest {
         val loader = TestLoader(Result.Success("Value"))
         val loading = OrdinaryLoading(loader)

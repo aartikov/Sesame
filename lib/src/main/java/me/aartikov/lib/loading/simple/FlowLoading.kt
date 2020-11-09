@@ -7,9 +7,9 @@ import me.aartikov.lib.loading.simple.internal.LoadingImpl
 
 interface FlowLoader<T : Any> {
 
-    suspend fun load(fresh: Boolean): T
+    suspend fun load(fresh: Boolean): T?
 
-    fun observe(): Flow<T>
+    fun observe(): Flow<T?>
 }
 
 fun <T : Any> FlowLoading(loader: FlowLoader<T>): Loading<T> {
@@ -17,8 +17,8 @@ fun <T : Any> FlowLoading(loader: FlowLoader<T>): Loading<T> {
 }
 
 fun <T : Any> FlowLoading(
-    load: suspend (fresh: Boolean) -> T,
-    observe: () -> Flow<T>
+    load: suspend (fresh: Boolean) -> T?,
+    observe: () -> Flow<T?>
 ): Loading<T> {
     return LoadingImpl(
         LoadingEffectHandler(load),
@@ -28,8 +28,8 @@ fun <T : Any> FlowLoading(
 }
 
 fun <T : Any> FlowLoading(
-    load: suspend () -> T,
-    observe: () -> Flow<T>
+    load: suspend () -> T?,
+    observe: () -> Flow<T?>
 ): Loading<T> {
     return FlowLoading({ _ -> load() }, observe)
 }
