@@ -11,7 +11,7 @@ import java.util.concurrent.CancellationException
 internal class PagedLoadingEffectHandler<T : Any>(private val loader: PagedLoader<T>) :
     EffectHandler<Effect<T>, Action<T>> {
 
-    private var loadNextPageJob: Job? = null
+    private var job: Job? = null
 
     override suspend fun handleEffect(effect: Effect<T>, actionConsumer: (Action<T>) -> Unit) {
         when (effect) {
@@ -20,18 +20,23 @@ internal class PagedLoadingEffectHandler<T : Any>(private val loader: PagedLoade
         }
     }
 
-    private suspend fun loadFirstPage(fresh: Boolean, actionConsumer: (Action<T>) -> Unit) {
-        try {
-            loadNextPageJob?.cancel()
-            val data = loader.loadFirstPage(fresh)
-            if (data.isEmpty()) {
-                actionConsumer(Action.EmptyPage)
-            } else {
-                actionConsumer(Action.NewPage(data))
-            }
-        } catch (e: Exception) {
-            if (e !is CancellationException) {
-                actionConsumer(Action.Error(e))
+    private suspend fun loadFirstPage(
+        fresh: Boolean,
+        actionConsumer: (Action<T>) -> Unit
+    ) = coroutineScope {
+        job?.cancel()
+        job = launch {
+            try {
+                val data = loader.loadFirstPage(fresh)
+                if (data.isEmpty()) {
+                    actionConsumer(Action.EmptyPage)
+                } else {
+                    actionConsumer(Action.NewPage(data))
+                }
+            } catch (e: Exception) {
+                if (e !is CancellationException) {
+                    actionConsumer(Action.Error(e))
+                }
             }
         }
     }
@@ -40,7 +45,8 @@ internal class PagedLoadingEffectHandler<T : Any>(private val loader: PagedLoade
         pagingInfo: PagingInfo<T>,
         actionConsumer: (Action<T>) -> Unit
     ) = coroutineScope {
-        loadNextPageJob = launch {
+        job?.cancel()
+        job = launch {
             try {
                 val data = loader.loadNextPage(pagingInfo)
                 if (data.isEmpty()) {
