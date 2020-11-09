@@ -14,6 +14,7 @@ internal sealed class State<out T> {
 internal sealed class Action<out T> {
     data class Load(val fresh: Boolean) : Action<Nothing>()
     object Refresh : Action<Nothing>()
+    data class Restart(val fresh: Boolean) : Action<Nothing>()
 
     data class DataLoaded<T>(val data: T) : Action<T>()
     object EmptyDataLoaded : Action<Nothing>()
@@ -25,7 +26,6 @@ internal sealed class Action<out T> {
 
 internal sealed class Effect {
     data class Load(val fresh: Boolean) : Effect()
-    object Refresh : Effect()
     data class EmitEvent(val event: Event) : Effect()
 }
 
@@ -49,18 +49,25 @@ internal class LoadingReducer<T> : Reducer<State<T>, Action<T>, Effect> {
             when (state) {
                 is State.Empty -> next(
                     State.Loading,
-                    Effect.Refresh
+                    Effect.Load(fresh = true)
                 )
                 is State.Error -> next(
                     State.Loading,
-                    Effect.Refresh
+                    Effect.Load(fresh = true)
                 )
                 is State.Data -> next(
                     State.Refresh(data = state.data),
-                    Effect.Refresh
+                    Effect.Load(fresh = true)
                 )
                 else -> nothing()
             }
+        }
+
+        is Action.Restart -> {
+            next(
+                State.Loading,
+                Effect.Load(action.fresh)
+            )
         }
 
         is Action.DataLoaded -> {
