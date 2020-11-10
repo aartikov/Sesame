@@ -50,4 +50,8 @@ internal class LoadingImpl<T : Any>(
     override fun refresh() {
         stateMachine.dispatch(Action.Refresh)
     }
+
+    override fun restart(fresh: Boolean) {
+        stateMachine.dispatch(Action.Restart(fresh))
+    }
 }

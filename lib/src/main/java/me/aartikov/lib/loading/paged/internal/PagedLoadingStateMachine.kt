@@ -18,6 +18,7 @@ internal sealed class Action<out T> {
     data class Load(val fresh: Boolean) : Action<Nothing>()
     object Refresh : Action<Nothing>()
     object LoadMore : Action<Nothing>()
+    data class Restart(val fresh: Boolean) : Action<Nothing>()
 
     data class NewPage<T>(val data: List<T>) : Action<T>()
     object EmptyPage : Action<Nothing>()
@@ -79,6 +80,13 @@ internal class PagedLoadingReducer<T> : Reducer<State<T>, Action<T>, Effect<T>> 
                 )
                 else -> nothing()
             }
+        }
+
+        is Action.Restart -> {
+            next(
+                State.Loading,
+                Effect.LoadFirstPage(action.fresh)
+            )
         }
 
         is Action.NewPage -> {

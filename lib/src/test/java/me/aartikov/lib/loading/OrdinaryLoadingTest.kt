@@ -159,7 +159,38 @@ class OrdinaryLoadingTest {
         job.cancel()
     }
 
-    private class TestLoader(private val result: Result) : OrdinaryLoader<String> {
+    @Test
+    fun `starts loading after restart`() = runBlockingTest {
+        val loader = TestLoader(Result.Success("Anything"))
+        val loading = OrdinaryLoading(loader, initialState = State.Data("Value"))
+
+        val job = loading.startIn(this)
+        loading.restart()
+
+        assertEquals(State.Loading, loading.state)
+        job.cancel()
+    }
+
+    @Test
+    fun `loads new data after restart`() = runBlockingTest {
+        var resultValue = "First"
+        val loader = TestLoader { Result.Success(resultValue) }
+        val loading = OrdinaryLoading(loader)
+
+        val job = loading.startIn(this)
+        delay(TestLoader.LOAD_DELAY / 2)
+        resultValue = "Second"
+        loading.restart()
+        delay(TestLoader.LOAD_DELAY * 2)
+
+        assertEquals(State.Data("Second"), loading.state)
+        job.cancel()
+    }
+
+    private class TestLoader(private val resultProvider: () -> Result) : OrdinaryLoader<String> {
+
+        constructor(result: Result) : this({ result })
+
         companion object {
             const val LOAD_DELAY: Long = 100
         }
@@ -175,7 +206,7 @@ class OrdinaryLoadingTest {
         override suspend fun load(fresh: Boolean): String {
             callCount++
             delay(LOAD_DELAY)
-            return when (result) {
+            return when (val result = resultProvider.invoke()) {
                 is Result.Success -> if (fresh) result.value else "${result.value} (cached)"
                 is Result.Error -> throw result.throwable
             }

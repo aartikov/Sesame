@@ -50,4 +50,8 @@ internal class PagedLoadingImpl<T : Any>(
     override fun loadMore() {
         stateMachine.dispatch(Action.LoadMore)
     }
+
+    override fun restart(fresh: Boolean) {
+        stateMachine.dispatch(Action.Restart(fresh))
+    }
 }

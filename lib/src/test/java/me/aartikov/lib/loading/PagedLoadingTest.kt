@@ -238,6 +238,38 @@ class PagedLoadingTest {
         job.cancel()
     }
 
+    @Test
+    fun `starts loading after restart`() = runBlockingTest {
+        val loader = TestLoader(
+            firstPageResult = Result.Success(listOf("Anything"))
+        )
+        val loading = PagedLoading(loader, initialState = State.Data(1, listOf("Value1", "Value2")))
+
+        val job = loading.startIn(this)
+        loading.restart()
+
+        assertEquals(State.Loading, loading.state)
+        job.cancel()
+    }
+
+    @Test
+    fun `loads new data after restart`() = runBlockingTest {
+        val loader = TestLoader(
+            firstPageResult = Result.Success(listOf("Value1", "Value2")),
+            nextPageResult = { Result.Success(listOf("Value3", "Value4")) }
+        )
+        val loading = PagedLoading(loader, initialState = State.Data(1, listOf("Previous value1", "Previous value2")))
+
+        val job = loading.startIn(this)
+        loading.loadMore()
+        delay(TestLoader.LOAD_DELAY / 2)
+        loading.restart()
+        delay(TestLoader.LOAD_DELAY * 2)
+
+        assertEquals(State.Data(1, listOf("Value1", "Value2")), loading.state)
+        job.cancel()
+    }
+
     private class TestLoader(
         private val firstPageResult: Result,
         private val nextPageResult: (PagingInfo<String>) -> Result = { Result.Success(emptyList()) }

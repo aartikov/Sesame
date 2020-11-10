@@ -48,6 +48,7 @@ interface PagedLoading<T : Any> {
 
     fun loadMore()
 
+    fun restart(fresh: Boolean = true)
 }
 
 fun <T : Any> PagedLoading(

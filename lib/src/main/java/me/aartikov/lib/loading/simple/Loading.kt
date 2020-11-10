@@ -26,6 +26,7 @@ interface Loading<T : Any> {
 
     fun refresh()
 
+    fun restart(fresh: Boolean = true)
 }
 
 val <T : Any> Loading<T>.state: Loading.State<T> get() = stateFlow.value
