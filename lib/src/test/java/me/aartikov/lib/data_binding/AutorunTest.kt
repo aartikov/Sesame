@@ -11,9 +11,9 @@ class AutorunTest {
         val propertyHost = object : TestPropertyHost() {
             val state1 by state(1)
             val state2 by state(2)
-            val autorun = autorun(::state1, ::state2) { val1, val2 ->
-                values.add(val1 + val2)
-            }
+        }
+        with(propertyHost) {
+            autorun(::state1, ::state2) { val1, val2 -> values.add(val1 + val2) }
         }
 
         Assert.assertEquals(listOf(3), values)
@@ -22,12 +22,12 @@ class AutorunTest {
     @Test
     fun `trigger autorun after state changed`() {
         val values = mutableListOf<Int>()
-        val propertyHost = object : TestPropertyHost() {
-            var state1 by state(1)
-            val autorun = autorun(::state1) { values.add(it) }
+        val propertyHost = object : TestPropertyHost() { var state by state(1) }
+        with(propertyHost) {
+            autorun(::state) { values.add(it) }
         }
 
-        repeat(3) { propertyHost.state1++ }
+        repeat(3) { propertyHost.state++ }
 
         Assert.assertEquals(listOf(1, 2, 3, 4), values)
     }
@@ -38,10 +38,9 @@ class AutorunTest {
         val propertyHost = object : TestPropertyHost() {
             var state1 by state(1)
             var state2 by state(2)
-
-            val autorun = autorun(::state1, ::state2) { val1, val2 ->
-                values.add(val1 + val2)
-            }
+        }
+        with(propertyHost) {
+            autorun(::state1, ::state2) { val1, val2 -> values.add(val1 + val2) }
         }
 
         repeat(3) { propertyHost.state1++ }
@@ -57,8 +56,9 @@ class AutorunTest {
             var state1 by state(1)
             var state2 by state(2)
             var state3 by state(3)
-
-            val autorun = autorun(::state1, ::state2, ::state3) { val1, val2, val3 ->
+        }
+        with(propertyHost) {
+            autorun(::state1, ::state2, ::state3) { val1, val2, val3 ->
                 values.add(val1 + val2 + val3)
             }
         }
@@ -75,8 +75,10 @@ class AutorunTest {
         val values = mutableListOf<Int>()
         val propertyHost = object : TestPropertyHost() {
             var state by state(1)
-            val value by computed(::state) { it }
-            val autorun = autorun(::value) { values.add(it) }
+            val computedValue by computed(::state) { it }
+        }
+        with(propertyHost) {
+            autorun(::computedValue) { values.add(it) }
         }
 
         repeat(3) { propertyHost.state++ }
