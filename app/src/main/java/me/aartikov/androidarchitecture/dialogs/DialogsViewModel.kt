@@ -22,9 +22,9 @@ class DialogsViewModel : BaseViewModel() {
             val result = dialogForResult.showForResult(Unit)
 
             if(result != null && result.isNotEmpty()) {
-                showMessage.send(result)
+                showMessage(result)
             } else {
-                showMessage.send("Canceled")
+                showMessage("Canceled")
             }
         }
     }

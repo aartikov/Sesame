@@ -10,14 +10,10 @@ open class BaseViewModel : ViewModel(), PropertyHost {
 
     override val propertyHostScope get() = viewModelScope
 
-    val navigationMessages = command<NavigationMessage>()
-    val showErrorCommand = command<String>()
-
-    protected fun navigate(navigationMessage: NavigationMessage) {
-        navigationMessages.send(navigationMessage)
-    }
+    val navigate = command<NavigationMessage>()
+    val showError = command<String>()
 
     protected fun showError(e: Throwable) {
-        showErrorCommand.send(e.message ?: "Error")
+        showError(e.message ?: "Error")
     }
 }

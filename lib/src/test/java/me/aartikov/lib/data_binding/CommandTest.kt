@@ -22,7 +22,7 @@ class CommandTest {
         }
 
         with(propertyHost) {
-            command.send(0)
+            command(0)
         }
 
         assertEquals(emptyList<Int>(), values)
@@ -41,15 +41,15 @@ class CommandTest {
 
         propertyObserver.propertyObserverLifecycleOwner.onStart()
         with(propertyHost) {
-            command.send(0)
+            command(0)
         }
         propertyObserver.propertyObserverLifecycleOwner.onResume()
         with(propertyHost) {
-            propertyHost.command.send(1)
+            command(1)
         }
         propertyObserver.propertyObserverLifecycleOwner.onPause()
         with(propertyHost) {
-            propertyHost.command.send(2)
+            command(2)
         }
 
         assertEquals(listOf(0, 1, 2), values)
@@ -68,14 +68,14 @@ class CommandTest {
 
         propertyObserver.propertyObserverLifecycleOwner.onStop()
         with(propertyHost) {
-            command.send(0)
+            command(0)
         }
 
         assertEquals(emptyList<Int>(), values)
     }
 
     @Test
-    fun `saves commands when stopped`() {
+    fun `buffers commands when stopped`() {
         val propertyObserver = TestPropertyObserver()
         val propertyHost = object : TestPropertyHost() {
             val command = command<Int>()
@@ -87,7 +87,7 @@ class CommandTest {
 
         propertyObserver.propertyObserverLifecycleOwner.onStop()
         with(propertyHost) {
-            repeat(3) { command.send(0) }
+            repeat(3) { command(0) }
         }
         propertyObserver.propertyObserverLifecycleOwner.onStart()
 
@@ -95,7 +95,7 @@ class CommandTest {
     }
 
     @Test
-    fun `saves commands before starting`() {
+    fun `buffers commands before starting`() {
         val propertyObserver = TestPropertyObserver()
         val propertyHost = object : TestPropertyHost() {
             val command = command<Int>()
@@ -106,7 +106,7 @@ class CommandTest {
         }
 
         with(propertyHost) {
-            repeat(3) { command.send(0) }
+            repeat(3) { command(0) }
         }
         propertyObserver.propertyObserverLifecycleOwner.onStart()
 
