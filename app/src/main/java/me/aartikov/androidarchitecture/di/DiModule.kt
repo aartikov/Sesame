@@ -15,6 +15,7 @@ import me.aartikov.androidarchitecture.profile.domain.Profile
 import me.aartikov.lib.loading.paged.PagedLoading
 import me.aartikov.lib.loading.simple.Loading
 import me.aartikov.lib.loading.simple.OrdinaryLoading
+import me.aartikov.lib.navigation.NavigationMessageDispatcher
 import javax.inject.Singleton
 
 @Module
@@ -25,6 +26,12 @@ object DiModule {
     @Provides
     fun provideSharedPreferences(@ApplicationContext context: Context): SharedPreferences {
         return context.getSharedPreferences("prefs", Context.MODE_PRIVATE)
+    }
+
+    @Singleton
+    @Provides
+    fun provideNavigationMessageDispatcher(): NavigationMessageDispatcher {     // TODO: must be in ActivityComponent
+        return NavigationMessageDispatcher()
     }
 
     @Provides
