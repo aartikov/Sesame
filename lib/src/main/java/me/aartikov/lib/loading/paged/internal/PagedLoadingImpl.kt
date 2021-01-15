@@ -1,6 +1,6 @@
 package me.aartikov.lib.loading.paged.internal
 
-import kotlinx.coroutines.channels.BroadcastChannel
+import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -15,7 +15,10 @@ internal class PagedLoadingImpl<T : Any>(
 ) : PagedLoading<T> {
 
     private val mutableStateFlow = MutableStateFlow(initialState)
-    private val eventChannel = BroadcastChannel<Event>(capacity = 100)
+
+    private val mutableEventFlow = MutableSharedFlow<PagedLoading.Event>(
+        extraBufferCapacity = 100, onBufferOverflow = BufferOverflow.DROP_OLDEST
+    )
 
     private val stateMachine: PagedLoadingStateMachine<T> = PagedLoadingStateMachine(
         initialState = initialState.toInternalState(),
@@ -23,7 +26,7 @@ internal class PagedLoadingImpl<T : Any>(
         actionSources = emptyList(),
         effectHandlers = listOf(
             PagedLoadingEffectHandler(loader),
-            EventEffectHandler(eventChannel)
+            EventEffectHandler { event -> mutableEventFlow.tryEmit(event) }
         )
     )
 
@@ -31,7 +34,7 @@ internal class PagedLoadingImpl<T : Any>(
         get() = mutableStateFlow
 
     override val eventFlow: Flow<Event>
-        get() = eventChannel.asFlow()
+        get() = mutableEventFlow
 
     override suspend fun start(fresh: Boolean) = coroutineScope {
         launch {
