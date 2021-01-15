@@ -9,10 +9,10 @@ import javax.inject.Singleton
 
 
 @Singleton
-class MoviesService @Inject constructor() {
+class MoviesGateway @Inject constructor() {
 
     companion object {
-        private const val PAGES_VOLUME = 20
+        private const val PAGE_VOLUME = 20
         private const val DELAY_MS = 2000L
     }
 
@@ -28,5 +28,5 @@ class MoviesService @Inject constructor() {
     }
 
     private fun generateMovies(page: Int): List<Movie> =
-        (page * PAGES_VOLUME until (page + 1) * PAGES_VOLUME).map { Movie(id = it) }
+        (page * PAGE_VOLUME until (page + 1) * PAGE_VOLUME).map { Movie(id = it) }
 }
