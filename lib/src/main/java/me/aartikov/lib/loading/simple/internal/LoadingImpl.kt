@@ -1,6 +1,6 @@
 package me.aartikov.lib.loading.simple.internal
 
-import kotlinx.coroutines.channels.BroadcastChannel
+import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -17,7 +17,10 @@ internal class LoadingImpl<T : Any>(
 ) : Loading<T> {
 
     private val mutableStateFlow = MutableStateFlow(initialState)
-    private val eventChannel = BroadcastChannel<Event>(capacity = 100)
+
+    private val mutableEventFlow = MutableSharedFlow<Event>(
+        extraBufferCapacity = 100, onBufferOverflow = BufferOverflow.DROP_OLDEST
+    )
 
     private val stateMachine: LoadingStateMachine<T> = LoadingStateMachine(
         initialState = initialState.toInternalState(),
@@ -27,7 +30,7 @@ internal class LoadingImpl<T : Any>(
         ),
         effectHandlers = listOf(
             loadingEffectHandler,
-            EventEffectHandler(eventChannel)
+            EventEffectHandler { event -> mutableEventFlow.tryEmit(event) }
         )
     )
 
@@ -35,7 +38,7 @@ internal class LoadingImpl<T : Any>(
         get() = mutableStateFlow
 
     override val eventFlow: Flow<Event>
-        get() = eventChannel.asFlow()
+        get() = mutableEventFlow
 
     override suspend fun start(fresh: Boolean) = coroutineScope {
         launch {
