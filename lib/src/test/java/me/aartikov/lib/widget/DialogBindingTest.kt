@@ -7,7 +7,7 @@ import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.verifyZeroInteractions
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runBlockingTest
-import me.aartikov.lib.utils.DispatchersTestRule
+import me.aartikov.lib.utils.MainDispatcherRule
 import org.junit.Assert.assertEquals
 import org.junit.Rule
 import org.junit.Test
@@ -15,7 +15,7 @@ import org.junit.Test
 class DialogBindingTest {
 
     @get:Rule
-    val coroutinesTestRule = DispatchersTestRule()
+    val mainDispatcherRule = MainDispatcherRule()
 
     @Test
     fun `doesn't show dialog when not started`() {

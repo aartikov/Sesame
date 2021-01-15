@@ -1,6 +1,6 @@
 package me.aartikov.lib.data_binding
 
-import me.aartikov.lib.utils.DispatchersTestRule
+import me.aartikov.lib.utils.MainDispatcherRule
 import org.junit.Assert.assertEquals
 import org.junit.Rule
 import org.junit.Test
@@ -8,7 +8,7 @@ import org.junit.Test
 class StateTest {
 
     @get:Rule
-    val coroutinesTestRule = DispatchersTestRule()
+    val mainDispatcherRule = MainDispatcherRule()
 
     @Test
     fun `receives nothing when not started`() {

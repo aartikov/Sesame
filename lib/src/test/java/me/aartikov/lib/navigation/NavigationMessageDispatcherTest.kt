@@ -1,7 +1,7 @@
 package me.aartikov.lib.navigation
 
 import com.nhaarman.mockitokotlin2.*
-import me.aartikov.lib.utils.DispatchersTestRule
+import me.aartikov.lib.utils.MainDispatcherRule
 import me.aartikov.lib.utils.TestLifecycleOwner
 import org.junit.Rule
 import org.junit.Test
@@ -10,7 +10,7 @@ import kotlin.test.assertEquals
 class NavigationMessageDispatcherTest {
 
     @get:Rule
-    val dispatchersTestRule = DispatchersTestRule()
+    val mainDispatcherRule = MainDispatcherRule()
 
     @Test
     fun `doesn't handles navigation messages when is not attached`() {
