@@ -10,19 +10,19 @@ class DialogsViewModel : BaseViewModel() {
 
     val showMessage = command<String>()
 
-    val dialog = dialogControl<String, String>()
-    val dialogForResult = dialogControl<Unit, String>()
+    val dialog = dialogControl<String, Unit>()
+    val dialogForResult = dialogControl<String, String>()
 
     fun onShowDialogButtonClicked() {
-        dialog.show("Test show dialog")
+        dialog.show("Dialog")
     }
 
     fun onShowForResultButtonClicked() {
         viewModelScope.launch {
-            val result = dialogForResult.showForResult(Unit)
+            val result = dialogForResult.showForResult("Dialog for result")
 
-            if(result != null && result.isNotEmpty()) {
-                showMessage(result)
+            if (result != null) {
+                showMessage(if (result.isEmpty()) "Empty" else result)
             } else {
                 showMessage("Canceled")
             }

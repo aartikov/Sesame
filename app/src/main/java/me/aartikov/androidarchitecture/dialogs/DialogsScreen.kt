@@ -29,12 +29,14 @@ class DialogsScreen : BaseScreen<DialogsViewModel>(R.layout.screen_dialogs, Dial
                 .create()
         }
 
-        vm.dialogForResult bind { _, dc ->
+        vm.dialogForResult bind { text, dc ->
             val dialogView = LayoutInflater.from(context).inflate(
                 R.layout.dialog_for_result,
                 null,
                 false
             )
+
+            dialogView.title.text = text
 
             AlertDialog.Builder(context)
                 .setView(dialogView)

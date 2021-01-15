@@ -1,9 +1,9 @@
 package me.aartikov.lib.widget
 
-import kotlinx.coroutines.channels.*
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.MutableStateFlow
 
-class DialogControl<T: Any, R: Any> {
+class DialogControl<T : Any, R : Any> {
 
     internal val data = MutableStateFlow<T?>(null)
     private val resultChannel = Channel<R?>(Channel.RENDEZVOUS)
@@ -27,6 +27,10 @@ class DialogControl<T: Any, R: Any> {
     }
 }
 
-fun <T: Any, R: Any> dialogControl(): DialogControl<T, R> {
+fun <R : Any> DialogControl<Unit, R>.show() = show(Unit)
+
+suspend fun <R : Any> DialogControl<Unit, R>.showForResult(): R? = showForResult(Unit)
+
+fun <T : Any, R : Any> dialogControl(): DialogControl<T, R> {
     return DialogControl()
 }
