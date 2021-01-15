@@ -26,8 +26,8 @@ open class BaseScreen<VM : BaseViewModel>(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        vm.navigationMessages bind { navigationMessageDispatcher.dispatch(it) }
-        vm.showErrorCommand bind {
+        vm.navigate bind { navigationMessageDispatcher.dispatch(it) }
+        vm.showError bind {
             Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
         }
     }

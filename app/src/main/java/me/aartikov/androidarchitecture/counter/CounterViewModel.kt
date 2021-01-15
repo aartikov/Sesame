@@ -18,7 +18,7 @@ class CounterViewModel @ViewModelInject constructor() : BaseViewModel() {
     val minusButtonEnabled by computed(::count) { it > 0 }
     val plusButtonEnabled by computed(::count) { it < MAX_COUNT }
 
-    val showMessageCommand = command<String>()
+    val showMessage = command<String>()
 
     fun onMinusButtonClicked() {
         if (minusButtonEnabled) {
@@ -32,7 +32,7 @@ class CounterViewModel @ViewModelInject constructor() : BaseViewModel() {
         }
 
         if (count == MAX_COUNT) {
-            showMessageCommand.send("It's enough!")
+            showMessage("It's enough!")
         }
     }
 }

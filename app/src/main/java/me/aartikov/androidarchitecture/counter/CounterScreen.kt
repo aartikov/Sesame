@@ -21,7 +21,7 @@ class CounterScreen : BaseScreen<CounterViewModel>(R.layout.screen_counter, Coun
         vm::minusButtonEnabled bind minusButton::setEnabled
         vm::plusButtonEnabled bind plusButton::setEnabled
 
-        vm.showMessageCommand bind { Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show() }
+        vm.showMessage bind { Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show() }
     }
 }
 

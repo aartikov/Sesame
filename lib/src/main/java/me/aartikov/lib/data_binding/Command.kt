@@ -5,7 +5,7 @@ import kotlinx.coroutines.channels.Channel
 class Command<T> internal constructor() {
     private val channel = Channel<T>(Channel.UNLIMITED)
 
-    internal fun sendInternal(command: T) {
+    internal fun send(command: T) {
         channel.offer(command)
     }
 
