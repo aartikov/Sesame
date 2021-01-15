@@ -24,7 +24,7 @@ class DialogBindingTest {
         val dialogControl = dialogControl<Unit, Unit>()
         with(widgetObserver) { dialogControl bind { _, _ -> mockedDialog } }
 
-        dialogControl.show(Unit)
+        dialogControl.show()
 
         verifyZeroInteractions(mockedDialog)
     }
@@ -37,7 +37,7 @@ class DialogBindingTest {
         with(widgetObserver) { dialogControl bind { _, _ -> mockedDialog } }
 
         widgetObserver.widgetObserverLifecycleOwner.onStart()
-        dialogControl.show(Unit)
+        dialogControl.show()
 
         verify(mockedDialog).show()
         verify(mockedDialog, never()).dismiss()
@@ -51,7 +51,7 @@ class DialogBindingTest {
         with(widgetObserver) { dialogControl bind { _, _ -> mockedDialog } }
 
         widgetObserver.widgetObserverLifecycleOwner.onStart()
-        dialogControl.show(Unit)
+        dialogControl.show()
         dialogControl.dismiss()
 
         verify(mockedDialog).show()
@@ -113,7 +113,7 @@ class DialogBindingTest {
         with(widgetObserver) { dialogControl bind { _, _ -> mockedDialog } }
 
         widgetObserver.widgetObserverLifecycleOwner.onStop()
-        dialogControl.show(Unit)
+        dialogControl.show()
 
         verifyZeroInteractions(mockedDialog)
     }
@@ -126,7 +126,7 @@ class DialogBindingTest {
         with(widgetObserver) { dialogControl bind { _, _ -> mockedDialog } }
 
         widgetObserver.widgetObserverLifecycleOwner.onStart()
-        val job = launch { dialogControl.showForResult(Unit) }
+        val job = launch { dialogControl.showForResult() }
 
         verify(mockedDialog).show()
         job.cancel()
@@ -140,7 +140,7 @@ class DialogBindingTest {
         with(widgetObserver) { dialogControl bind { _, _ -> mockedDialog } }
 
         widgetObserver.widgetObserverLifecycleOwner.onStop()
-        val job = launch { dialogControl.showForResult(Unit) }
+        val job = launch { dialogControl.showForResult() }
 
         verifyZeroInteractions(mockedDialog)
         job.cancel()
