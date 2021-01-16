@@ -1,16 +1,16 @@
-package me.aartikov.lib.widget
+package me.aartikov.lib.dialog
 
 import android.app.Dialog
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.flow.collect
 
-interface WidgetObserver {
+interface DialogObserver {
 
-    val widgetObserverLifecycleOwner: LifecycleOwner
+    val dialogObserverLifecycleOwner: LifecycleOwner
 
     infix fun <T : Any, R : Any> DialogControl<T, R>.bind(createDialog: (data: T, dc: DialogControl<T, R>) -> Dialog) {
-        widgetObserverLifecycleOwner.lifecycleScope.launchWhenStarted {
+        dialogObserverLifecycleOwner.lifecycleScope.launchWhenStarted {
             var dialog: Dialog? = null
             val closeDialog = {
                 dialog?.setOnDismissListener(null)

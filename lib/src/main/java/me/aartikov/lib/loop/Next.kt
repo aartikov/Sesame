@@ -1,4 +1,4 @@
-package me.aartikov.lib.state_machine
+package me.aartikov.lib.loop
 
 /**
  * Represents an output of [Reducer]. Contains new state and side effects. Null state means no changes.

@@ -2,7 +2,7 @@ package me.aartikov.lib.loading.paged.internal
 
 import me.aartikov.lib.loading.paged.PagedLoading.Event
 import me.aartikov.lib.loading.paged.PagingInfo
-import me.aartikov.lib.state_machine.*
+import me.aartikov.lib.loop.*
 
 internal sealed class State<out T> {
     object Empty : State<Nothing>()
@@ -31,7 +31,7 @@ internal sealed class Effect<out T> {
     data class EmitEvent(val event: Event) : Effect<Nothing>()
 }
 
-internal typealias PagedLoadingStateMachine<T> = StateMachine<State<T>, Action<T>, Effect<T>>
+internal typealias PagedLoadingLoop<T> = Loop<State<T>, Action<T>, Effect<T>>
 
 internal class PagedLoadingReducer<T> : Reducer<State<T>, Action<T>, Effect<T>> {
 

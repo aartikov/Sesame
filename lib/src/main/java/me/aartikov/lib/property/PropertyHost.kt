@@ -1,4 +1,4 @@
-package me.aartikov.lib.data_binding
+package me.aartikov.lib.property
 
 import kotlinx.coroutines.CoroutineScope
 

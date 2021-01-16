@@ -1,55 +1,55 @@
-package me.aartikov.lib.state_machine
+package me.aartikov.lib.loop
 
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runBlockingTest
-import me.aartikov.lib.state_machine.TestAction.*
-import me.aartikov.lib.state_machine.TestEffect.Effect1
-import me.aartikov.lib.state_machine.TestEffect.Effect2
+import me.aartikov.lib.loop.TestAction.*
+import me.aartikov.lib.loop.TestEffect.Effect1
+import me.aartikov.lib.loop.TestEffect.Effect2
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
-class StateMachineTest {
+class LoopTest {
 
     @Test
     fun `dispatches actions to state changes`() = runBlockingTest {
-        val stateMachine = TestStateMachine()
+        val loop = TestLoop()
 
         val job = launch {
-            stateMachine.start()
+            loop.start()
         }
-        stateMachine.dispatch(Action1)
-        stateMachine.dispatch(Action2)
+        loop.dispatch(Action1)
+        loop.dispatch(Action2)
         job.cancel()
 
-        assertEquals(TestState("Action1 Action2"), stateMachine.state)
+        assertEquals(TestState("Action1 Action2"), loop.state)
     }
 
     @Test
     fun `dispatches actions from external source to state changes`() = runBlockingTest {
         val actionSource = TestActionSource(Action1, Action2)
-        val stateMachine = TestStateMachine(actionSources = listOf(actionSource))
+        val loop = TestLoop(actionSources = listOf(actionSource))
 
         val job = launch {
-            stateMachine.start()
+            loop.start()
         }
         job.cancel()
 
-        assertEquals(TestState("Action1 Action2"), stateMachine.state)
+        assertEquals(TestState("Action1 Action2"), loop.state)
     }
 
     @Test
     fun `dispatches actions from effect handlers to state changes`() = runBlockingTest {
         val effectHandler = TestEffectHandler()
-        val stateMachine = TestStateMachine(effectHandlers = listOf(effectHandler))
+        val loop = TestLoop(effectHandlers = listOf(effectHandler))
 
         val job = launch {
-            stateMachine.start()
+            loop.start()
         }
-        stateMachine.dispatch(Action1)
-        stateMachine.dispatch(Action2)
+        loop.dispatch(Action1)
+        loop.dispatch(Action2)
         job.cancel()
 
-        assertEquals(TestState("Action1 ActionAfterEffect1 Action2 ActionAfterEffect2"), stateMachine.state)
+        assertEquals(TestState("Action1 ActionAfterEffect1 Action2 ActionAfterEffect2"), loop.state)
     }
 }
 
@@ -64,10 +64,10 @@ private enum class TestEffect {
     Effect1, Effect2
 }
 
-private class TestStateMachine(
+private class TestLoop(
     actionSources: List<ActionSource<TestAction>> = emptyList(),
     effectHandlers: List<EffectHandler<TestEffect, TestAction>> = emptyList()
-) : StateMachine<TestState, TestAction, TestEffect>(
+) : Loop<TestState, TestAction, TestEffect>(
     TestState(""),
     TestReducer(),
     actionSources,

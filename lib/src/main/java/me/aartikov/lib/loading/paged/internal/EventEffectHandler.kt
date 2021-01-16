@@ -1,9 +1,7 @@
 package me.aartikov.lib.loading.paged.internal
 
-import kotlinx.coroutines.channels.SendChannel
 import me.aartikov.lib.loading.paged.PagedLoading
-import me.aartikov.lib.loading.simple.Loading
-import me.aartikov.lib.state_machine.EffectHandler
+import me.aartikov.lib.loop.EffectHandler
 
 internal class EventEffectHandler<T>(private val emitEvent: (PagedLoading.Event) -> Unit) :
     EffectHandler<Effect<T>, Action<T>> {

@@ -1,4 +1,4 @@
-package me.aartikov.lib.state_machine
+package me.aartikov.lib.loop
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.Channel
@@ -8,14 +8,14 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 /**
- * TEA-like state machine. Stores current state. Receives actions from [dispatch] method or from external [actionSources].
+ * TEA-like state manager. Stores current state. Receives actions from [dispatch] method or from external [actionSources].
  * Sends actions to [Reducer]. [Reducer] generates [Next]-object (new state + side effects). Side effects are handled by [effectHandlers].
  *
- * [StateT] - type of state that is stored in a state machine. State must be immutable
+ * [StateT] - type of state that is stored in a state manager. State must be immutable
  * [ActionT] - type of action (some external command)
  * [EffectT] - type of side effects (such as starting network request or saving to database)
  */
-open class StateMachine<StateT, ActionT, EffectT>(
+open class Loop<StateT, ActionT, EffectT>(
     initialState: StateT,
     private val reducer: Reducer<StateT, ActionT, EffectT>,
     private val actionSources: List<ActionSource<ActionT>>,
@@ -36,7 +36,7 @@ open class StateMachine<StateT, ActionT, EffectT>(
     private val actionChannel = Channel<ActionT>(Channel.UNLIMITED)
 
     /**
-     * Start state machine
+     * Start loop
      */
     suspend fun start() = coroutineScope {
         startActionSources(this)

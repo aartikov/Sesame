@@ -5,7 +5,7 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import me.aartikov.lib.loading.paged.PagedLoader
 import me.aartikov.lib.loading.paged.PagingInfo
-import me.aartikov.lib.state_machine.EffectHandler
+import me.aartikov.lib.loop.EffectHandler
 import java.util.concurrent.CancellationException
 
 internal class PagedLoadingEffectHandler<T : Any>(private val loader: PagedLoader<T>) :

@@ -4,7 +4,7 @@ import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.viewModelScope
 import me.aartikov.androidarchitecture.base.BaseViewModel
 import me.aartikov.androidarchitecture.profile.data.ProfileGateway
-import me.aartikov.lib.data_binding.stateFromFlow
+import me.aartikov.lib.property.stateFromFlow
 import me.aartikov.lib.loading.simple.OrdinaryLoading
 import me.aartikov.lib.loading.simple.handleErrors
 import me.aartikov.lib.loading.simple.startIn

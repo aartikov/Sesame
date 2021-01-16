@@ -1,4 +1,4 @@
-package me.aartikov.lib.state_machine
+package me.aartikov.lib.loop
 
 /**
  * External action source.
