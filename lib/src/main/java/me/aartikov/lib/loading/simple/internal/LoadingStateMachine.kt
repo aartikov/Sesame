@@ -1,7 +1,7 @@
 package me.aartikov.lib.loading.simple.internal
 
 import me.aartikov.lib.loading.simple.Loading.Event
-import me.aartikov.lib.state_machine.*
+import me.aartikov.lib.loop.*
 
 internal sealed class State<out T> {
     object Empty : State<Nothing>()
@@ -29,7 +29,7 @@ internal sealed class Effect {
     data class EmitEvent(val event: Event) : Effect()
 }
 
-internal typealias LoadingStateMachine<T> = StateMachine<State<T>, Action<T>, Effect>
+internal typealias LoadingLoop<T> = Loop<State<T>, Action<T>, Effect>
 
 internal class LoadingReducer<T> : Reducer<State<T>, Action<T>, Effect> {
 

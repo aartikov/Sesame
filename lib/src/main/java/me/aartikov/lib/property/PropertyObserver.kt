@@ -1,9 +1,8 @@
-package me.aartikov.lib.data_binding
+package me.aartikov.lib.property
 
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collect
 import kotlin.reflect.KProperty0
 

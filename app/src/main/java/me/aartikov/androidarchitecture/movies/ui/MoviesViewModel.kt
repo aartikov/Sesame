@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import me.aartikov.androidarchitecture.base.BaseViewModel
 import me.aartikov.androidarchitecture.movies.data.MoviesGateway
 import me.aartikov.androidarchitecture.movies.domain.Movie
-import me.aartikov.lib.data_binding.stateFromFlow
+import me.aartikov.lib.property.stateFromFlow
 import me.aartikov.lib.loading.paged.PagedLoading
 import me.aartikov.lib.loading.paged.handleErrors
 import me.aartikov.lib.loading.paged.startIn

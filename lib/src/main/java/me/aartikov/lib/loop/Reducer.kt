@@ -1,7 +1,7 @@
-package me.aartikov.lib.state_machine
+package me.aartikov.lib.loop
 
 /**
- * Executes action processing loop.
+ * Executes action processing.
  */
 interface Reducer<StateT, ActionT, EffectT> {
 

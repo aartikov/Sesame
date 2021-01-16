@@ -4,7 +4,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import me.aartikov.lib.loading.simple.isEmpty
-import me.aartikov.lib.state_machine.EffectHandler
+import me.aartikov.lib.loop.EffectHandler
 import java.util.concurrent.CancellationException
 
 internal class LoadingEffectHandler<T : Any>(private val loader: suspend (fresh: Boolean) -> T?) :

@@ -1,4 +1,4 @@
-package me.aartikov.lib.widget
+package me.aartikov.lib.dialog
 
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runBlockingTest

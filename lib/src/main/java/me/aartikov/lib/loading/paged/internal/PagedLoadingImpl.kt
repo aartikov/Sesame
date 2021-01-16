@@ -20,7 +20,7 @@ internal class PagedLoadingImpl<T : Any>(
         extraBufferCapacity = 100, onBufferOverflow = BufferOverflow.DROP_OLDEST
     )
 
-    private val stateMachine: PagedLoadingStateMachine<T> = PagedLoadingStateMachine(
+    private val loop: PagedLoadingLoop<T> = PagedLoadingLoop(
         initialState = initialState.toInternalState(),
         reducer = PagedLoadingReducer(),
         actionSources = emptyList(),
@@ -38,23 +38,23 @@ internal class PagedLoadingImpl<T : Any>(
 
     override suspend fun start(fresh: Boolean) = coroutineScope {
         launch {
-            stateMachine.stateFlow.collect {
+            loop.stateFlow.collect {
                 mutableStateFlow.value = it.toPublicState()
             }
         }
-        stateMachine.dispatch(Action.Load(fresh))
-        stateMachine.start()
+        loop.dispatch(Action.Load(fresh))
+        loop.start()
     }
 
     override fun refresh() {
-        stateMachine.dispatch(Action.Refresh)
+        loop.dispatch(Action.Refresh)
     }
 
     override fun loadMore() {
-        stateMachine.dispatch(Action.LoadMore)
+        loop.dispatch(Action.LoadMore)
     }
 
     override fun restart(fresh: Boolean) {
-        stateMachine.dispatch(Action.Restart(fresh))
+        loop.dispatch(Action.Restart(fresh))
     }
 }

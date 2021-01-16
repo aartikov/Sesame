@@ -2,9 +2,9 @@ package me.aartikov.androidarchitecture.counter
 
 import androidx.hilt.lifecycle.ViewModelInject
 import me.aartikov.androidarchitecture.base.BaseViewModel
-import me.aartikov.lib.data_binding.command
-import me.aartikov.lib.data_binding.computed
-import me.aartikov.lib.data_binding.state
+import me.aartikov.lib.property.command
+import me.aartikov.lib.property.computed
+import me.aartikov.lib.property.state
 
 class CounterViewModel @ViewModelInject constructor() : BaseViewModel() {
 

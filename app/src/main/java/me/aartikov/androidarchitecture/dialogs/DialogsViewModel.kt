@@ -3,8 +3,8 @@ package me.aartikov.androidarchitecture.dialogs
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import me.aartikov.androidarchitecture.base.BaseViewModel
-import me.aartikov.lib.data_binding.command
-import me.aartikov.lib.widget.dialogControl
+import me.aartikov.lib.property.command
+import me.aartikov.lib.dialog.dialogControl
 
 class DialogsViewModel : BaseViewModel() {
 
