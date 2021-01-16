@@ -3,6 +3,7 @@ package me.aartikov.androidarchitecture.movies.ui
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.viewModelScope
 import me.aartikov.androidarchitecture.base.BaseViewModel
+import me.aartikov.androidarchitecture.movies.data.MoviesGateway
 import me.aartikov.androidarchitecture.movies.domain.Movie
 import me.aartikov.lib.data_binding.stateFromFlow
 import me.aartikov.lib.loading.paged.PagedLoading
@@ -11,8 +12,12 @@ import me.aartikov.lib.loading.paged.startIn
 
 
 class MoviesViewModel @ViewModelInject constructor(
-    private val moviesLoading: PagedLoading<Movie>
+    private val moviesGateway: MoviesGateway
 ) : BaseViewModel() {
+
+    private val moviesLoading = PagedLoading<Movie>(
+        loadPage = { moviesGateway.getMovies(it.loadedPageCount) }
+    )
 
     val moviesState by stateFromFlow(moviesLoading.stateFlow)
 

@@ -3,7 +3,7 @@ package me.aartikov.lib.loading.simple.internal
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
-import me.aartikov.lib.loading.simple.dataIsEmpty
+import me.aartikov.lib.loading.simple.isEmpty
 import me.aartikov.lib.state_machine.EffectHandler
 import java.util.concurrent.CancellationException
 
@@ -26,7 +26,7 @@ internal class LoadingEffectHandler<T : Any>(private val loader: suspend (fresh:
         job = launch {
             try {
                 val data = loader(fresh)
-                if (data == null || dataIsEmpty(data)) {
+                if (data == null || isEmpty(data)) {
                     actionConsumer(Action.EmptyDataLoaded)
                 } else {
                     actionConsumer(Action.DataLoaded(data))
