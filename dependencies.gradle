@@ -1,0 +1,23 @@
+ext {
+
+    versions = [
+            kotlin : "1.4.21",
+            coroutines : "1.4.1",
+            lifecycle : "2.2.0",
+            junit : "4.13.1",
+            mockitokotlin : "2.2.0",
+            fragment : "1.2.5"
+    ]
+
+    coroutines = "org.jetbrains.kotlinx:kotlinx-coroutines-core:${versions.coroutines}"
+    lifecycle = "androidx.lifecycle:lifecycle-runtime-ktx:${versions.lifecycle}"
+    lifecycleExtensions = "androidx.lifecycle:lifecycle-extensions:${versions.lifecycle}"
+    fragment = "androidx.fragment:fragment-ktx:${versions.fragment}"
+
+    tests = [
+            junit: "junit:junit:${versions.junit}",
+            kotlinTest: "org.jetbrains.kotlin:kotlin-test-junit:${versions.kotlin}",
+            coroutinesTest: "org.jetbrains.kotlinx:kotlinx-coroutines-test:${versions.coroutines}",
+            mockitokotlin: "com.nhaarman.mockitokotlin2:mockito-kotlin:${versions.mockitokotlin}"
+    ]
+}
