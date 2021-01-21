@@ -1,7 +1,7 @@
 package me.aartikov.lib.loading.simple.internal
 
-import me.aartikov.lib.loop.EffectHandler
 import me.aartikov.lib.loading.simple.Loading
+import me.aartikov.lib.loop.EffectHandler
 
 internal class EventEffectHandler<T>(private val emitEvent: (Loading.Event) -> Unit) :
     EffectHandler<Effect, Action<T>> {
