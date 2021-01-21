@@ -1,36 +1,38 @@
 plugins {
-    id 'com.android.library'
-    id 'kotlin-android'
+    id "com.android.library"
+    id "kotlin-android"
+    id "maven"
 }
+group = libraryConfig.group
 
 android {
-    compileSdkVersion 30
-    buildToolsVersion "30.0.3"
+    compileSdkVersion libraryConfig.compileSdkVersion
+    buildToolsVersion libraryConfig.buildToolsVersion
 
     defaultConfig {
-        minSdkVersion 21
-        targetSdkVersion 30
-        versionCode 1
-        versionName "1.0"
-
-        consumerProguardFiles "consumer-rules.pro"
-    }
-
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-        }
+        minSdkVersion libraryConfig.minSdkVersion
+        targetSdkVersion libraryConfig.targetSdkVersion
+        versionCode libraryConfig.versionCode
+        versionName libraryConfig.versionName
     }
 }
 
 dependencies {
-    implementation androidx.fragment
     implementation androidx.lifecycle
+    implementation androidx.fragment
     implementation coroutines
 
     testImplementation tests.mockitokotlin
     testImplementation tests.junit
     testImplementation tests.coroutinesTest
     testImplementation tests.kotlinTest
+}
+
+task sourcesJar(type: Jar) {
+    from android.sourceSets.main.java.srcDirs
+    classifier = "sources"
+}
+
+artifacts {
+    archives sourcesJar
 }

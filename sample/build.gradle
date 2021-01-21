@@ -1,8 +1,8 @@
-apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-kapt'
-apply plugin: 'dagger.hilt.android.plugin'
-apply plugin: 'kotlin-android-extensions'
+apply plugin: "com.android.application"
+apply plugin: "kotlin-android"
+apply plugin: "kotlin-kapt"
+apply plugin: "dagger.hilt.android.plugin"
+apply plugin: "kotlin-android-extensions"
 
 android {
     compileSdkVersion 30
@@ -16,18 +16,11 @@ android {
         versionName "1.0"
     }
 
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-        }
-    }
-
     kotlinOptions { jvmTarget = "1.8" }
 
     packagingOptions {
-        exclude 'META-INF/AL2.0'
-        exclude 'META-INF/LGPL2.1'
+        exclude "META-INF/AL2.0"
+        exclude "META-INF/LGPL2.1"
     }
 
     androidExtensions {
@@ -36,10 +29,10 @@ android {
 }
 
 dependencies {
-    implementation project(':property')
-    implementation project(':navigation')
-    implementation project(':dialog')
-    implementation project(':loading')
+    implementation project(":property")
+    implementation project(":navigation")
+    implementation project(":dialog")
+    implementation project(":loading")
 
     implementation androidx.coreKtx
     implementation androidx.appCompat

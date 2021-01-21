@@ -1,8 +1,9 @@
 plugins {
-    id 'java-library'
-    id 'kotlin'
+    id "java-library"
+    id "kotlin"
+    id "maven"
 }
-group = 'com.github.aartikov'
+group = libraryConfig.group
 
 java {
     sourceCompatibility = JavaVersion.VERSION_1_8
@@ -10,9 +11,18 @@ java {
 }
 
 dependencies {
-    implementation project(':loop')
+    implementation project(":loop")
     implementation coroutines
 
     testImplementation tests.junit
     testImplementation tests.coroutinesTest
+}
+
+task sourcesJar(type: Jar, dependsOn: classes) {
+    classifier = "sources"
+    from sourceSets.main.allSource
+}
+
+artifacts {
+    archives sourcesJar
 }
