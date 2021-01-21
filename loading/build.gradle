@@ -1,0 +1,18 @@
+plugins {
+    id 'java-library'
+    id 'kotlin'
+}
+group = 'com.github.aartikov'
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
+
+dependencies {
+    implementation project(':loop')
+    implementation coroutines
+
+    testImplementation tests.junit
+    testImplementation tests.coroutinesTest
+}

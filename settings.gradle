@@ -1,6 +1,7 @@
-include ':core'
-include ':sample'
 rootProject.name = "Android Architecture"
-include ':dialog'
-include ':navigation'
+include ':sample'
 include ':property'
+include ':navigation'
+include ':dialog'
+include ':loop'
+include ':loading'
