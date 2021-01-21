@@ -1,4 +1,4 @@
-package me.aartikov.lib.core.navigation
+package me.aartikov.lib.navigation
 
 /**
  * Marker interface for navigation message.

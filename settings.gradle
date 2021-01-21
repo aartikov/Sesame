@@ -2,3 +2,4 @@ include ':core'
 include ':sample'
 rootProject.name = "Android Architecture"
 include ':dialog'
+include ':navigation'

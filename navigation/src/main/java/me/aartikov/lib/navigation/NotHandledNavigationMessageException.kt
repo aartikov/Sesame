@@ -1,4 +1,4 @@
-package me.aartikov.lib.core.navigation
+package me.aartikov.lib.navigation
 
 /**
  * Thrown when there is no [NavigationMessageHandler] to handle the [navigation message][NavigationMessage].

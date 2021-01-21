@@ -1,4 +1,4 @@
-package me.aartikov.lib.core.navigation
+package me.aartikov.lib.navigation
 
 /**
  * Interface for classes which implement navigation in the app.

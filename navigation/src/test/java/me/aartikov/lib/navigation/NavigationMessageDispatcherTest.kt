@@ -1,8 +1,8 @@
-package me.aartikov.lib.core.navigation
+package me.aartikov.lib.navigation
 
 import com.nhaarman.mockitokotlin2.*
-import me.aartikov.lib.utils.MainDispatcherRule
-import me.aartikov.lib.utils.TestLifecycleOwner
+import me.aartikov.lib.navigation.utils.MainDispatcherRule
+import me.aartikov.lib.navigation.utils.TestLifecycleOwner
 import org.junit.Rule
 import org.junit.Test
 import kotlin.test.assertEquals

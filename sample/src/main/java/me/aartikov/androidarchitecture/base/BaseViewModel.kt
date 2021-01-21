@@ -2,9 +2,9 @@ package me.aartikov.androidarchitecture.base
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import me.aartikov.lib.core.navigation.NavigationMessage
 import me.aartikov.lib.core.property.PropertyHost
 import me.aartikov.lib.core.property.command
+import me.aartikov.lib.navigation.NavigationMessage
 
 open class BaseViewModel : ViewModel(), PropertyHost {
 

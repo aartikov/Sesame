@@ -8,9 +8,9 @@ import me.aartikov.androidarchitecture.dialogs.DialogsScreen
 import me.aartikov.androidarchitecture.menu.MenuScreen
 import me.aartikov.androidarchitecture.movies.ui.MoviesScreen
 import me.aartikov.androidarchitecture.profile.ui.ProfileScreen
-import me.aartikov.lib.core.navigation.NavigationMessage
-import me.aartikov.lib.core.navigation.NavigationMessageDispatcher
-import me.aartikov.lib.core.navigation.NavigationMessageHandler
+import me.aartikov.lib.navigation.NavigationMessage
+import me.aartikov.lib.navigation.NavigationMessageDispatcher
+import me.aartikov.lib.navigation.NavigationMessageHandler
 import javax.inject.Inject
 
 @AndroidEntryPoint

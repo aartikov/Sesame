@@ -1,6 +1,6 @@
 package me.aartikov.androidarchitecture
 
-import me.aartikov.lib.core.navigation.NavigationMessage
+import me.aartikov.lib.navigation.NavigationMessage
 
 object Back : NavigationMessage
 object OpenCounterScreen : NavigationMessage
