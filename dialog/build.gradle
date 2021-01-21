@@ -26,8 +26,6 @@ android {
 }
 
 dependencies {
-    implementation project(':core')
-
     implementation coroutines
     implementation lifecycle
 

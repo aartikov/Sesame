@@ -1,4 +1,4 @@
-package me.aartikov.lib.core.property
+package me.aartikov.lib.property
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow

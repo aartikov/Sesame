@@ -3,3 +3,4 @@ include ':sample'
 rootProject.name = "Android Architecture"
 include ':dialog'
 include ':navigation'
+include ':property'

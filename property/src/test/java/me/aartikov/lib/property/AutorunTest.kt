@@ -1,5 +1,6 @@
-package me.aartikov.lib.core.property
+package me.aartikov.lib.property
 
+import me.aartikov.lib.property.utils.TestPropertyHost
 import org.junit.Assert
 import org.junit.Test
 

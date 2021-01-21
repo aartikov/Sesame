@@ -1,6 +1,8 @@
-package me.aartikov.lib.core.property
+package me.aartikov.lib.property.utils
 
-import me.aartikov.lib.utils.TestLifecycleOwner
+
+import me.aartikov.lib.property.PropertyObserver
+
 
 class TestPropertyObserver(
     override val propertyObserverLifecycleOwner: TestLifecycleOwner = TestLifecycleOwner()

@@ -1,6 +1,8 @@
-package me.aartikov.lib.core.property
+package me.aartikov.lib.property
 
-import me.aartikov.lib.utils.MainDispatcherRule
+import me.aartikov.lib.property.utils.MainDispatcherRule
+import me.aartikov.lib.property.utils.TestPropertyHost
+import me.aartikov.lib.property.utils.TestPropertyObserver
 import org.junit.Assert.assertEquals
 import org.junit.Rule
 import org.junit.Test

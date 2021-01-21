@@ -26,12 +26,9 @@ android {
 }
 
 dependencies {
-    implementation fragment
     implementation coroutines
     implementation lifecycle
 
-    testImplementation tests.mockitokotlin
     testImplementation tests.junit
     testImplementation tests.coroutinesTest
-    testImplementation tests.kotlinTest
 }

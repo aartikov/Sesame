@@ -8,7 +8,7 @@ import me.aartikov.androidarchitecture.movies.domain.Movie
 import me.aartikov.lib.core.loading.paged.PagedLoading
 import me.aartikov.lib.core.loading.paged.handleErrors
 import me.aartikov.lib.core.loading.paged.startIn
-import me.aartikov.lib.core.property.stateFromFlow
+import me.aartikov.lib.property.stateFromFlow
 
 
 class MoviesViewModel @ViewModelInject constructor(

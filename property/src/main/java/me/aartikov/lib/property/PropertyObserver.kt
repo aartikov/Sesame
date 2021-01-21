@@ -1,4 +1,4 @@
-package me.aartikov.lib.core.property
+package me.aartikov.lib.property
 
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope

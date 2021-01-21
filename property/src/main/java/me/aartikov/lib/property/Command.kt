@@ -1,4 +1,4 @@
-package me.aartikov.lib.core.property
+package me.aartikov.lib.property
 
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow

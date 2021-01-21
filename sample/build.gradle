@@ -39,6 +39,7 @@ android {
 
 dependencies {
     implementation project(':core')
+    implementation project(':property')
     implementation project(':dialog')
     implementation project(':navigation')
     implementation fileTree(dir: "libs", include: ["*.jar"])

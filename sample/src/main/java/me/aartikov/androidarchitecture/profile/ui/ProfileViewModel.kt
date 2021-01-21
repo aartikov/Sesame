@@ -7,7 +7,7 @@ import me.aartikov.androidarchitecture.profile.data.ProfileGateway
 import me.aartikov.lib.core.loading.simple.OrdinaryLoading
 import me.aartikov.lib.core.loading.simple.handleErrors
 import me.aartikov.lib.core.loading.simple.startIn
-import me.aartikov.lib.core.property.stateFromFlow
+import me.aartikov.lib.property.stateFromFlow
 
 class ProfileViewModel @ViewModelInject constructor(
     private val profileGateway: ProfileGateway
