@@ -9,7 +9,7 @@ import kotlinx.android.synthetic.main.layout_error_view.*
 import kotlinx.android.synthetic.main.screen_profile.*
 import me.aartikov.androidarchitecture.R
 import me.aartikov.androidarchitecture.base.BaseScreen
-import me.aartikov.lib.loading.simple.Loading
+import me.aartikov.lib.core.loading.simple.Loading
 
 @AndroidEntryPoint
 class ProfileScreen : BaseScreen<ProfileViewModel>(R.layout.screen_profile, ProfileViewModel::class) {

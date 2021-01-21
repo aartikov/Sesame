@@ -14,7 +14,7 @@ import kotlinx.android.synthetic.main.screen_movies.*
 import me.aartikov.androidarchitecture.R
 import me.aartikov.androidarchitecture.base.BaseScreen
 import me.aartikov.androidarchitecture.movies.utils.doOnScrollToEnd
-import me.aartikov.lib.loading.paged.PagedLoading
+import me.aartikov.lib.core.loading.paged.PagedLoading
 
 
 @AndroidEntryPoint

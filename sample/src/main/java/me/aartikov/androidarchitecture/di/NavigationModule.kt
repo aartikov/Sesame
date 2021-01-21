@@ -5,7 +5,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ActivityComponent
 import dagger.hilt.android.scopes.ActivityScoped
-import me.aartikov.lib.navigation.NavigationMessageDispatcher
+import me.aartikov.lib.core.navigation.NavigationMessageDispatcher
 
 @Module
 @InstallIn(ActivityComponent::class)
