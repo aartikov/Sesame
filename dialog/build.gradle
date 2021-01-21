@@ -13,7 +13,6 @@ android {
         versionCode 1
         versionName "1.0"
 
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
     }
 
@@ -27,7 +26,7 @@ android {
 
 dependencies {
     implementation coroutines
-    implementation lifecycle
+    implementation androidx.lifecycle
 
     testImplementation tests.mockitokotlin
     testImplementation tests.junit
