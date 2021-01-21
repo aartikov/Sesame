@@ -1,4 +1,4 @@
-package me.aartikov.lib.core.dialog
+package me.aartikov.lib.dialog
 
 import android.app.Dialog
 import androidx.lifecycle.LifecycleOwner

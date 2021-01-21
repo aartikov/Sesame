@@ -7,9 +7,9 @@ import androidx.annotation.LayoutRes
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.createViewModelLazy
 import androidx.lifecycle.LifecycleOwner
-import me.aartikov.lib.core.dialog.DialogObserver
 import me.aartikov.lib.core.navigation.NavigationMessageDispatcher
 import me.aartikov.lib.core.property.PropertyObserver
+import me.aartikov.lib.dialog.DialogObserver
 import javax.inject.Inject
 import kotlin.reflect.KClass
 

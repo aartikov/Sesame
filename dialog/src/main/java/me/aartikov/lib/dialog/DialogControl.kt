@@ -1,4 +1,4 @@
-package me.aartikov.lib.core.dialog
+package me.aartikov.lib.dialog
 
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow

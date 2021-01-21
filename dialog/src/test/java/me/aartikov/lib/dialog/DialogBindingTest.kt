@@ -1,4 +1,4 @@
-package me.aartikov.lib.core.dialog
+package me.aartikov.lib.dialog
 
 import android.app.Dialog
 import com.nhaarman.mockitokotlin2.mock
@@ -7,7 +7,8 @@ import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.verifyZeroInteractions
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runBlockingTest
-import me.aartikov.lib.utils.MainDispatcherRule
+import me.aartikov.lib.dialog.utils.MainDispatcherRule
+import me.aartikov.lib.dialog.utils.TestDialogObserver
 import org.junit.Assert.assertEquals
 import org.junit.Rule
 import org.junit.Test

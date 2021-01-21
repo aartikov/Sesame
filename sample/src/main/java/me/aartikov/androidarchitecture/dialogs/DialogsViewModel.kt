@@ -3,8 +3,8 @@ package me.aartikov.androidarchitecture.dialogs
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import me.aartikov.androidarchitecture.base.BaseViewModel
-import me.aartikov.lib.core.dialog.dialogControl
 import me.aartikov.lib.core.property.command
+import me.aartikov.lib.dialog.dialogControl
 
 class DialogsViewModel : BaseViewModel() {
 
