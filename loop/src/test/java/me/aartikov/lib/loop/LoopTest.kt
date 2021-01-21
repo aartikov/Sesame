@@ -1,10 +1,10 @@
-package me.aartikov.lib.core.loop
+package me.aartikov.lib.loop
 
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runBlockingTest
-import me.aartikov.lib.core.loop.TestAction.*
-import me.aartikov.lib.core.loop.TestEffect.Effect1
-import me.aartikov.lib.core.loop.TestEffect.Effect2
+import me.aartikov.lib.loop.TestAction.*
+import me.aartikov.lib.loop.TestEffect.Effect1
+import me.aartikov.lib.loop.TestEffect.Effect2
 import org.junit.Assert.assertEquals
 import org.junit.Test
 

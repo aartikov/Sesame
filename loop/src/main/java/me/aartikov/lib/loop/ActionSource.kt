@@ -1,4 +1,4 @@
-package me.aartikov.lib.core.loop
+package me.aartikov.lib.loop
 
 /**
  * External action source.

@@ -1,4 +1,4 @@
-package me.aartikov.lib.core.loop
+package me.aartikov.lib.loop
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.Channel

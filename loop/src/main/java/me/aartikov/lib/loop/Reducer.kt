@@ -1,4 +1,4 @@
-package me.aartikov.lib.core.loop
+package me.aartikov.lib.loop
 
 /**
  * Executes action processing.
