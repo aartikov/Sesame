@@ -1,3 +1,7 @@
-include ':lib'
-include ':app'
 rootProject.name = "Android Architecture"
+include ":sample"
+include ":property"
+include ":navigation"
+include ":dialog"
+include ":loop"
+include ":loading"

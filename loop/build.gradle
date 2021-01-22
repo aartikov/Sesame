@@ -1,0 +1,27 @@
+plugins {
+    id "java-library"
+    id "kotlin"
+    id "maven"
+}
+group = libraryConfig.group
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
+
+dependencies {
+    implementation coroutines
+
+    testImplementation tests.junit
+    testImplementation tests.coroutinesTest
+}
+
+task sourcesJar(type: Jar, dependsOn: classes) {
+    classifier = "sources"
+    from sourceSets.main.allSource
+}
+
+artifacts {
+    archives sourcesJar
+}

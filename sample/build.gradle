@@ -1,0 +1,57 @@
+apply plugin: "com.android.application"
+apply plugin: "kotlin-android"
+apply plugin: "kotlin-kapt"
+apply plugin: "dagger.hilt.android.plugin"
+apply plugin: "kotlin-android-extensions"
+
+android {
+    compileSdkVersion 30
+    buildToolsVersion "30.0.3"
+
+    defaultConfig {
+        applicationId "me.aartikov.androidarchitecture"
+        minSdkVersion 21
+        targetSdkVersion 30
+        versionCode 1
+        versionName "1.0"
+    }
+
+    kotlinOptions { jvmTarget = "1.8" }
+
+    packagingOptions {
+        exclude "META-INF/AL2.0"
+        exclude "META-INF/LGPL2.1"
+    }
+
+    androidExtensions {
+        experimental = true
+    }
+}
+
+dependencies {
+    implementation project(":property")
+    implementation project(":navigation")
+    implementation project(":dialog")
+    implementation project(":loading")
+
+    implementation androidx.coreKtx
+    implementation androidx.appCompat
+    implementation androidx.fragment
+    implementation androidx.constraintLayout
+    implementation androidx.swipeRefresh
+    implementation androidx.cardView
+
+    implementation material
+
+    implementation groupie.core
+    implementation groupie.androidExtensions
+
+    implementation coroutines
+
+    implementation glide
+
+    implementation daggerHilt.coreAndroid
+    kapt daggerHilt.androidCompiler
+    implementation androidx.hiltLifecycle
+    kapt androidx.hiltCompiler
+}
