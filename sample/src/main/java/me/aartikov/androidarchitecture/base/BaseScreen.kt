@@ -9,6 +9,7 @@ import androidx.fragment.app.createViewModelLazy
 import androidx.lifecycle.LifecycleOwner
 import me.aartikov.lib.dialog.DialogObserver
 import me.aartikov.lib.navigation.NavigationMessageDispatcher
+import me.aartikov.lib.navigation.bind
 import me.aartikov.lib.property.PropertyObserver
 import javax.inject.Inject
 import kotlin.reflect.KClass
@@ -28,9 +29,7 @@ open class BaseScreen<VM : BaseViewModel>(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        vm.navigate bind {
-            navigationMessageDispatcher.dispatch(it, firstNode = this)
-        }
+        vm.navigationMessageQueue.bind(viewLifecycleOwner, navigationMessageDispatcher, node = this)
 
         vm.showError bind {
             Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
