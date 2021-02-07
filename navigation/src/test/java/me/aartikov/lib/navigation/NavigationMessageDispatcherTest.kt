@@ -152,6 +152,29 @@ class NavigationMessageDispatcherTest {
         assertEquals("m1_begin m1_end m2", log)
     }
 
+    @Test
+    fun `drops unhandled messages after reattach`() {
+        val testMessage = object : NavigationMessage {}
+        val testHandler = mockNavigationMessageHandler { true }
+        val testDispatcher = createDispatcher(testHandler)
+        val lifecycleOwner1 = TestLifecycleOwner()
+        val lifecycleOwner2 = TestLifecycleOwner()
+
+        testDispatcher.attach(lifecycleOwner1)
+        lifecycleOwner1.onCreate()
+        lifecycleOwner1.onStart()
+        testDispatcher.dispatch(testMessage, testHandler)
+        testDispatcher.dispatch(testMessage, testHandler)
+
+        lifecycleOwner2.onCreate()
+        lifecycleOwner2.onStart()
+        testDispatcher.attach(lifecycleOwner2)
+        testDispatcher.dispatch(testMessage, testHandler)
+        lifecycleOwner2.onResume()
+
+        verify(testHandler, times(1)).handleNavigationMessage(testMessage)
+    }
+
     private fun mockNavigationMessageHandler(handle: (NavigationMessage) -> Boolean): NavigationMessageHandler {
         return mock {
             on { handleNavigationMessage(any()) } doAnswer { handle(it.getArgument(0)) }
