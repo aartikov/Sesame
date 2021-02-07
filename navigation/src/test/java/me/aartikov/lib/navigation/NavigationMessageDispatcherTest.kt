@@ -162,10 +162,11 @@ class NavigationMessageDispatcherTest {
         vararg handlers: Any,
         errorHandler: ((Exception) -> Unit)? = null
     ): NavigationMessageDispatcher {
-        return object : NavigationMessageDispatcher(errorHandler) {
-            override fun getParentNode(node: Any): Any? {
+        val nodeWalker = object : NodeWalker {
+            override fun getNextNode(node: Any): Any? {
                 return handlers.getOrNull(handlers.indexOf(node) + 1)
             }
         }
+        return NavigationMessageDispatcher(nodeWalker, errorHandler)
     }
 }

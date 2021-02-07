@@ -1,13 +1,15 @@
 package me.aartikov.lib.navigation
 
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.receiveAsFlow
 
-open class NavigationMessageDispatcher(private val errorHandler: ((Exception) -> Unit)? = null) {
+class NavigationMessageDispatcher(
+    private val nodeWalker: NodeWalker = DefaultNodeWalker(),
+    private val errorHandler: ((Exception) -> Unit)? = null
+) {
 
     private val messageChannel = Channel<Pair<NavigationMessage, Any>>(Channel.UNLIMITED)
 
@@ -29,21 +31,13 @@ open class NavigationMessageDispatcher(private val errorHandler: ((Exception) ->
             if (node is NavigationMessageHandler && node.handleNavigationMessage(message)) {
                 return
             }
-            node = node?.let { getParentNode(it) }
+            node = node?.let { nodeWalker.getNextNode(it) }
         } while (node != null)
 
         if (errorHandler != null) {
             errorHandler.invoke(NotHandledNavigationMessageException())
         } else {
             throw NotHandledNavigationMessageException()
-        }
-    }
-
-    protected open fun getParentNode(node: Any): Any? {
-        return if (node is Fragment) {
-            node.parentFragment ?: node.activity
-        } else {
-            null
         }
     }
 }
