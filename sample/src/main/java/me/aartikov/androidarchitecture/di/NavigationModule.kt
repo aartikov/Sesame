@@ -5,6 +5,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ActivityComponent
 import dagger.hilt.android.scopes.ActivityScoped
+import me.aartikov.lib.navigation.AndroidNavigationMessageDispatcher
 import me.aartikov.lib.navigation.NavigationMessageDispatcher
 
 @Module
@@ -14,6 +15,6 @@ object NavigationModule {
     @ActivityScoped
     @Provides
     fun provideNavigationMessageDispatcher(): NavigationMessageDispatcher {
-        return NavigationMessageDispatcher()
+        return AndroidNavigationMessageDispatcher()
     }
 }
