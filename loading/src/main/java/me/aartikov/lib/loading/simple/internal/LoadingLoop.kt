@@ -107,7 +107,6 @@ internal class LoadingReducer<T> : Reducer<State<T>, Action<T>, Effect> {
                 is State.Error -> next(State.Data(action.data))    // TODO: Effect.EmitEvent(Event.Error(action.throwable, hasData = true)) ???
                 is State.Refresh -> next(State.Refresh(action.data))
                 is State.Data -> next(State.Data(action.data))
-                else -> nothing()
             }
         }
 
