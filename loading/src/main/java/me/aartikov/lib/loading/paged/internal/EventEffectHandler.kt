@@ -1,6 +1,5 @@
 package me.aartikov.lib.loading.paged.internal
 
-
 import me.aartikov.lib.loading.paged.PagedLoading
 import me.aartikov.lib.loop.EffectHandler
 
