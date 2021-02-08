@@ -33,6 +33,7 @@ dependencies {
     implementation project(":navigation")
     implementation project(":dialog")
     implementation project(":loading")
+    implementation project(":loop")
 
     implementation androidx.coreKtx
     implementation androidx.appCompat
