@@ -6,8 +6,7 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
-import com.xwray.groupie.GroupAdapter
-import com.xwray.groupie.GroupieViewHolder
+import com.xwray.groupie.GroupieAdapter
 import com.xwray.groupie.Section
 import dagger.hilt.android.AndroidEntryPoint
 import me.aartikov.androidarchitecture.R
@@ -22,7 +21,7 @@ class MoviesScreen : BaseScreen<MoviesViewModel>(R.layout.screen_movies, MoviesV
 
     private val binding by viewBinding(ScreenMoviesBinding::bind)
 
-    private val movieAdapter = GroupAdapter<GroupieViewHolder>()
+    private val movieAdapter = GroupieAdapter()
     private val listSection = Section()
     private var scrollToEndListenerEnabled: Boolean = true
 
@@ -32,6 +31,7 @@ class MoviesScreen : BaseScreen<MoviesViewModel>(R.layout.screen_movies, MoviesV
         with(binding) {
             initRecyclerView()
             swipeRefresh.setOnRefreshListener { vm.onPullToRefresh() }
+            emptyView.retryButton.setOnClickListener { vm.onRetryClicked() }
             errorView.retryButton.setOnClickListener { vm.onRetryClicked() }
 
             vm::moviesState bind { state ->
@@ -50,14 +50,14 @@ class MoviesScreen : BaseScreen<MoviesViewModel>(R.layout.screen_movies, MoviesV
                         } else {
                             listSection.removeFooter()
                         }
-
-                        scrollToEndListenerEnabled = !state.fullData
                     }
 
                     is PagedLoading.State.Error -> {
                         errorView.errorMessage.text = state.throwable.message
                     }
                 }
+
+                scrollToEndListenerEnabled = state is PagedLoading.State.Data && !state.fullData
             }
         }
     }

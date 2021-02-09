@@ -13,14 +13,15 @@ class MoviesGateway @Inject constructor() {
 
     companion object {
         private const val PAGE_VOLUME = 20
-        private const val DELAY_MS = 2000L
     }
 
     private var counter = 0
 
     suspend fun getMovies(page: Int): List<Movie> = withContext(Dispatchers.IO) {
-        delay(DELAY_MS)
-        val success = counter++ % 2 == 0
+        delay(1000)
+        val success = counter % 4 != 0
+        counter++
+
         if (success)
             generateMovies(page)
         else

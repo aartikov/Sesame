@@ -18,5 +18,5 @@
     <string name="enter_result">Enter your result</string>
 
     <!-- Movies -->
-    <string name="movies_placeholder">Movies placeholder</string>
+    <string name="empty_view_text">No items to display</string>
 </resources>
