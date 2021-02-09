@@ -24,7 +24,7 @@ class ProfileGateway @Inject constructor() {
                 avatarUrl = "https://www.biography.com/.image/ar_1:1%2Cc_fill%2Ccs_srgb%2Cg_face%2Cq_auto:good%2Cw_300/MTIwNjA4NjMzOTc0MTk1NzI0/john-smith-9486928-1-402.jpg"
             )
         } else {
-            throw RuntimeException("No internet connection")
+            throw RuntimeException("Emulated failure. Please, try again.")
         }
     }
 }

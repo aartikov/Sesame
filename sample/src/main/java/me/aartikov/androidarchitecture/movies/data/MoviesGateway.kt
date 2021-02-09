@@ -24,7 +24,7 @@ class MoviesGateway @Inject constructor() {
         if (success)
             generateMovies(page)
         else
-            throw RuntimeException("No internet connection")
+            throw RuntimeException("Emulated failure. Please, try again.")
     }
 
     private fun generateMovies(page: Int): List<Movie> =
