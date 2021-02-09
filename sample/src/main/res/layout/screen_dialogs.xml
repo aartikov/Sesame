@@ -12,14 +12,14 @@
         android:orientation="vertical">
 
         <Button
-            android:id="@+id/showDialogButton"
+            android:id="@+id/show_dialog_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:text="@string/show_dialog_button_text" />
 
         <Button
-            android:id="@+id/showForResultButton"
+            android:id="@+id/show_for_result_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"

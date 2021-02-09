@@ -2,7 +2,6 @@ apply plugin: "com.android.application"
 apply plugin: "kotlin-android"
 apply plugin: "kotlin-kapt"
 apply plugin: "dagger.hilt.android.plugin"
-apply plugin: "kotlin-android-extensions"
 
 android {
     compileSdkVersion 30
@@ -18,13 +17,8 @@ android {
 
     kotlinOptions { jvmTarget = "1.8" }
 
-    packagingOptions {
-        exclude "META-INF/AL2.0"
-        exclude "META-INF/LGPL2.1"
-    }
-
-    androidExtensions {
-        experimental = true
+    buildFeatures {
+        viewBinding = true
     }
 }
 
@@ -47,10 +41,12 @@ dependencies {
     implementation groupie.core
     implementation groupie.androidExtensions
 
+    implementation daggerHilt.coreAndroid
+    kapt daggerHilt.androidCompiler
+
     implementation coroutines
 
     implementation glide
 
-    implementation daggerHilt.coreAndroid
-    kapt daggerHilt.androidCompiler
+    implementation viewBindingDelegates
 }

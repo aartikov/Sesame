@@ -1,19 +1,23 @@
 package me.aartikov.androidarchitecture.movies.ui
 
-import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
-import com.xwray.groupie.kotlinandroidextensions.Item
-import kotlinx.android.synthetic.main.item_movie.*
+import android.view.View
+import com.xwray.groupie.viewbinding.BindableItem
 import me.aartikov.androidarchitecture.R
+import me.aartikov.androidarchitecture.databinding.ItemMovieBinding
 import me.aartikov.androidarchitecture.movies.domain.Movie
 
 
-class MovieItem(private val movie: Movie) : Item() {
+class MovieItem(private val movie: Movie) : BindableItem<ItemMovieBinding>() {
 
     override fun getLayout() = R.layout.item_movie
 
+    override fun initializeViewBinding(view: View): ItemMovieBinding {
+        return ItemMovieBinding.bind(view)
+    }
+
     override fun getId(): Long = movie.id.toLong()
 
-    override fun bind(viewHolder: GroupieViewHolder, position: Int) = with(viewHolder) {
+    override fun bind(binding: ItemMovieBinding, position: Int) = with(binding) {
         id.text = movie.id.toString()
         title.text = movie.title
         overview.text = movie.overview
