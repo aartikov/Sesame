@@ -32,18 +32,32 @@ open class Loop<StateT, ActionT, EffectT>(
      */
     val stateFlow: StateFlow<StateT> get() = mutableStateFlow
 
+    var isStarted: Boolean = false
+        private set
+
     private val mutableStateFlow = MutableStateFlow(initialState)
     private val actionChannel = Channel<ActionT>(Channel.UNLIMITED)
 
     /**
      * Start loop
      */
-    suspend fun start() = coroutineScope {
-        startActionSources(this)
-        for (action in actionChannel) {
-            val next = reducer.reduce(state, action)
-            changeState(next.state)
-            handleEffects(this, next.effects)
+    suspend fun start() {
+        if (isStarted) {
+            throw IllegalStateException("Loop is already started")
+        }
+
+        coroutineScope {
+            isStarted = true
+            try {
+                startActionSources(this)
+                for (action in actionChannel) {
+                    val next = reducer.reduce(state, action)
+                    changeState(next.state)
+                    handleEffects(this, next.effects)
+                }
+            } finally {
+                isStarted = false
+            }
         }
     }
 

@@ -34,6 +34,8 @@ internal class LoadingImpl<T : Any>(
         )
     )
 
+    override val isStarted: Boolean get() = loop.isStarted
+
     override val stateFlow: StateFlow<State<T>>
         get() = mutableStateFlow
 

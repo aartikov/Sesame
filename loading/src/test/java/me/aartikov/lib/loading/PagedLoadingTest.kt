@@ -7,6 +7,9 @@ import kotlinx.coroutines.test.runBlockingTest
 import me.aartikov.lib.loading.PagedLoadingTest.TestLoader.Result
 import me.aartikov.lib.loading.paged.*
 import me.aartikov.lib.loading.paged.PagedLoading.*
+import me.aartikov.lib.loading.simple.OrdinaryLoading
+import me.aartikov.lib.loading.simple.startIn
+import org.junit.Assert
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
@@ -269,6 +272,20 @@ class PagedLoadingTest {
         assertEquals(State.Data(1, listOf("Value1", "Value2")), loading.state)
         job.cancel()
     }
+
+    @Test
+    fun `fails if startIn is called twice`() {
+        val loader = TestLoader(Result.Success(listOf("Anything")))
+        val loading = PagedLoading(loader)
+
+        Assert.assertThrows(IllegalStateException::class.java) {
+            runBlockingTest {
+                loading.startIn(this)
+                loading.startIn(this)
+            }
+        }
+    }
+
 
     private class TestLoader(
         private val firstPageResult: Result,

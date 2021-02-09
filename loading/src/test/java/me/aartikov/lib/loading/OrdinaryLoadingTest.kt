@@ -12,6 +12,7 @@ import me.aartikov.lib.loading.simple.OrdinaryLoading
 import me.aartikov.lib.loading.simple.startIn
 import me.aartikov.lib.loading.simple.state
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertThrows
 import org.junit.Test
 
 class OrdinaryLoadingTest {
@@ -185,6 +186,19 @@ class OrdinaryLoadingTest {
 
         assertEquals(State.Data("Second"), loading.state)
         job.cancel()
+    }
+
+    @Test
+    fun `fails if startIn is called twice`() {
+        val loader = TestLoader(Result.Success("Anything"))
+        val loading = OrdinaryLoading(loader)
+
+        assertThrows(IllegalStateException::class.java) {
+            runBlockingTest {
+                loading.startIn(this)
+                loading.startIn(this)
+            }
+        }
     }
 
     private class TestLoader(private val resultProvider: () -> Result) : OrdinaryLoader<String> {

@@ -22,6 +22,8 @@ interface Loading<T : Any> {
 
     val eventFlow: Flow<Event>
 
+    val isStarted: Boolean
+
     suspend fun start(fresh: Boolean = true)
 
     fun refresh()
