@@ -1,7 +1,7 @@
 package me.aartikov.androidarchitecture.movies.ui
 
-import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import me.aartikov.androidarchitecture.base.BaseViewModel
 import me.aartikov.androidarchitecture.movies.data.MoviesGateway
 import me.aartikov.androidarchitecture.movies.domain.Movie
@@ -9,9 +9,10 @@ import me.aartikov.lib.loading.paged.PagedLoading
 import me.aartikov.lib.loading.paged.handleErrors
 import me.aartikov.lib.loading.paged.startIn
 import me.aartikov.lib.property.stateFromFlow
+import javax.inject.Inject
 
-
-class MoviesViewModel @ViewModelInject constructor(
+@HiltViewModel
+class MoviesViewModel @Inject constructor(
     private val moviesGateway: MoviesGateway
 ) : BaseViewModel() {
 

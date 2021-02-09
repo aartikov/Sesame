@@ -1,15 +1,17 @@
 package me.aartikov.androidarchitecture.profile.ui
 
-import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import me.aartikov.androidarchitecture.base.BaseViewModel
 import me.aartikov.androidarchitecture.profile.data.ProfileGateway
 import me.aartikov.lib.loading.simple.OrdinaryLoading
 import me.aartikov.lib.loading.simple.handleErrors
 import me.aartikov.lib.loading.simple.startIn
 import me.aartikov.lib.property.stateFromFlow
+import javax.inject.Inject
 
-class ProfileViewModel @ViewModelInject constructor(
+@HiltViewModel
+class ProfileViewModel @Inject constructor(
     private val profileGateway: ProfileGateway
 ) : BaseViewModel() {
 

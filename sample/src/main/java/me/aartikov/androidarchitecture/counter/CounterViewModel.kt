@@ -1,12 +1,14 @@
 package me.aartikov.androidarchitecture.counter
 
-import androidx.hilt.lifecycle.ViewModelInject
+import dagger.hilt.android.lifecycle.HiltViewModel
 import me.aartikov.androidarchitecture.base.BaseViewModel
 import me.aartikov.lib.property.command
 import me.aartikov.lib.property.computed
 import me.aartikov.lib.property.state
+import javax.inject.Inject
 
-class CounterViewModel @ViewModelInject constructor() : BaseViewModel() {
+@HiltViewModel
+class CounterViewModel @Inject constructor() : BaseViewModel() {
 
     companion object {
         private const val MAX_COUNT = 10

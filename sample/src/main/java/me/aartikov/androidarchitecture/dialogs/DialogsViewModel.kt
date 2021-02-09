@@ -1,12 +1,15 @@
 package me.aartikov.androidarchitecture.dialogs
 
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import me.aartikov.androidarchitecture.base.BaseViewModel
 import me.aartikov.lib.dialog.dialogControl
 import me.aartikov.lib.property.command
+import javax.inject.Inject
 
-class DialogsViewModel : BaseViewModel() {
+@HiltViewModel
+class DialogsViewModel @Inject constructor() : BaseViewModel() {
 
     val showMessage = command<String>()
 

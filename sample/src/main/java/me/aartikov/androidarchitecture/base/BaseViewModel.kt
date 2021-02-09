@@ -7,7 +7,7 @@ import me.aartikov.lib.navigation.NavigationMessageQueue
 import me.aartikov.lib.property.PropertyHost
 import me.aartikov.lib.property.command
 
-open class BaseViewModel : ViewModel(), PropertyHost {
+abstract class BaseViewModel : ViewModel(), PropertyHost {
 
     override val propertyHostScope get() = viewModelScope
 
