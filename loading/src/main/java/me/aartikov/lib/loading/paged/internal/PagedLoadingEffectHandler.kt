@@ -29,13 +29,13 @@ internal class PagedLoadingEffectHandler<T : Any>(private val loader: PagedLoade
             try {
                 val data = loader.loadFirstPage(fresh)
                 if (data.isEmpty()) {
-                    actionConsumer(Action.EmptyPage)
+                    actionConsumer(Action.EmptyPageLoaded)
                 } else {
-                    actionConsumer(Action.NewPage(data))
+                    actionConsumer(Action.NewPageLoaded(data))
                 }
             } catch (e: Exception) {
                 if (e !is CancellationException) {
-                    actionConsumer(Action.Error(e))
+                    actionConsumer(Action.LoadingError(e))
                 }
             }
         }
@@ -50,13 +50,13 @@ internal class PagedLoadingEffectHandler<T : Any>(private val loader: PagedLoade
             try {
                 val data = loader.loadNextPage(pagingInfo)
                 if (data.isEmpty()) {
-                    actionConsumer(Action.EmptyPage)
+                    actionConsumer(Action.EmptyPageLoaded)
                 } else {
-                    actionConsumer(Action.NewPage(data))
+                    actionConsumer(Action.NewPageLoaded(data))
                 }
             } catch (e: Exception) {
                 if (e !is CancellationException) {
-                    actionConsumer(Action.Error(e))
+                    actionConsumer(Action.LoadingError(e))
                 }
             }
         }

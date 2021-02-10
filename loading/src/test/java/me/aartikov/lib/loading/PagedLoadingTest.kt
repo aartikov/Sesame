@@ -7,7 +7,9 @@ import kotlinx.coroutines.test.runBlockingTest
 import me.aartikov.lib.loading.PagedLoadingTest.TestLoader.Result
 import me.aartikov.lib.loading.paged.*
 import me.aartikov.lib.loading.paged.PagedLoading.*
+import org.junit.Assert
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertThrows
 import org.junit.Test
 
 class PagedLoadingTest {
@@ -21,11 +23,36 @@ class PagedLoadingTest {
     }
 
     @Test
-    fun `starts loading after started`() = runBlockingTest {
+    fun `is empty after attach`() = runBlockingTest {
         val loader = TestLoader(Result.Success(listOf("Anything")))
         val loading = PagedLoading(loader)
 
-        val job = loading.startIn(this)
+        val job = loading.attach(this)
+
+        assertEquals(PagedLoading.State.Empty, loading.state)
+        job.cancel()
+    }
+
+    @Test
+    fun `fails if attach is called twice`() {
+        val loader = TestLoader(Result.Success(listOf("Anything")))
+        val loading = PagedLoading(loader)
+
+        assertThrows(IllegalStateException::class.java) {
+            runBlockingTest {
+                loading.attach(this)
+                loading.attach(this)
+            }
+        }
+    }
+
+    @Test
+    fun `starts loading after refresh is called`() = runBlockingTest {
+        val loader = TestLoader(Result.Success(listOf("Anything")))
+        val loading = PagedLoading(loader)
+
+        val job = loading.attach(this)
+        loading.refresh()
 
         assertEquals(State.Loading, loading.state)
         assertEquals(loader.loadFirstPageCallCount, 1)
@@ -38,7 +65,8 @@ class PagedLoadingTest {
         val loader = TestLoader(Result.Success(emptyList()))
         val loading = PagedLoading(loader)
 
-        val job = loading.startIn(this)
+        val job = loading.attach(this)
+        loading.refresh()
         delay(TestLoader.LOAD_DELAY * 2)
 
         assertEquals(State.Empty, loading.state)
@@ -50,7 +78,8 @@ class PagedLoadingTest {
         val loader = TestLoader(Result.Success(listOf("Value1", "Value2")))
         val loading = PagedLoading(loader)
 
-        val job = loading.startIn(this)
+        val job = loading.attach(this)
+        loading.refresh()
         delay(TestLoader.LOAD_DELAY * 2)
 
         assertEquals(State.Data(1, listOf("Value1", "Value2")), loading.state)
@@ -66,7 +95,8 @@ class PagedLoadingTest {
         val eventsJob = launch {
             loading.eventFlow.toList(events)
         }
-        val job = loading.startIn(this)
+        val job = loading.attach(this)
+        loading.refresh()
         delay(TestLoader.LOAD_DELAY * 2)
 
         assertEquals(State.Error(LoadingFailedException()), loading.state)
@@ -80,7 +110,7 @@ class PagedLoadingTest {
         val loader = TestLoader(Result.Success(listOf("Value1", "Value2")))
         val loading = PagedLoading(loader, initialState = State.Data(1, listOf("Previous value1", "Previous value2")))
 
-        val job = loading.startIn(this)
+        val job = loading.attach(this)
         loading.refresh()
 
         assertEquals(State.Data(1, listOf("Previous value1", "Previous value2"), DataStatus.REFRESHING), loading.state)
@@ -95,7 +125,7 @@ class PagedLoadingTest {
             initialState = State.Data(2, listOf("Previous value1", "Previous value2", "Previous value3"))
         )
 
-        val job = loading.startIn(this)
+        val job = loading.attach(this)
         loading.refresh()
         delay(TestLoader.LOAD_DELAY * 2)
 
@@ -109,7 +139,7 @@ class PagedLoadingTest {
         val loading = PagedLoading(loader, initialState = State.Data(1, listOf("Previous value1", "Previous value2")))
         val events = mutableListOf<Event>()
 
-        val job = loading.startIn(this)
+        val job = loading.attach(this)
         val eventsJob = launch {
             loading.eventFlow.toList(events)
         }
@@ -127,7 +157,8 @@ class PagedLoadingTest {
         val loader = TestLoader(Result.Success(listOf("Value1", "Value2")))
         val loading = PagedLoading(loader)
 
-        val job = loading.startIn(this)
+        val job = loading.attach(this)
+        loading.refresh()
         delay(TestLoader.LOAD_DELAY / 2)
         loading.refresh()
 
@@ -136,11 +167,12 @@ class PagedLoadingTest {
     }
 
     @Test
-    fun `loads not fresh data when it is specified`() = runBlockingTest {
+    fun `loads cached data when it is specified`() = runBlockingTest {
         val loader = TestLoader(Result.Success(listOf("Value1", "Value2")))
         val loading = PagedLoading(loader)
 
-        val job = loading.startIn(this, fresh = false)
+        val job = loading.attach(this)
+        loading.loadFirstPage(fresh = false)
         delay(TestLoader.LOAD_DELAY * 2)
 
         assertEquals(State.Data(1, listOf("Value1 (cached)", "Value2 (cached)")), loading.state)
@@ -152,7 +184,7 @@ class PagedLoadingTest {
         val loader = TestLoader(Result.Success(listOf("Value3", "Value4")))
         val loading = PagedLoading(loader, initialState = State.Data(1, listOf("Value1", "Value2")))
 
-        val job = loading.startIn(this)
+        val job = loading.attach(this)
         loading.loadMore()
         delay(TestLoader.LOAD_DELAY / 2)
 
@@ -173,7 +205,7 @@ class PagedLoadingTest {
         )
         val loading = PagedLoading(loader, initialState = State.Data(1, listOf("Value1", "Value2")))
 
-        val job = loading.startIn(this)
+        val job = loading.attach(this)
         loading.loadMore()
         delay(TestLoader.LOAD_DELAY * 2)
 
@@ -190,7 +222,7 @@ class PagedLoadingTest {
         val loading = PagedLoading(loader, initialState = State.Data(1, listOf("Value1", "Value2")))
         val events = mutableListOf<Event>()
 
-        val job = loading.startIn(this)
+        val job = loading.attach(this)
         val eventsJob = launch {
             loading.eventFlow.toList(events)
         }
@@ -211,7 +243,7 @@ class PagedLoadingTest {
         )
         val loading = PagedLoading(loader, initialState = State.Data(2, listOf("Value1", "Value2", "Value3")))
 
-        val job = loading.startIn(this)
+        val job = loading.attach(this)
         loading.loadMore()
         delay(TestLoader.LOAD_DELAY * 2)
 
@@ -228,7 +260,7 @@ class PagedLoadingTest {
         )
         val loading = PagedLoading(loader, initialState = State.Data(1, listOf("Previous value1", "Previous value2")))
 
-        val job = loading.startIn(this)
+        val job = loading.attach(this)
         loading.loadMore()
         delay(TestLoader.LOAD_DELAY / 2)
         loading.refresh()
@@ -245,7 +277,7 @@ class PagedLoadingTest {
         )
         val loading = PagedLoading(loader, initialState = State.Data(1, listOf("Value1", "Value2")))
 
-        val job = loading.startIn(this)
+        val job = loading.attach(this)
         loading.restart()
 
         assertEquals(State.Loading, loading.state)
@@ -260,7 +292,7 @@ class PagedLoadingTest {
         )
         val loading = PagedLoading(loader, initialState = State.Data(1, listOf("Previous value1", "Previous value2")))
 
-        val job = loading.startIn(this)
+        val job = loading.attach(this)
         loading.loadMore()
         delay(TestLoader.LOAD_DELAY / 2)
         loading.restart()

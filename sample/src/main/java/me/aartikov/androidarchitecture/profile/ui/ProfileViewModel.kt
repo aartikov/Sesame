@@ -6,7 +6,7 @@ import me.aartikov.androidarchitecture.base.BaseViewModel
 import me.aartikov.androidarchitecture.profile.data.ProfileGateway
 import me.aartikov.lib.loading.simple.OrdinaryLoading
 import me.aartikov.lib.loading.simple.handleErrors
-import me.aartikov.lib.loading.simple.startIn
+import me.aartikov.lib.loading.simple.refresh
 import me.aartikov.lib.property.stateFromFlow
 import javax.inject.Inject
 
@@ -25,7 +25,8 @@ class ProfileViewModel @Inject constructor(
                 showError(error.throwable)
             }
         }
-        profileLoading.startIn(viewModelScope)
+        profileLoading.attach(viewModelScope)
+        profileLoading.refresh()
     }
 
     fun onPullToRefresh() {

@@ -11,7 +11,7 @@ import org.junit.Test
 class FlowLoadingTest {
 
     @Test
-    fun `is empty when not started`() {
+    fun `is empty when not attached`() {
         val loader = TestLoader(
             TestLoader.Result.Success("Anything"),
             cachedValue = "Cached value"
@@ -22,14 +22,29 @@ class FlowLoadingTest {
     }
 
     @Test
-    fun `starts loading fresh data after started`() = runBlockingTest {
+    fun `shows cached value after attach`() = runBlockingTest {
         val loader = TestLoader(
             TestLoader.Result.Success("Anything"),
             cachedValue = "Cached value"
         )
         val loading = FlowLoading(loader)
 
-        val job = loading.startIn(this)
+        val job = loading.attach(this)
+
+        assertEquals(Loading.State.Data("Cached value"), loading.state)
+        job.cancel()
+    }
+
+    @Test
+    fun `starts loading fresh data after refresh is called`() = runBlockingTest {
+        val loader = TestLoader(
+            TestLoader.Result.Success("Anything"),
+            cachedValue = "Cached value"
+        )
+        val loading = FlowLoading(loader)
+
+        val job = loading.attach(this)
+        loading.refresh()
 
         assertEquals(Loading.State.Data("Cached value", refreshing = true), loading.state)
         job.cancel()
@@ -43,7 +58,8 @@ class FlowLoadingTest {
         )
         val loading = FlowLoading(loader)
 
-        val job = loading.startIn(this)
+        val job = loading.attach(this)
+        loading.refresh()
         delay(TestLoader.LOAD_DELAY)
 
         assertEquals(Loading.State.Data("Fresh value"), loading.state)
@@ -58,7 +74,8 @@ class FlowLoadingTest {
         )
         val loading = FlowLoading(loader)
 
-        val job = loading.startIn(this, fresh = false)
+        val job = loading.attach(this)
+        loading.load(fresh = false)
 
         assertEquals(Loading.State.Data("Cached value"), loading.state)
         job.cancel()
@@ -72,7 +89,7 @@ class FlowLoadingTest {
         )
         val loading = FlowLoading(loader)
 
-        val job = loading.startIn(this, fresh = false)
+        val job = loading.attach(this)
         loader.updateCache("Modified value")
 
         assertEquals(Loading.State.Data("Modified value"), loading.state)

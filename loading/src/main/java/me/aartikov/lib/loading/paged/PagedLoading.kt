@@ -3,7 +3,6 @@ package me.aartikov.lib.loading.paged
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.launch
 import me.aartikov.lib.loading.paged.internal.PagedLoadingImpl
 
 interface PagedLoader<T : Any> {
@@ -42,13 +41,29 @@ interface PagedLoading<T : Any> {
 
     val eventFlow: Flow<Event>
 
-    suspend fun start(fresh: Boolean = true)
+    fun attach(scope: CoroutineScope): Job
 
-    fun refresh()
+    fun loadFirstPage(fresh: Boolean, dropData: Boolean = false)
 
     fun loadMore()
 
-    fun restart(fresh: Boolean = true)
+}
+
+fun <T : Any> PagedLoading<T>.refresh() = loadFirstPage(fresh = true, dropData = false)
+
+fun <T : Any> PagedLoading<T>.restart(fresh: Boolean = true) = loadFirstPage(fresh, dropData = true)
+
+val <T : Any> PagedLoading<T>.state: PagedLoading.State<T> get() = stateFlow.value
+
+fun <T : Any> PagedLoading<T>.handleErrors(
+    scope: CoroutineScope,
+    handler: (PagedLoading.Event.Error) -> Unit
+): Job {
+    return eventFlow.filterIsInstance<PagedLoading.Event.Error>()
+        .onEach {
+            handler(it)
+        }
+        .launchIn(scope)
 }
 
 fun <T : Any> PagedLoading(
@@ -94,23 +109,4 @@ fun <T : Any> PagedLoading(
         override suspend fun loadNextPage(pagingInfo: PagingInfo<T>): List<T> = loadPage(pagingInfo)
     }
     return PagedLoading(loader, initialState)
-}
-
-val <T : Any> PagedLoading<T>.state: PagedLoading.State<T> get() = stateFlow.value
-
-fun <T : Any> PagedLoading<T>.startIn(scope: CoroutineScope, fresh: Boolean = true): Job {
-    return scope.launch {
-        start(fresh)
-    }
-}
-
-fun <T : Any> PagedLoading<T>.handleErrors(
-    scope: CoroutineScope,
-    handler: (PagedLoading.Event.Error) -> Unit
-): Job {
-    return eventFlow.filterIsInstance<PagedLoading.Event.Error>()
-        .onEach {
-            handler(it)
-        }
-        .launchIn(scope)
 }

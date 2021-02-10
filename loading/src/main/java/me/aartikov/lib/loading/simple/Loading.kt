@@ -3,7 +3,6 @@ package me.aartikov.lib.loading.simple
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.launch
 
 interface Loading<T : Any> {
 
@@ -22,20 +21,17 @@ interface Loading<T : Any> {
 
     val eventFlow: Flow<Event>
 
-    suspend fun start(fresh: Boolean = true)
+    fun attach(scope: CoroutineScope): Job
 
-    fun refresh()
+    fun load(fresh: Boolean, dropData: Boolean = false)
 
-    fun restart(fresh: Boolean = true)
 }
+
+fun <T : Any> Loading<T>.refresh() = load(fresh = true, dropData = false)
+
+fun <T : Any> Loading<T>.restart(fresh: Boolean = true) = load(fresh, dropData = true)
 
 val <T : Any> Loading<T>.state: Loading.State<T> get() = stateFlow.value
-
-fun <T : Any> Loading<T>.startIn(scope: CoroutineScope, fresh: Boolean = true): Job {
-    return scope.launch {
-        start(fresh)
-    }
-}
 
 fun <T : Any> Loading<T>.handleErrors(
     scope: CoroutineScope,

@@ -1,5 +1,7 @@
 package me.aartikov.lib.loading.simple.internal
 
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.*
@@ -40,21 +42,21 @@ internal class LoadingImpl<T : Any>(
     override val eventFlow: Flow<Event>
         get() = mutableEventFlow
 
-    override suspend fun start(fresh: Boolean) = coroutineScope {
-        launch {
-            loop.stateFlow.collect {
-                mutableStateFlow.value = it.toPublicState()
+    override fun attach(scope: CoroutineScope): Job = scope.launch {
+        coroutineScope {
+            launch {
+                loop.stateFlow.collect {
+                    mutableStateFlow.value = it.toPublicState()
+                }
+            }
+
+            launch {
+                loop.start()
             }
         }
-        loop.dispatch(Action.Load(fresh))
-        loop.start()
     }
 
-    override fun refresh() {
-        loop.dispatch(Action.Refresh)
-    }
-
-    override fun restart(fresh: Boolean) {
-        loop.dispatch(Action.Restart(fresh))
+    override fun load(fresh: Boolean, dropData: Boolean) {
+        loop.dispatch(Action.Load(fresh, dropData))
     }
 }
