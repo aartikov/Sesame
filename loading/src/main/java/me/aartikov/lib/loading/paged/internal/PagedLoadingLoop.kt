@@ -15,14 +15,12 @@ internal sealed class State<out T> {
 }
 
 internal sealed class Action<out T> {
-    data class Load(val fresh: Boolean) : Action<Nothing>()
-    object Refresh : Action<Nothing>()
+    data class LoadFirstPage(val fresh: Boolean, val dropData: Boolean) : Action<Nothing>()
     object LoadMore : Action<Nothing>()
-    data class Restart(val fresh: Boolean) : Action<Nothing>()
 
-    data class NewPage<T>(val data: List<T>) : Action<T>()
-    object EmptyPage : Action<Nothing>()
-    data class Error(val throwable: Throwable) : Action<Nothing>()
+    data class NewPageLoaded<T>(val data: List<T>) : Action<T>()
+    object EmptyPageLoaded : Action<Nothing>()
+    data class LoadingError(val throwable: Throwable) : Action<Nothing>()
 }
 
 internal sealed class Effect<out T> {
@@ -36,39 +34,37 @@ internal typealias PagedLoadingLoop<T> = Loop<State<T>, Action<T>, Effect<T>>
 internal class PagedLoadingReducer<T> : Reducer<State<T>, Action<T>, Effect<T>> {
 
     override fun reduce(state: State<T>, action: Action<T>): Next<State<T>, Effect<T>> = when (action) {
-        is Action.Load -> {
-            when (state) {
-                is State.Empty -> next(
+
+        is Action.LoadFirstPage -> {
+            if (action.dropData) {
+                next(
                     State.Loading,
                     Effect.LoadFirstPage(action.fresh)
                 )
-                else -> nothing()
-            }
-        }
-
-        is Action.Refresh -> {
-            when (state) {
-                is State.Empty -> next(
-                    State.Loading,
-                    Effect.LoadFirstPage(fresh = true)
-                )
-                is State.Error -> next(
-                    State.Loading,
-                    Effect.LoadFirstPage(fresh = true)
-                )
-                is State.Data -> next(
-                    State.Refresh(state.pageCount, state.data),
-                    Effect.LoadFirstPage(fresh = true)
-                )
-                is State.LoadingMore -> next(
-                    State.Refresh(state.pageCount, state.data),
-                    Effect.LoadFirstPage(fresh = true)
-                )
-                is State.FullData -> next(
-                    State.Refresh(state.pageCount, state.data),
-                    Effect.LoadFirstPage(fresh = true)
-                )
-                else -> nothing()
+            } else {
+                when (state) {
+                    is State.Empty -> next(
+                        State.Loading,
+                        Effect.LoadFirstPage(action.fresh)
+                    )
+                    is State.Error -> next(
+                        State.Loading,
+                        Effect.LoadFirstPage(action.fresh)
+                    )
+                    is State.Data -> next(
+                        State.Refresh(state.pageCount, state.data),
+                        Effect.LoadFirstPage(action.fresh)
+                    )
+                    is State.LoadingMore -> next(
+                        State.Refresh(state.pageCount, state.data),
+                        Effect.LoadFirstPage(action.fresh)
+                    )
+                    is State.FullData -> next(
+                        State.Refresh(state.pageCount, state.data),
+                        Effect.LoadFirstPage(action.fresh)
+                    )
+                    else -> nothing()
+                }
             }
         }
 
@@ -82,14 +78,7 @@ internal class PagedLoadingReducer<T> : Reducer<State<T>, Action<T>, Effect<T>> 
             }
         }
 
-        is Action.Restart -> {
-            next(
-                State.Loading,
-                Effect.LoadFirstPage(action.fresh)
-            )
-        }
-
-        is Action.NewPage -> {
+        is Action.NewPageLoaded -> {
             when (state) {
                 is State.Loading -> next(State.Data(1, action.data))
                 is State.Refresh -> next(State.Data(1, action.data))
@@ -103,7 +92,7 @@ internal class PagedLoadingReducer<T> : Reducer<State<T>, Action<T>, Effect<T>> 
             }
         }
 
-        is Action.EmptyPage -> {
+        is Action.EmptyPageLoaded -> {
             when (state) {
                 is State.Loading -> next(State.Empty)
                 is State.Refresh -> next(State.Empty)
@@ -112,7 +101,7 @@ internal class PagedLoadingReducer<T> : Reducer<State<T>, Action<T>, Effect<T>> 
             }
         }
 
-        is Action.Error -> {
+        is Action.LoadingError -> {
             when (state) {
                 is State.Loading -> next(
                     State.Error(action.throwable),

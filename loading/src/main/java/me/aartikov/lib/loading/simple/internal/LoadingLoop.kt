@@ -12,9 +12,7 @@ internal sealed class State<out T> {
 }
 
 internal sealed class Action<out T> {
-    data class Load(val fresh: Boolean) : Action<Nothing>()
-    object Refresh : Action<Nothing>()
-    data class Restart(val fresh: Boolean) : Action<Nothing>()
+    data class Load(val fresh: Boolean, val dropData: Boolean) : Action<Nothing>()
 
     data class DataLoaded<T>(val data: T) : Action<T>()
     object EmptyDataLoaded : Action<Nothing>()
@@ -36,38 +34,28 @@ internal class LoadingReducer<T> : Reducer<State<T>, Action<T>, Effect> {
     override fun reduce(state: State<T>, action: Action<T>): Next<State<T>, Effect> = when (action) {
 
         is Action.Load -> {
-            when (state) {
-                is State.Empty -> next(
+            if (action.dropData) {
+                next(
                     State.Loading,
                     Effect.Load(action.fresh)
                 )
-                else -> nothing()
+            } else {
+                when (state) {
+                    is State.Empty -> next(
+                        State.Loading,
+                        Effect.Load(action.fresh)
+                    )
+                    is State.Error -> next(
+                        State.Loading,
+                        Effect.Load(action.fresh)
+                    )
+                    is State.Data -> next(
+                        State.Refresh(data = state.data),
+                        Effect.Load(action.fresh)
+                    )
+                    else -> nothing()
+                }
             }
-        }
-
-        is Action.Refresh -> {
-            when (state) {
-                is State.Empty -> next(
-                    State.Loading,
-                    Effect.Load(fresh = true)
-                )
-                is State.Error -> next(
-                    State.Loading,
-                    Effect.Load(fresh = true)
-                )
-                is State.Data -> next(
-                    State.Refresh(data = state.data),
-                    Effect.Load(fresh = true)
-                )
-                else -> nothing()
-            }
-        }
-
-        is Action.Restart -> {
-            next(
-                State.Loading,
-                Effect.Load(action.fresh)
-            )
         }
 
         is Action.DataLoaded -> {

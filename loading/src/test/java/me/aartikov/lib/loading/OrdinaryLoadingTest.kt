@@ -5,13 +5,11 @@ import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runBlockingTest
 import me.aartikov.lib.loading.OrdinaryLoadingTest.TestLoader.Result
+import me.aartikov.lib.loading.simple.*
 import me.aartikov.lib.loading.simple.Loading.Event
 import me.aartikov.lib.loading.simple.Loading.State
-import me.aartikov.lib.loading.simple.OrdinaryLoader
-import me.aartikov.lib.loading.simple.OrdinaryLoading
-import me.aartikov.lib.loading.simple.startIn
-import me.aartikov.lib.loading.simple.state
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertThrows
 import org.junit.Test
 
 class OrdinaryLoadingTest {
@@ -25,11 +23,36 @@ class OrdinaryLoadingTest {
     }
 
     @Test
-    fun `starts loading after started`() = runBlockingTest {
+    fun `is empty after attach`() = runBlockingTest {
         val loader = TestLoader(Result.Success("Anything"))
         val loading = OrdinaryLoading(loader)
 
-        val job = loading.startIn(this)
+        val job = loading.attach(this)
+
+        assertEquals(State.Empty, loading.state)
+        job.cancel()
+    }
+
+    @Test
+    fun `fails if attach is called twice`() {
+        val loader = TestLoader(Result.Success("Anything"))
+        val loading = OrdinaryLoading(loader)
+
+        assertThrows(IllegalStateException::class.java) {
+            runBlockingTest {
+                loading.attach(this)
+                loading.attach(this)
+            }
+        }
+    }
+
+    @Test
+    fun `starts loading when refresh is called`() = runBlockingTest {
+        val loader = TestLoader(Result.Success("Anything"))
+        val loading = OrdinaryLoading(loader)
+
+        val job = loading.attach(this)
+        loading.refresh()
 
         assertEquals(State.Loading, loading.state)
         assertEquals(loader.callCount, 1)
@@ -41,7 +64,8 @@ class OrdinaryLoadingTest {
         val loader = suspend { emptyList<String>() }
         val loading = OrdinaryLoading(loader)
 
-        val job = loading.startIn(this)
+        val job = loading.attach(this)
+        loading.refresh()
         delay(TestLoader.LOAD_DELAY * 2)
 
         assertEquals(State.Empty, loading.state)
@@ -53,7 +77,8 @@ class OrdinaryLoadingTest {
         val loader = suspend { null }
         val loading = OrdinaryLoading(loader)
 
-        val job = loading.startIn(this)
+        val job = loading.attach(this)
+        loading.refresh()
         delay(TestLoader.LOAD_DELAY * 2)
 
         assertEquals(State.Empty, loading.state)
@@ -65,7 +90,8 @@ class OrdinaryLoadingTest {
         val loader = TestLoader(Result.Success("Value"))
         val loading = OrdinaryLoading(loader)
 
-        val job = loading.startIn(this)
+        val job = loading.attach(this)
+        loading.refresh()
         delay(TestLoader.LOAD_DELAY * 2)
 
         assertEquals(State.Data("Value"), loading.state)
@@ -81,7 +107,8 @@ class OrdinaryLoadingTest {
         val eventsJob = launch {
             loading.eventFlow.toList(events)
         }
-        val job = loading.startIn(this)
+        val job = loading.attach(this)
+        loading.refresh()
         delay(TestLoader.LOAD_DELAY * 2)
 
         assertEquals(State.Error(LoadingFailedException()), loading.state)
@@ -95,7 +122,7 @@ class OrdinaryLoadingTest {
         val loader = TestLoader(Result.Success("Value"))
         val loading = OrdinaryLoading(loader, initialState = State.Data("Previous value"))
 
-        val job = loading.startIn(this)
+        val job = loading.attach(this)
         loading.refresh()
 
         assertEquals(State.Data("Previous value", refreshing = true), loading.state)
@@ -107,7 +134,7 @@ class OrdinaryLoadingTest {
         val loader = TestLoader(Result.Success("Value"))
         val loading = OrdinaryLoading(loader, initialState = State.Data("Previous value"))
 
-        val job = loading.startIn(this)
+        val job = loading.attach(this)
         loading.refresh()
         delay(TestLoader.LOAD_DELAY * 2)
 
@@ -121,7 +148,7 @@ class OrdinaryLoadingTest {
         val loading = OrdinaryLoading(loader, initialState = State.Data("Previous value"))
         val events = mutableListOf<Event>()
 
-        val job = loading.startIn(this)
+        val job = loading.attach(this)
         val eventsJob = launch {
             loading.eventFlow.toList(events)
         }
@@ -139,7 +166,7 @@ class OrdinaryLoadingTest {
         val loader = TestLoader(Result.Success("Value"))
         val loading = OrdinaryLoading(loader)
 
-        val job = loading.startIn(this)
+        val job = loading.attach(this)
         delay(TestLoader.LOAD_DELAY / 2)
         loading.refresh()
 
@@ -152,7 +179,8 @@ class OrdinaryLoadingTest {
         val loader = TestLoader(Result.Success("Value"))
         val loading = OrdinaryLoading(loader)
 
-        val job = loading.startIn(this, fresh = false)
+        val job = loading.attach(this)
+        loading.load(fresh = false)
         delay(TestLoader.LOAD_DELAY * 2)
 
         assertEquals(State.Data("Value (cached)"), loading.state)
@@ -164,7 +192,7 @@ class OrdinaryLoadingTest {
         val loader = TestLoader(Result.Success("Anything"))
         val loading = OrdinaryLoading(loader, initialState = State.Data("Value"))
 
-        val job = loading.startIn(this)
+        val job = loading.attach(this)
         loading.restart()
 
         assertEquals(State.Loading, loading.state)
@@ -177,7 +205,8 @@ class OrdinaryLoadingTest {
         val loader = TestLoader { Result.Success(resultValue) }
         val loading = OrdinaryLoading(loader)
 
-        val job = loading.startIn(this)
+        val job = loading.attach(this)
+        loading.refresh()
         delay(TestLoader.LOAD_DELAY / 2)
         resultValue = "Second"
         loading.restart()
