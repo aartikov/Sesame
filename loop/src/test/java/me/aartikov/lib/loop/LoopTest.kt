@@ -5,6 +5,7 @@ import kotlinx.coroutines.test.runBlockingTest
 import me.aartikov.lib.loop.TestAction.*
 import me.aartikov.lib.loop.TestEffect.Effect1
 import me.aartikov.lib.loop.TestEffect.Effect2
+import org.junit.Assert
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
@@ -50,6 +51,22 @@ class LoopTest {
         job.cancel()
 
         assertEquals(TestState("Action1 ActionAfterEffect1 Action2 ActionAfterEffect2"), loop.state)
+    }
+
+    @Test
+    fun `fails if started twice`() {
+        val loop = TestLoop()
+
+        Assert.assertThrows(IllegalStateException::class.java) {
+            runBlockingTest {
+                launch {
+                    loop.start()
+                }
+                launch {
+                    loop.start()
+                }
+            }
+        }
     }
 }
 
