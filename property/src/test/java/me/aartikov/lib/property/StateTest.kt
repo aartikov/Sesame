@@ -1,5 +1,6 @@
 package me.aartikov.lib.property
 
+import androidx.lifecycle.Lifecycle
 import me.aartikov.lib.property.utils.MainDispatcherRule
 import me.aartikov.lib.property.utils.TestPropertyHost
 import me.aartikov.lib.property.utils.TestPropertyObserver
@@ -39,11 +40,11 @@ class StateTest {
             propertyHost::state bind { values.add(it) }
         }
 
-        propertyObserver.propertyObserverLifecycleOwner.onStart()
+        propertyObserver.propertyObserverLifecycleOwner.moveToState(Lifecycle.State.STARTED)
         propertyHost.state++
-        propertyObserver.propertyObserverLifecycleOwner.onResume()
+        propertyObserver.propertyObserverLifecycleOwner.moveToState(Lifecycle.State.RESUMED)
         propertyHost.state++
-        propertyObserver.propertyObserverLifecycleOwner.onPause()
+        propertyObserver.propertyObserverLifecycleOwner.moveToState(Lifecycle.State.STARTED)
         propertyHost.state++
 
         assertEquals(listOf(0, 1, 2, 3), values)
@@ -60,9 +61,9 @@ class StateTest {
             propertyHost::state bind { values.add(it) }
         }
 
-        propertyObserver.propertyObserverLifecycleOwner.onStop()
+        propertyObserver.propertyObserverLifecycleOwner.moveToState(Lifecycle.State.CREATED)
         repeat(3) { propertyHost.state++ }
-        propertyObserver.propertyObserverLifecycleOwner.onStart()
+        propertyObserver.propertyObserverLifecycleOwner.moveToState(Lifecycle.State.STARTED)
 
         assertEquals(listOf(3), values)
     }
@@ -78,9 +79,9 @@ class StateTest {
             propertyHost::state bind { values.add(it) }
         }
 
-        propertyObserver.propertyObserverLifecycleOwner.onStart()
+        propertyObserver.propertyObserverLifecycleOwner.moveToState(Lifecycle.State.STARTED)
         propertyHost.state++
-        propertyObserver.propertyObserverLifecycleOwner.onStop()
+        propertyObserver.propertyObserverLifecycleOwner.moveToState(Lifecycle.State.CREATED)
         propertyHost.state++
 
         assertEquals(listOf(0, 1), values)

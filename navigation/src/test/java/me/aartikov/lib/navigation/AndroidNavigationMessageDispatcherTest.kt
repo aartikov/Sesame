@@ -1,5 +1,6 @@
 package me.aartikov.lib.navigation
 
+import androidx.lifecycle.Lifecycle
 import com.nhaarman.mockitokotlin2.*
 import me.aartikov.lib.navigation.utils.MainDispatcherRule
 import me.aartikov.lib.navigation.utils.TestLifecycleOwner
@@ -31,8 +32,7 @@ class AndroidNavigationMessageDispatcherTest {
         val lifecycleOwner = TestLifecycleOwner()
         dispatcher.attach(lifecycleOwner)
 
-        lifecycleOwner.onCreate()
-        lifecycleOwner.onStart()
+        lifecycleOwner.moveToState(Lifecycle.State.STARTED)
         dispatcher.dispatch(testMessage, testHandler)
 
         verifyZeroInteractions(testHandler)
@@ -46,9 +46,7 @@ class AndroidNavigationMessageDispatcherTest {
         val lifecycleOwner = TestLifecycleOwner()
         dispatcher.attach(lifecycleOwner)
 
-        lifecycleOwner.onCreate()
-        lifecycleOwner.onStart()
-        lifecycleOwner.onResume()
+        lifecycleOwner.moveToState(Lifecycle.State.RESUMED)
         dispatcher.dispatch(testMessage, testHandler)
 
         verify(testHandler).handleNavigationMessage(testMessage)
@@ -62,11 +60,10 @@ class AndroidNavigationMessageDispatcherTest {
         val lifecycleOwner = TestLifecycleOwner()
         dispatcher.attach(lifecycleOwner)
 
-        lifecycleOwner.onCreate()
-        lifecycleOwner.onStart()
+        lifecycleOwner.moveToState(Lifecycle.State.STARTED)
         dispatcher.dispatch(testMessage, testHandler)
         dispatcher.dispatch(testMessage, testHandler)
-        lifecycleOwner.onResume()
+        lifecycleOwner.moveToState(Lifecycle.State.RESUMED)
         dispatcher.dispatch(testMessage, testHandler)
 
         verify(testHandler, times(3)).handleNavigationMessage(testMessage)
@@ -82,10 +79,8 @@ class AndroidNavigationMessageDispatcherTest {
         val dispatcher = createDispatcher(ignoringHandler, workingHandler, unreachableHandler)
         val lifecycleOwner = TestLifecycleOwner()
         dispatcher.attach(lifecycleOwner)
+        lifecycleOwner.moveToState(Lifecycle.State.RESUMED)
 
-        lifecycleOwner.onCreate()
-        lifecycleOwner.onStart()
-        lifecycleOwner.onResume()
         dispatcher.dispatch(testMessage, ignoringHandler)
 
         verify(ignoringHandler).handleNavigationMessage(testMessage)
@@ -101,10 +96,7 @@ class AndroidNavigationMessageDispatcherTest {
         val dispatcher = createDispatcher(testHandler) { exception -> exceptions.add(exception) }
         val lifecycleOwner = TestLifecycleOwner()
         dispatcher.attach(lifecycleOwner)
-
-        lifecycleOwner.onCreate()
-        lifecycleOwner.onStart()
-        lifecycleOwner.onResume()
+        lifecycleOwner.moveToState(Lifecycle.State.RESUMED)
 
         dispatcher.dispatch(testMessage, testHandler)
 
@@ -143,9 +135,7 @@ class AndroidNavigationMessageDispatcherTest {
         dispatcher = createDispatcher(testHandler1, testHandler2)
         val lifecycleOwner = TestLifecycleOwner()
         dispatcher.attach(lifecycleOwner)
-        lifecycleOwner.onCreate()
-        lifecycleOwner.onStart()
-        lifecycleOwner.onResume()
+        lifecycleOwner.moveToState(Lifecycle.State.RESUMED)
 
         dispatcher.dispatch(testMessage1, testHandler1)
 
@@ -161,16 +151,14 @@ class AndroidNavigationMessageDispatcherTest {
         val lifecycleOwner2 = TestLifecycleOwner()
 
         dispatcher.attach(lifecycleOwner1)
-        lifecycleOwner1.onCreate()
-        lifecycleOwner1.onStart()
+        lifecycleOwner1.moveToState(Lifecycle.State.STARTED)
         dispatcher.dispatch(testMessage, testHandler)
         dispatcher.dispatch(testMessage, testHandler)
 
-        lifecycleOwner2.onCreate()
-        lifecycleOwner2.onStart()
+        lifecycleOwner2.moveToState(Lifecycle.State.STARTED)
         dispatcher.attach(lifecycleOwner2)
         dispatcher.dispatch(testMessage, testHandler)
-        lifecycleOwner2.onResume()
+        lifecycleOwner2.moveToState(Lifecycle.State.RESUMED)
 
         verify(testHandler, times(1)).handleNavigationMessage(testMessage)
     }

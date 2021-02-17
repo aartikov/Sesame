@@ -1,5 +1,6 @@
 package me.aartikov.lib.navigation
 
+import androidx.lifecycle.Lifecycle
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.times
 import com.nhaarman.mockitokotlin2.verify
@@ -23,8 +24,7 @@ class NavigationMessageQueueTest {
         val node = Any()
         queue.bind(lifecycleOwner, testDispatcher, node)
 
-        lifecycleOwner.onCreate()
-        lifecycleOwner.onStart()
+        lifecycleOwner.moveToState(Lifecycle.State.STARTED)
         queue.send(testMessage)
         verifyZeroInteractions(testDispatcher)
     }
@@ -38,9 +38,7 @@ class NavigationMessageQueueTest {
         val node = Any()
         queue.bind(lifecycleOwner, testDispatcher, node)
 
-        lifecycleOwner.onCreate()
-        lifecycleOwner.onStart()
-        lifecycleOwner.onResume()
+        lifecycleOwner.moveToState(Lifecycle.State.RESUMED)
         queue.send(testMessage)
         verify(testDispatcher, times(1)).dispatch(testMessage, node)
     }
@@ -54,11 +52,10 @@ class NavigationMessageQueueTest {
         val node = Any()
         queue.bind(lifecycleOwner, testDispatcher, node)
 
-        lifecycleOwner.onCreate()
-        lifecycleOwner.onStart()
+        lifecycleOwner.moveToState(Lifecycle.State.STARTED)
         queue.send(testMessage)
         queue.send(testMessage)
-        lifecycleOwner.onResume()
+        lifecycleOwner.moveToState(Lifecycle.State.RESUMED)
         queue.send(testMessage)
 
         verify(testDispatcher, times(3)).dispatch(testMessage, node)

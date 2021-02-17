@@ -1,6 +1,7 @@
 package me.aartikov.lib.dialog
 
 import android.app.Dialog
+import androidx.lifecycle.Lifecycle
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.verify
@@ -37,7 +38,7 @@ class DialogBindingTest {
         val dialogControl = dialogControl<Unit, Unit>()
         with(dialogObserver) { dialogControl bind { _, _ -> mockedDialog } }
 
-        dialogObserver.dialogObserverLifecycleOwner.onStart()
+        dialogObserver.dialogObserverLifecycleOwner.moveToState(Lifecycle.State.STARTED)
         dialogControl.show()
 
         verify(mockedDialog).show()
@@ -51,7 +52,7 @@ class DialogBindingTest {
         val dialogControl = dialogControl<Unit, Unit>()
         with(dialogObserver) { dialogControl bind { _, _ -> mockedDialog } }
 
-        dialogObserver.dialogObserverLifecycleOwner.onStart()
+        dialogObserver.dialogObserverLifecycleOwner.moveToState(Lifecycle.State.STARTED)
         dialogControl.show()
         dialogControl.dismiss()
 
@@ -73,9 +74,9 @@ class DialogBindingTest {
         }
 
         with(dialogObserver.dialogObserverLifecycleOwner) {
-            onStop()
+            moveToState(Lifecycle.State.CREATED)
             repeat(3) { dialogControl.show(it) }
-            onStart()
+            moveToState(Lifecycle.State.STARTED)
         }
 
         verify(mockedDialog).show()
@@ -98,7 +99,7 @@ class DialogBindingTest {
 
         with(dialogObserver.dialogObserverLifecycleOwner) {
             repeat(3) { dialogControl.show(it) }
-            onStart()
+            moveToState(Lifecycle.State.STARTED)
         }
 
         verify(mockedDialog).show()
@@ -113,7 +114,7 @@ class DialogBindingTest {
         val dialogControl = dialogControl<Unit, Unit>()
         with(dialogObserver) { dialogControl bind { _, _ -> mockedDialog } }
 
-        dialogObserver.dialogObserverLifecycleOwner.onStop()
+        dialogObserver.dialogObserverLifecycleOwner.moveToState(Lifecycle.State.CREATED)
         dialogControl.show()
 
         verifyZeroInteractions(mockedDialog)
@@ -126,7 +127,7 @@ class DialogBindingTest {
         val dialogControl = dialogControl<Unit, Unit>()
         with(dialogObserver) { dialogControl bind { _, _ -> mockedDialog } }
 
-        dialogObserver.dialogObserverLifecycleOwner.onStart()
+        dialogObserver.dialogObserverLifecycleOwner.moveToState(Lifecycle.State.STARTED)
         val job = launch { dialogControl.showForResult() }
 
         verify(mockedDialog).show()
@@ -140,7 +141,7 @@ class DialogBindingTest {
         val dialogControl = dialogControl<Unit, Unit>()
         with(dialogObserver) { dialogControl bind { _, _ -> mockedDialog } }
 
-        dialogObserver.dialogObserverLifecycleOwner.onStop()
+        dialogObserver.dialogObserverLifecycleOwner.moveToState(Lifecycle.State.CREATED)
         val job = launch { dialogControl.showForResult() }
 
         verifyZeroInteractions(mockedDialog)

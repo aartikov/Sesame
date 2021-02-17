@@ -10,15 +10,7 @@ class TestLifecycleOwner : LifecycleOwner {
 
     override fun getLifecycle() = lifecycle
 
-    fun onCreate() = lifecycle.handleLifecycleEvent(Lifecycle.Event.ON_CREATE)
-
-    fun onStart() = lifecycle.handleLifecycleEvent(Lifecycle.Event.ON_START)
-
-    fun onResume() = lifecycle.handleLifecycleEvent(Lifecycle.Event.ON_RESUME)
-
-    fun onPause() = lifecycle.handleLifecycleEvent(Lifecycle.Event.ON_PAUSE)
-
-    fun onStop() = lifecycle.handleLifecycleEvent(Lifecycle.Event.ON_STOP)
-
-    fun onDestroy() = lifecycle.handleLifecycleEvent(Lifecycle.Event.ON_DESTROY)
+    fun moveToState(state: Lifecycle.State) {
+        lifecycle.currentState = state
+    }
 }

@@ -1,5 +1,6 @@
 package me.aartikov.lib.property
 
+import androidx.lifecycle.Lifecycle
 import me.aartikov.lib.property.utils.MainDispatcherRule
 import me.aartikov.lib.property.utils.TestPropertyHost
 import me.aartikov.lib.property.utils.TestPropertyObserver
@@ -41,15 +42,15 @@ class CommandTest {
             propertyHost.command bind { values.add(it) }
         }
 
-        propertyObserver.propertyObserverLifecycleOwner.onStart()
+        propertyObserver.propertyObserverLifecycleOwner.moveToState(Lifecycle.State.STARTED)
         with(propertyHost) {
             command(0)
         }
-        propertyObserver.propertyObserverLifecycleOwner.onResume()
+        propertyObserver.propertyObserverLifecycleOwner.moveToState(Lifecycle.State.RESUMED)
         with(propertyHost) {
             command(1)
         }
-        propertyObserver.propertyObserverLifecycleOwner.onPause()
+        propertyObserver.propertyObserverLifecycleOwner.moveToState(Lifecycle.State.STARTED)
         with(propertyHost) {
             command(2)
         }
@@ -68,7 +69,7 @@ class CommandTest {
             propertyHost.command bind { values.add(it) }
         }
 
-        propertyObserver.propertyObserverLifecycleOwner.onStop()
+        propertyObserver.propertyObserverLifecycleOwner.moveToState(Lifecycle.State.CREATED)
         with(propertyHost) {
             command(0)
         }
@@ -87,11 +88,11 @@ class CommandTest {
             propertyHost.command bind { values.add(it) }
         }
 
-        propertyObserver.propertyObserverLifecycleOwner.onStop()
+        propertyObserver.propertyObserverLifecycleOwner.moveToState(Lifecycle.State.CREATED)
         with(propertyHost) {
             repeat(3) { command(0) }
         }
-        propertyObserver.propertyObserverLifecycleOwner.onStart()
+        propertyObserver.propertyObserverLifecycleOwner.moveToState(Lifecycle.State.STARTED)
 
         assertEquals(listOf(0, 0, 0), values)
     }
@@ -110,7 +111,7 @@ class CommandTest {
         with(propertyHost) {
             repeat(3) { command(0) }
         }
-        propertyObserver.propertyObserverLifecycleOwner.onStart()
+        propertyObserver.propertyObserverLifecycleOwner.moveToState(Lifecycle.State.STARTED)
 
         assertEquals(listOf(0, 0, 0), values)
     }

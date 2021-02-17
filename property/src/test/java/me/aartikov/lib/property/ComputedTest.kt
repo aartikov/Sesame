@@ -1,5 +1,6 @@
 package me.aartikov.lib.property
 
+import androidx.lifecycle.Lifecycle
 import me.aartikov.lib.property.utils.MainDispatcherRule
 import me.aartikov.lib.property.utils.TestPropertyHost
 import me.aartikov.lib.property.utils.TestPropertyObserver
@@ -89,7 +90,7 @@ class ComputedTest {
         val values = mutableListOf<Int>()
         with(propertyObserver) { propertyHost::value bind { values.add(it) } }
 
-        propertyObserver.propertyObserverLifecycleOwner.onStart()
+        propertyObserver.propertyObserverLifecycleOwner.moveToState(Lifecycle.State.STARTED)
         repeat(3) { propertyHost.state++ }
 
         assertEquals(listOf(0, 1, 2, 3), values)
@@ -105,9 +106,9 @@ class ComputedTest {
         val values = mutableListOf<Int>()
         with(propertyObserver) { propertyHost::value bind { values.add(it) } }
 
-        propertyObserver.propertyObserverLifecycleOwner.onStart()
+        propertyObserver.propertyObserverLifecycleOwner.moveToState(Lifecycle.State.STARTED)
         propertyHost.state++
-        propertyObserver.propertyObserverLifecycleOwner.onStop()
+        propertyObserver.propertyObserverLifecycleOwner.moveToState(Lifecycle.State.CREATED)
         repeat(3) { propertyHost.state++ }
 
         assertEquals(listOf(0, 1), values)
