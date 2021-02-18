@@ -1,0 +1,36 @@
+plugins {
+    id "com.android.library"
+    id "kotlin-android"
+    id "maven"
+}
+group = libraryConfig.group
+
+android {
+    compileSdkVersion libraryConfig.compileSdkVersion
+    buildToolsVersion libraryConfig.buildToolsVersion
+
+    defaultConfig {
+        minSdkVersion libraryConfig.minSdkVersion
+        targetSdkVersion libraryConfig.targetSdkVersion
+        versionCode libraryConfig.versionCode
+        versionName libraryConfig.versionName
+    }
+}
+
+dependencies {
+    implementation coroutines
+    implementation androidx.lifecycle
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.2.0"
+
+    testImplementation tests.junit
+    testImplementation tests.coroutinesTest
+}
+
+task sourcesJar(type: Jar) {
+    from android.sourceSets.main.java.srcDirs
+    classifier = "sources"
+}
+
+artifacts {
+    archives sourcesJar
+}
