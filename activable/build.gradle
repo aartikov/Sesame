@@ -20,7 +20,6 @@ android {
 dependencies {
     implementation coroutines
     implementation androidx.lifecycle
-    implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.2.0"
 
     testImplementation tests.junit
     testImplementation tests.coroutinesTest
