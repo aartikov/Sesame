@@ -7,6 +7,7 @@ import androidx.annotation.LayoutRes
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.createViewModelLazy
 import androidx.lifecycle.LifecycleOwner
+import me.aartikov.lib.activable.bindToLifecycle
 import me.aartikov.lib.dialog.DialogObserver
 import me.aartikov.lib.navigation.NavigationMessageDispatcher
 import me.aartikov.lib.navigation.bind
@@ -28,6 +29,8 @@ abstract class BaseScreen<VM : BaseViewModel>(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        vm.bindToLifecycle(viewLifecycleOwner.lifecycle)
 
         vm.navigationMessageQueue.bind(viewLifecycleOwner, navigationMessageDispatcher, node = this)
 

@@ -1,10 +1,7 @@
 package me.aartikov.androidarchitecture.menu
 
 import dagger.hilt.android.lifecycle.HiltViewModel
-import me.aartikov.androidarchitecture.OpenCounterScreen
-import me.aartikov.androidarchitecture.OpenDialogsScreen
-import me.aartikov.androidarchitecture.OpenMoviesScreen
-import me.aartikov.androidarchitecture.OpenProfileScreen
+import me.aartikov.androidarchitecture.*
 import me.aartikov.androidarchitecture.base.BaseViewModel
 import javax.inject.Inject
 
@@ -25,5 +22,9 @@ class MenuViewModel @Inject constructor() : BaseViewModel() {
 
     fun onMoviesButtonClicked() {
         navigate(OpenMoviesScreen)
+    }
+
+    fun onClockButtonClicked() {
+        navigate(OpenClockScreen)
     }
 }
