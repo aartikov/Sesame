@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import dagger.hilt.android.AndroidEntryPoint
 import me.aartikov.androidarchitecture.counter.CounterScreen
+import me.aartikov.androidarchitecture.dialogs.ClockScreen
 import me.aartikov.androidarchitecture.dialogs.DialogsScreen
 import me.aartikov.androidarchitecture.menu.MenuScreen
 import me.aartikov.androidarchitecture.movies.ui.MoviesScreen
@@ -40,6 +41,7 @@ class MainActivity : AppCompatActivity(), NavigationMessageHandler {
             is OpenProfileScreen -> navigator.goTo(ProfileScreen())
             is OpenDialogsScreen -> navigator.goTo(DialogsScreen())
             is OpenMoviesScreen -> navigator.goTo(MoviesScreen())
+            is OpenClockScreen -> navigator.goTo(ClockScreen())
         }
         return true
     }

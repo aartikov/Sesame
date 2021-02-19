@@ -4,6 +4,7 @@ ext {
             kotlin : "1.4.21",
             coroutines : "1.4.1",
             lifecycle : "2.2.0",
+            desugaring : "1.1.1",
             junit : "4.13.1",
             mockitokotlin : "2.2.0",
             fragment : "1.2.5",
@@ -16,8 +17,11 @@ ext {
             groupie : "2.9.0",
             glide : "4.11.0",
             hilt : "2.32-alpha",
-            viewBindingDelegates : "1.4.1"
+            viewBindingDelegates : "1.4.1",
+            dateTime : "0.1.1"
     ]
+
+    desugaring = "com.android.tools:desugar_jdk_libs:${versions.desugaring}"
 
     tests = [
             junit: "junit:junit:${versions.junit}",
@@ -47,6 +51,8 @@ ext {
     ]
 
     coroutines = "org.jetbrains.kotlinx:kotlinx-coroutines-core:${versions.coroutines}"
+
+    dateTime = "org.jetbrains.kotlinx:kotlinx-datetime:${versions.dateTime}"
 
     material = "com.google.android.material:material:${versions.material}"
 

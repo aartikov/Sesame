@@ -15,6 +15,12 @@ android {
         versionName "1.0"
     }
 
+    compileOptions {
+        coreLibraryDesugaringEnabled true
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
     kotlinOptions { jvmTarget = "1.8" }
 
     buildFeatures {
@@ -23,11 +29,13 @@ android {
 }
 
 dependencies {
-    implementation project(":property")
-    implementation project(":navigation")
+    coreLibraryDesugaring desugaring
+
+    implementation project(":activable")
     implementation project(":dialog")
     implementation project(":loading")
-    implementation project(":loop")
+    implementation project(":navigation")
+    implementation project(":property")
 
     implementation androidx.coreKtx
     implementation androidx.appCompat
@@ -45,8 +53,8 @@ dependencies {
     kapt daggerHilt.androidCompiler
 
     implementation coroutines
+    implementation dateTime
 
     implementation glide
-
     implementation viewBindingDelegates
 }
