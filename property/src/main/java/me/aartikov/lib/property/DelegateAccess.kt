@@ -20,6 +20,10 @@ internal val <T> KProperty0<T>.delegate: Any?
         }
     }
 
+/**
+ * Retrieves [StateFlow] from an observable property (See: [PropertyHost.state], [PropertyHost.stateFromFlow], [PropertyHost.computed]).
+ */
 @Suppress("UNCHECKED_CAST")
 val <T> KProperty0<T>.flow: StateFlow<T>
-    get() = delegate as StateFlow<T>
+    get() = delegate as? StateFlow<T>
+        ?: throw IllegalArgumentException("Property $name is not observable. Make sure you use state, stateFromFlow or computed to create it.")
