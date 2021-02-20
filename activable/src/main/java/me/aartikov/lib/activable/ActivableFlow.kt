@@ -7,6 +7,10 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
+/**
+ * Converts [Flow] to an activable flow.
+ * An activable flow collects the [originalFlow] and emits elements further when the [activable] is active. It stops collecting and emitting when the [activable] is inactive.
+ */
 fun <T> activableFlow(originalFlow: Flow<T>, activable: Activable, scope: CoroutineScope): Flow<T> {
     val flow = MutableSharedFlow<T>()
     var job: Job? = null
