@@ -18,12 +18,15 @@ class DialogControl<T : Any, R : Any> {
     }
 
     fun sendResult(result: R) {
+        data.value = null
         this.resultChannel.offer(result)
     }
 
     fun dismiss() {
-        data.value = null
-        resultChannel.offer(null)
+        if (data.value != null) {
+            data.value = null
+            resultChannel.offer(null)
+        }
     }
 }
 
