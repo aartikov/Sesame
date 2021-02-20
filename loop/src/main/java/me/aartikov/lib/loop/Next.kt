@@ -9,7 +9,6 @@ data class Next<StateT, EffectT>(val state: StateT?, val effects: List<EffectT>)
 /**
  * Helper method to create [Next]
  */
-
 fun <StateT, EffectT> next(state: StateT, vararg effects: EffectT?): Next<StateT, EffectT> {
     return Next(state, effects.toList().filterNotNull())
 }
