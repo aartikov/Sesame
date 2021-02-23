@@ -4,9 +4,13 @@ import kotlinx.coroutines.CoroutineScope
 
 /**
  * Gives access to methods [state], [stateFromFlow], [computed], [autorun], [command]. Adds ability to send commands.
- * In MVVM architecture [PropertyHost] is ViewModel.
+ * In MVVM architecture [PropertyHost] is View Model.
  */
 interface PropertyHost {
+
+    /**
+     * A [CoroutineScope] where computed properties will work in.
+     */
     val propertyHostScope: CoroutineScope
 
     /**

@@ -12,6 +12,9 @@ import kotlin.reflect.KProperty0
  */
 interface PropertyObserver {
 
+    /**
+     * A [LifecycleOwner] to provide a lifecycle for bindings.
+     */
     val propertyObserverLifecycleOwner: LifecycleOwner
 
     /**
