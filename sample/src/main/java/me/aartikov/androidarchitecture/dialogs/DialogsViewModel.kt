@@ -14,18 +14,18 @@ class DialogsViewModel @Inject constructor() : BaseViewModel() {
     val showMessage = command<String>()
 
     val dialog = dialogControl<String, Unit>()
-    val dialogForResult = dialogControl<String, String>()
+    val dialogForResult = dialogControl<String, DialogResult>()
 
     fun onShowDialogButtonClicked() {
-        dialog.show("Dialog")
+        dialog.show("Some message")
     }
 
     fun onShowForResultButtonClicked() {
         viewModelScope.launch {
-            val result = dialogForResult.showForResult("Dialog for result")
+            val result = dialogForResult.showForResult("Some message for result") ?: DialogResult.CANCEL
 
-            if (result != null) {
-                showMessage(if (result.isEmpty()) "Empty" else result)
+            if (result == DialogResult.OK) {
+                showMessage("OK")
             } else {
                 showMessage("Canceled")
             }

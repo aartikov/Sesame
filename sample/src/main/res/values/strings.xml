@@ -12,11 +12,12 @@
     <string name="retry_button">Retry</string>
 
     <!-- Dialogs -->
-    <string name="send_button">Send</string>
+    <string name="ok_button">OK</string>
     <string name="cancel_button">Cancel</string>
     <string name="show_dialog_button_text">Show Dialog</string>
     <string name="show_for_result_button_text">Show For Result</string>
-    <string name="enter_result">Enter your result</string>
+    <string name="dialog_title">Dialog</string>
+    <string name="dialog_for_result_title">Dialog for result</string>
 
     <!-- Movies -->
     <string name="empty_view_text">No items to display</string>
