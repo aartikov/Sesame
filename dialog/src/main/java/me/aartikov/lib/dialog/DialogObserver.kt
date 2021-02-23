@@ -5,10 +5,21 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.flow.collect
 
+/**
+ * Allows to bind a [DialogControl] to [Dialog] and send dialog results.
+ * In MVVM architecture [DialogObserver] is View.
+ */
 interface DialogObserver {
 
+    /**
+     * A [LifecycleOwner] to provide a lifecycle for bindings.
+     */
     val dialogObserverLifecycleOwner: LifecycleOwner
 
+    /**
+     * Binds [DialogControl] to a function that creates [Dialog].
+     * To send a dialog result call [DialogControl.sendResult] from a dialog listener.
+     */
     infix fun <T : Any, R : Any> DialogControl<T, R>.bind(createDialog: (data: T, dc: DialogControl<T, R>) -> Dialog) {
         dialogObserverLifecycleOwner.lifecycleScope.launchWhenStarted {
             var dialog: Dialog? = null
