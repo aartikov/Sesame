@@ -40,7 +40,7 @@ class DialogsScreen : BaseScreen<DialogsViewModel>(R.layout.screen_dialogs, Dial
                         dc.sendResult(DialogResult.OK)
                     }
                     .setNegativeButton(R.string.cancel_button) { _, _ ->
-                        dc.sendResult(DialogResult.CANCEL)
+                        dc.sendResult(DialogResult.CANCELED)
                     }
                     .create()
             }
