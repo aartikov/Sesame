@@ -1,9 +1,15 @@
 package me.aartikov.lib.loading.simple
 
+/**
+ * Allows to customize a behaviour of [isEmpty] for custom classes.
+ */
 interface Emptyable {
     fun isEmpty(): Boolean
 }
 
+/**
+ * Checks if [data] is empty. It is used by [Loading] to choose from [Loading.State.Empty] and [Loading.State.Data].
+ */
 fun isEmpty(data: Any): Boolean {
     return when (data) {
         is Collection<*> -> data.isEmpty()
