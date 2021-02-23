@@ -43,6 +43,6 @@ class NavigationMessageDispatcher(
             node = node?.let { nodeWalker.getNextNode(it) }
         } while (node != null)
 
-        throw NotHandledNavigationMessageException()
+        throw NotHandledNavigationMessageException(message)
     }
 }

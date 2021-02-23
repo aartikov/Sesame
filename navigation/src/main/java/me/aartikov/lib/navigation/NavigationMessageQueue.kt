@@ -16,9 +16,9 @@ class NavigationMessageQueue {
 }
 
 fun NavigationMessageQueue.bind(
-    lifecycleOwner: LifecycleOwner,
     dispatcher: NavigationMessageDispatcher,
-    node: Any
+    node: Any,
+    lifecycleOwner: LifecycleOwner
 ) {
     lifecycleOwner.lifecycleScope.launchWhenResumed {
         flow.collect { message ->

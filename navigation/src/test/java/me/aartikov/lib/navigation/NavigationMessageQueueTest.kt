@@ -22,7 +22,7 @@ class NavigationMessageQueueTest {
         val testDispatcher = mock<NavigationMessageDispatcher>()
         val lifecycleOwner = TestLifecycleOwner()
         val node = Any()
-        queue.bind(lifecycleOwner, testDispatcher, node)
+        queue.bind(testDispatcher, node, lifecycleOwner)
 
         lifecycleOwner.moveToState(Lifecycle.State.STARTED)
         queue.send(testMessage)
@@ -36,7 +36,7 @@ class NavigationMessageQueueTest {
         val testDispatcher = mock<NavigationMessageDispatcher>()
         val lifecycleOwner = TestLifecycleOwner()
         val node = Any()
-        queue.bind(lifecycleOwner, testDispatcher, node)
+        queue.bind(testDispatcher, node, lifecycleOwner)
 
         lifecycleOwner.moveToState(Lifecycle.State.RESUMED)
         queue.send(testMessage)
@@ -50,7 +50,7 @@ class NavigationMessageQueueTest {
         val testDispatcher = mock<NavigationMessageDispatcher>()
         val lifecycleOwner = TestLifecycleOwner()
         val node = Any()
-        queue.bind(lifecycleOwner, testDispatcher, node)
+        queue.bind(testDispatcher, node, lifecycleOwner)
 
         lifecycleOwner.moveToState(Lifecycle.State.STARTED)
         queue.send(testMessage)
