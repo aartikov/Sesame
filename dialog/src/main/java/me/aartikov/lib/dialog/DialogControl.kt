@@ -29,8 +29,8 @@ class DialogControl<T : Any, R : Any> internal constructor() {
     }
 
     fun sendResult(result: R) {
-        this.resultChannel.offer(result)
         state.value = State.Hidded
+        this.resultChannel.offer(result)
     }
 
     fun dismiss() {
@@ -38,10 +38,11 @@ class DialogControl<T : Any, R : Any> internal constructor() {
             return
         }
 
-        if (isShownForResult()) {
+        val wasShownForResult = isShownForResult()
+        state.value = State.Hidded
+        if (wasShownForResult) {
             resultChannel.offer(null)
         }
-        state.value = State.Hidded
     }
 
     private fun isShownForResult(): Boolean {
