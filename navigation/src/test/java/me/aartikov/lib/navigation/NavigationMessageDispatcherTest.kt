@@ -4,11 +4,11 @@ import androidx.lifecycle.Lifecycle
 import com.nhaarman.mockitokotlin2.*
 import me.aartikov.lib.navigation.utils.MainDispatcherRule
 import me.aartikov.lib.navigation.utils.TestLifecycleOwner
+import org.junit.Assert.assertEquals
 import org.junit.Rule
 import org.junit.Test
-import kotlin.test.assertEquals
 
-class AndroidNavigationMessageDispatcherTest {
+class NavigationMessageDispatcherTest {
 
     @get:Rule
     val mainDispatcherRule = MainDispatcherRule()
@@ -89,22 +89,6 @@ class AndroidNavigationMessageDispatcherTest {
     }
 
     @Test
-    fun `fails when message is not handled`() {
-        val testMessage = object : NavigationMessage {}
-        val testHandler = mockNavigationMessageHandler { false }
-        val exceptions = mutableListOf<Throwable>()
-        val dispatcher = createDispatcher(testHandler) { exception -> exceptions.add(exception) }
-        val lifecycleOwner = TestLifecycleOwner()
-        dispatcher.attach(lifecycleOwner)
-        lifecycleOwner.moveToState(Lifecycle.State.RESUMED)
-
-        dispatcher.dispatch(testMessage, testHandler)
-
-        assertEquals(1, exceptions.size)
-        assert(exceptions[0] is NotHandledNavigationMessageException)
-    }
-
-    @Test
     fun `doesn't overlap message handling`() {      // Prevents "FragmentManager is already executing transactions" exception
         val testMessage1 = object : NavigationMessage {}
         val testMessage2 = object : NavigationMessage {}
@@ -169,15 +153,12 @@ class AndroidNavigationMessageDispatcherTest {
         }
     }
 
-    private fun createDispatcher(
-        vararg handlers: Any,
-        errorHandler: ((Exception) -> Unit)? = null
-    ): NavigationMessageDispatcher {
+    private fun createDispatcher(vararg handlers: Any): NavigationMessageDispatcher {
         val nodeWalker = object : NodeWalker {
             override fun getNextNode(node: Any): Any? {
                 return handlers.getOrNull(handlers.indexOf(node) + 1)
             }
         }
-        return AndroidNavigationMessageDispatcher(nodeWalker, errorHandler)
+        return NavigationMessageDispatcher(nodeWalker)
     }
 }

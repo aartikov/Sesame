@@ -3,18 +3,17 @@ package me.aartikov.androidarchitecture.di
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ActivityComponent
-import dagger.hilt.android.scopes.ActivityScoped
-import me.aartikov.lib.navigation.AndroidNavigationMessageDispatcher
+import dagger.hilt.components.SingletonComponent
 import me.aartikov.lib.navigation.NavigationMessageDispatcher
+import javax.inject.Singleton
 
 @Module
-@InstallIn(ActivityComponent::class)
+@InstallIn(SingletonComponent::class)
 object NavigationModule {
 
-    @ActivityScoped
+    @Singleton
     @Provides
     fun provideNavigationMessageDispatcher(): NavigationMessageDispatcher {
-        return AndroidNavigationMessageDispatcher()
+        return NavigationMessageDispatcher()
     }
 }

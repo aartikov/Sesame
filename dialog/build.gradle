@@ -21,8 +21,9 @@ dependencies {
     implementation androidx.lifecycle
     implementation coroutines
 
-    testImplementation tests.mockitokotlin
     testImplementation tests.junit
+    testImplementation tests.mockitoCore
+    testImplementation tests.mockitoKotlin
     testImplementation tests.coroutinesTest
 }
 

@@ -22,10 +22,11 @@ dependencies {
     implementation androidx.fragment
     implementation coroutines
 
-    testImplementation tests.mockitokotlin
     testImplementation tests.junit
+    testImplementation tests.mockitoCore
+    testImplementation tests.mockitoInline
+    testImplementation tests.mockitoKotlin
     testImplementation tests.coroutinesTest
-    testImplementation tests.kotlinTest
 }
 
 task sourcesJar(type: Jar) {
