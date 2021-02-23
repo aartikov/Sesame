@@ -2,10 +2,7 @@ package me.aartikov.lib.dialog
 
 import android.app.Dialog
 import androidx.lifecycle.Lifecycle
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.never
-import com.nhaarman.mockitokotlin2.verify
-import com.nhaarman.mockitokotlin2.verifyZeroInteractions
+import com.nhaarman.mockitokotlin2.*
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runBlockingTest
 import me.aartikov.lib.dialog.utils.MainDispatcherRule
@@ -14,54 +11,40 @@ import org.junit.Assert.assertEquals
 import org.junit.Rule
 import org.junit.Test
 
-class DialogBindingTest {
+class DialogShowingTest {
 
     @get:Rule
     val mainDispatcherRule = MainDispatcherRule()
 
     @Test
-    fun `doesn't show dialog when not started`() {
+    fun `shows dialog when lifecycle is started and show is called`() {
         val dialogObserver = TestDialogObserver()
         val mockedDialog = mock<Dialog>()
         val dialogControl = dialogControl<Unit, Unit>()
         with(dialogObserver) { dialogControl bind { _, _ -> mockedDialog } }
 
+        dialogObserver.dialogObserverLifecycleOwner.moveToState(Lifecycle.State.STARTED)
+        dialogControl.show()
+
+        verify(mockedDialog, times(1)).show()
+        verify(mockedDialog, never()).dismiss()
+    }
+
+    @Test
+    fun `doesn't show dialog when lifecycle is stopped and show is called`() {
+        val dialogObserver = TestDialogObserver()
+        val mockedDialog = mock<Dialog>()
+        val dialogControl = dialogControl<Unit, Unit>()
+        with(dialogObserver) { dialogControl bind { _, _ -> mockedDialog } }
+
+        dialogObserver.dialogObserverLifecycleOwner.moveToState(Lifecycle.State.CREATED)
         dialogControl.show()
 
         verifyZeroInteractions(mockedDialog)
     }
 
     @Test
-    fun `shows dialog when started`() {
-        val dialogObserver = TestDialogObserver()
-        val mockedDialog = mock<Dialog>()
-        val dialogControl = dialogControl<Unit, Unit>()
-        with(dialogObserver) { dialogControl bind { _, _ -> mockedDialog } }
-
-        dialogObserver.dialogObserverLifecycleOwner.moveToState(Lifecycle.State.STARTED)
-        dialogControl.show()
-
-        verify(mockedDialog).show()
-        verify(mockedDialog, never()).dismiss()
-    }
-
-    @Test
-    fun `closes dialog when started`() {
-        val dialogObserver = TestDialogObserver()
-        val mockedDialog = mock<Dialog>()
-        val dialogControl = dialogControl<Unit, Unit>()
-        with(dialogObserver) { dialogControl bind { _, _ -> mockedDialog } }
-
-        dialogObserver.dialogObserverLifecycleOwner.moveToState(Lifecycle.State.STARTED)
-        dialogControl.show()
-        dialogControl.dismiss()
-
-        verify(mockedDialog).show()
-        verify(mockedDialog).dismiss()
-    }
-
-    @Test
-    fun `shows only last dialog when restarted`()  {
+    fun `shows only last dialog when show is called several times and then lifecycle is started`() {
         val dialogObserver = TestDialogObserver()
         val mockedDialog = mock<Dialog>()
         val dialogControl = dialogControl<Int, Unit>()
@@ -79,49 +62,61 @@ class DialogBindingTest {
             moveToState(Lifecycle.State.STARTED)
         }
 
-        verify(mockedDialog).show()
+        verify(mockedDialog, times(1)).show()
         verify(mockedDialog, never()).dismiss()
         assertEquals(listOf(2), values)
     }
 
     @Test
-    fun `shows only last dialog when not started`()  {
-        val dialogObserver = TestDialogObserver()
-        val mockedDialog = mock<Dialog>()
-        val dialogControl = dialogControl<Int, Unit>()
-        val values = mutableListOf<Int>()
-        with(dialogObserver) {
-            dialogControl bind { data, _ ->
-                values.add(data)
-                mockedDialog
-            }
-        }
-
-        with(dialogObserver.dialogObserverLifecycleOwner) {
-            repeat(3) { dialogControl.show(it) }
-            moveToState(Lifecycle.State.STARTED)
-        }
-
-        verify(mockedDialog).show()
-        verify(mockedDialog, never()).dismiss()
-        assertEquals(listOf(2), values)
-    }
-
-    @Test
-    fun `doesn't show dialog when stopped`() {
+    fun `closes dialog when lifecycle is started and dismiss is called`() {
         val dialogObserver = TestDialogObserver()
         val mockedDialog = mock<Dialog>()
         val dialogControl = dialogControl<Unit, Unit>()
         with(dialogObserver) { dialogControl bind { _, _ -> mockedDialog } }
 
-        dialogObserver.dialogObserverLifecycleOwner.moveToState(Lifecycle.State.CREATED)
+        dialogObserver.dialogObserverLifecycleOwner.moveToState(Lifecycle.State.STARTED)
         dialogControl.show()
+        dialogControl.dismiss()
 
-        verifyZeroInteractions(mockedDialog)
+        verify(mockedDialog, times(1)).show()
+        verify(mockedDialog, times(1)).dismiss()
     }
 
     @Test
-    fun `show result dialog when started`() = runBlockingTest {
+    fun `doesn't closes dialog when lifecycle is stopped and dismiss is called`() {
+        val dialogObserver = TestDialogObserver()
+        val mockedDialog = mock<Dialog>()
+        val dialogControl = dialogControl<Unit, Unit>()
+        with(dialogObserver) { dialogControl bind { _, _ -> mockedDialog } }
+
+        dialogObserver.dialogObserverLifecycleOwner.moveToState(Lifecycle.State.STARTED)
+        dialogControl.show()
+        dialogObserver.dialogObserverLifecycleOwner.moveToState(Lifecycle.State.CREATED)
+        dialogControl.dismiss()
+
+        verify(mockedDialog, times(1)).show()
+        verify(mockedDialog, never()).dismiss()
+    }
+
+    @Test
+    fun `closes dialog when dismiss is called and then lifecycle is started`() {
+        val dialogObserver = TestDialogObserver()
+        val mockedDialog = mock<Dialog>()
+        val dialogControl = dialogControl<Unit, Unit>()
+        with(dialogObserver) { dialogControl bind { _, _ -> mockedDialog } }
+
+        dialogObserver.dialogObserverLifecycleOwner.moveToState(Lifecycle.State.STARTED)
+        dialogControl.show()
+        dialogObserver.dialogObserverLifecycleOwner.moveToState(Lifecycle.State.CREATED)
+        dialogControl.dismiss()
+        dialogObserver.dialogObserverLifecycleOwner.moveToState(Lifecycle.State.STARTED)
+
+        verify(mockedDialog, times(1)).show()
+        verify(mockedDialog, times(1)).dismiss()
+    }
+
+    @Test
+    fun `show dialog when lifecycle is started and showForResult is called`() = runBlockingTest {
         val dialogObserver = TestDialogObserver()
         val mockedDialog = mock<Dialog>()
         val dialogControl = dialogControl<Unit, Unit>()
@@ -130,12 +125,12 @@ class DialogBindingTest {
         dialogObserver.dialogObserverLifecycleOwner.moveToState(Lifecycle.State.STARTED)
         val job = launch { dialogControl.showForResult() }
 
-        verify(mockedDialog).show()
+        verify(mockedDialog, times(1)).show()
         job.cancel()
     }
 
     @Test
-    fun `doesn't show result dialog when stopped`() = runBlockingTest {
+    fun `doesn't show dialog when lifecycle is stopped and showForResult is called`() = runBlockingTest {
         val dialogObserver = TestDialogObserver()
         val mockedDialog = mock<Dialog>()
         val dialogControl = dialogControl<Unit, Unit>()
@@ -146,5 +141,20 @@ class DialogBindingTest {
 
         verifyZeroInteractions(mockedDialog)
         job.cancel()
+    }
+
+    @Test
+    fun `closes dialog when sendResult is called`() {
+        val dialogObserver = TestDialogObserver()
+        val mockedDialog = mock<Dialog>()
+        val dialogControl = dialogControl<Unit, String>()
+        with(dialogObserver) { dialogControl bind { _, _ -> mockedDialog } }
+
+        dialogObserver.dialogObserverLifecycleOwner.moveToState(Lifecycle.State.STARTED)
+        dialogControl.show()
+        dialogControl.sendResult("Result")
+
+        verify(mockedDialog, times(1)).show()
+        verify(mockedDialog, times(1)).dismiss()
     }
 }

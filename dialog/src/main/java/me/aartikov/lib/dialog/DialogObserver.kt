@@ -19,14 +19,18 @@ interface DialogObserver {
             }
 
             try {
-                data.collect {
-                    if (it != null) {
-                        closeDialog()
-                        dialog = createDialog(it, this@bind)
-                        dialog?.setOnDismissListener { dismiss() }
-                        dialog?.show()
-                    } else {
-                        closeDialog()
+                state.collect { state ->
+                    when (state) {
+                        is DialogControl.State.Shown<T> -> {
+                            closeDialog()
+                            dialog = createDialog(state.data, this@bind)
+                            dialog?.setOnDismissListener { dismiss() }
+                            dialog?.show()
+                        }
+
+                        is DialogControl.State.Hidded -> {
+                            closeDialog()
+                        }
                     }
                 }
             } finally {
