@@ -8,7 +8,7 @@ import org.junit.Test
 class DialogResultTest {
 
     @Test
-    fun `returns result when sendResult is called`() = runBlockingTest {
+    fun `returns a result when sendResult is called`() = runBlockingTest {
         val dialogControl = dialogControl<String, String>()
 
         var result: String? = null
@@ -22,7 +22,7 @@ class DialogResultTest {
     }
 
     @Test
-    fun `returns null as result when dismiss is called`() = runBlockingTest {
+    fun `returns null as a result when dismiss is called`() = runBlockingTest {
         val dialogControl = dialogControl<String, String>()
 
         var result: String? = null
@@ -30,6 +30,20 @@ class DialogResultTest {
             result = dialogControl.showForResult("Anything")
         }
         dialogControl.dismiss()
+
+        assertEquals(null, result)
+        job.cancel()
+    }
+
+    @Test
+    fun `returns null as a result when other dialog is shown`() = runBlockingTest {
+        val dialogControl = dialogControl<String, String>()
+
+        var result: String? = null
+        val job = launch {
+            result = dialogControl.showForResult("Anything")
+        }
+        dialogControl.show("Anything")
 
         assertEquals(null, result)
         job.cancel()
