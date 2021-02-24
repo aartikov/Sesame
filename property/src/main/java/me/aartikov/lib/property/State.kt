@@ -7,6 +7,10 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlin.reflect.KProperty
 
+/**
+ * Wraps [StateFlow] to a property delegate.
+ * Use [PropertyHost.stateFromFlow] to create it.
+ */
 class StateDelegate<T> internal constructor(
     private val flow: StateFlow<T>
 ) : StateFlow<T> by flow {
@@ -19,6 +23,10 @@ class StateDelegate<T> internal constructor(
     }
 }
 
+/**
+ * Wraps [MutableStateFlow] to a property delegate.
+ * Use [PropertyHost.state] or [PropertyHost.stateFromFlow] to create it.
+ */
 class MutableStateDelegate<T> internal constructor(
     private val flow: MutableStateFlow<T>
 ) : MutableStateFlow<T> by flow {
@@ -35,10 +43,18 @@ class MutableStateDelegate<T> internal constructor(
     }
 }
 
+/**
+ * Creates an observable mutable property.
+ * To observe value changes use [PropertyObserver.bind] or [PropertyHost.autorun].
+ */
 fun <T> PropertyHost.state(initialValue: T): MutableStateDelegate<T> {
     return MutableStateDelegate(MutableStateFlow(initialValue))
 }
 
+/**
+ * Wraps [Flow] to an observable property.
+ * To observe value changes use [PropertyObserver.bind] or [PropertyHost.autorun].
+ */
 fun <T> PropertyHost.stateFromFlow(initialValue: T, flow: Flow<T>): StateDelegate<T> {
     val resultFlow = MutableStateFlow(initialValue)
     propertyHostScope.launch {
@@ -49,10 +65,18 @@ fun <T> PropertyHost.stateFromFlow(initialValue: T, flow: Flow<T>): StateDelegat
     return StateDelegate(resultFlow)
 }
 
+/**
+ * Wraps [StateFlow] to an observable property.
+ * To observe value changes use [PropertyObserver.bind] or [PropertyHost.autorun].
+ */
 fun <T> PropertyHost.stateFromFlow(stateFlow: StateFlow<T>): StateDelegate<T> {
     return StateDelegate(stateFlow)
 }
 
+/**
+ * Wraps [MutableStateFlow] to an observable mutable property.
+ * To observe value changes use [PropertyObserver.bind] or [PropertyHost.autorun].
+ */
 fun <T> PropertyHost.stateFromFlow(mutableStateFlow: MutableStateFlow<T>): MutableStateDelegate<T> {
     return MutableStateDelegate(mutableStateFlow)
 }

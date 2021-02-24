@@ -5,6 +5,9 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlin.reflect.KProperty0
 
+/**
+ * Runs a [block] whenever the given observable [property] is changed.
+ */
 fun <T> PropertyHost.autorun(
     property: KProperty0<T>,
     block: (T) -> Unit
@@ -19,6 +22,9 @@ fun <T> PropertyHost.autorun(
     }
 }
 
+/**
+ * Runs a [block] whenever any of the given observable properties is changed.
+ */
 @Suppress("UNCHECKED_CAST")
 fun<T1, T2> PropertyHost.autorun(
     property1: KProperty0<T1>,
@@ -33,6 +39,9 @@ fun<T1, T2> PropertyHost.autorun(
     }
 }
 
+/**
+ * Runs a [block] whenever any of the given observable properties is changed.
+ */
 @Suppress("UNCHECKED_CAST")
 fun<T1, T2, T3> PropertyHost.autorun(
     property1: KProperty0<T1>,
@@ -49,6 +58,9 @@ fun<T1, T2, T3> PropertyHost.autorun(
     }
 }
 
+/**
+ * Runs a [block] whenever any of the given observable properties is changed.
+ */
 @Suppress("UNCHECKED_CAST")
 fun<T1, T2, T3, T4> PropertyHost.autorun(
     property1: KProperty0<T1>,
@@ -67,6 +79,9 @@ fun<T1, T2, T3, T4> PropertyHost.autorun(
     }
 }
 
+/**
+ * Runs a [block] whenever any of the given observable properties is changed.
+ */
 @Suppress("UNCHECKED_CAST")
 fun<T1, T2, T3, T4, T5> PropertyHost.autorun(
     property1: KProperty0<T1>,

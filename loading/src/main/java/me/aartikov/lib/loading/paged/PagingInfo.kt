@@ -1,8 +1,13 @@
 package me.aartikov.lib.loading.paged
 
+/**
+ * Stores information about already loaded pages for [PagedLoading].
+ * @property loadedPageCount count of loaded pages.
+ * @property loadedData sequentially merged data of all loaded pages.
+ */
 data class PagingInfo<T>(
     val loadedPageCount: Int,
-    val loadedItems: List<T>
+    val loadedData: List<T>
 ) {
-    val lastItem: T? get() = loadedItems.lastOrNull()
+    val lastItem: T? get() = loadedData.lastOrNull()
 }

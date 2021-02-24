@@ -32,6 +32,9 @@ open class Loop<StateT, ActionT, EffectT>(
      */
     val stateFlow: StateFlow<StateT> get() = mutableStateFlow
 
+    /**
+     * Returns true if [start] was called and is not canceled yet.
+     */
     var started: Boolean = false
         private set
 
@@ -39,7 +42,7 @@ open class Loop<StateT, ActionT, EffectT>(
     private val actionChannel = Channel<ActionT>(Channel.UNLIMITED)
 
     /**
-     * Start loop
+     * Starts loop
      */
     suspend fun start() {
         if (started) {
@@ -62,7 +65,7 @@ open class Loop<StateT, ActionT, EffectT>(
     }
 
     /**
-     * Send action for processing
+     * Sends action for processing
      */
     fun dispatch(action: ActionT) {
         actionChannel.offer(action)

@@ -7,6 +7,10 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.receiveAsFlow
 
+/**
+ * Coordinates handling of [navigation messages][NavigationMessage].
+ * There should be single instance of this class per Activity.
+ */
 class NavigationMessageDispatcher(
     private val nodeWalker: NodeWalker = DefaultNodeWalker()
 ) {
@@ -14,6 +18,10 @@ class NavigationMessageDispatcher(
     private var messageChannel = Channel<Pair<NavigationMessage, Any>>(Channel.UNLIMITED)
     private var collectingJob: Job? = null
 
+    /**
+     * Attaches a dispatcher to Activity lifecycle. Required because navigation can be executed only when an activity is resumed.
+     * If a dispatcher is attached in the second time all unprocessed messages will be dropped. Use [NavigationMessageQueue] to avoid this situation.
+     */
     fun attach(lifecycleOwner: LifecycleOwner) {
         if (collectingJob != null) {
             collectingJob?.cancel()
@@ -30,6 +38,13 @@ class NavigationMessageDispatcher(
         }
     }
 
+    /**
+     * Sends a [message] for processing. If another message is processing already or an activity is not resumed a message is queued.
+     * During the processing a message will be passed through a chain of nodes starting from the [firstNode]. [NodeWalker] helps to iterate nodes.
+     * If a node implements [NavigationMessageHandler] a message will be passed to [NavigationMessageHandler.handleNavigationMessage].
+     * If [NavigationMessageHandler.handleNavigationMessage] returns true (a message is handled) processing is stopped.
+     * If there is no [NavigationMessageHandler] that handled a message than [NotHandledNavigationMessageException] will be thrown.
+     */
     fun dispatch(message: NavigationMessage, firstNode: Any) {
         messageChannel.offer(Pair(message, firstNode))
     }

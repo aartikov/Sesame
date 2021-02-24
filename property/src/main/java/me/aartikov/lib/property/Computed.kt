@@ -6,6 +6,9 @@ import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.launch
 import kotlin.reflect.KProperty0
 
+/**
+ * Creates a read-only observable property that is automatically kept in sync with the other observable [property].
+ */
 fun <T, R> PropertyHost.computed(
     property: KProperty0<T>,
     transform: (T) -> R
@@ -22,6 +25,9 @@ fun <T, R> PropertyHost.computed(
     return StateDelegate(resultFlow)
 }
 
+/**
+ * Creates a read-only observable property that is automatically kept in sync with the other observable properties.
+ */
 @Suppress("UNCHECKED_CAST")
 fun <T1, T2, R> PropertyHost.computed(
     property1: KProperty0<T1>,
@@ -36,6 +42,9 @@ fun <T1, T2, R> PropertyHost.computed(
     }
 }
 
+/**
+ * Creates a read-only observable property that is automatically kept in sync with the other observable properties.
+ */
 @Suppress("UNCHECKED_CAST")
 fun <T1, T2, T3, R> PropertyHost.computed(
     property1: KProperty0<T1>,
@@ -52,6 +61,9 @@ fun <T1, T2, T3, R> PropertyHost.computed(
     }
 }
 
+/**
+ * Creates a read-only observable property that is automatically kept in sync with the other observable properties.
+ */
 @Suppress("UNCHECKED_CAST")
 fun <T1, T2, T3, T4, R> PropertyHost.computed(
     property1: KProperty0<T1>,
@@ -70,6 +82,9 @@ fun <T1, T2, T3, T4, R> PropertyHost.computed(
     }
 }
 
+/**
+ * Creates a read-only observable property that is automatically kept in sync with the other observable properties.
+ */
 @Suppress("UNCHECKED_CAST")
 fun <T1, T2, T3, T4, T5, R> PropertyHost.computed(
     property1: KProperty0<T1>,
