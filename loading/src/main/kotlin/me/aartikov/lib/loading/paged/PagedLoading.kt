@@ -146,6 +146,26 @@ fun <T : Any> PagedLoading<T>.restart(fresh: Boolean = true) = loadFirstPage(fre
 val <T : Any> PagedLoading<T>.state: PagedLoading.State<T> get() = stateFlow.value
 
 /**
+ * Returns [PagedLoading.State.Data.data] if it is available or null otherwise
+ */
+val <T : Any> PagedLoading<T>.dataOrNull: List<T>? get() = state.dataOrNull
+
+/**
+ * Returns [PagedLoading.State.Error.throwable] if it is available or null otherwise
+ */
+val PagedLoading<*>.errorOrNull: Throwable? get() = state.errorOrNull
+
+/**
+ * Returns [PagedLoading.State.Data.data] if it is available or null otherwise
+ */
+val <T : Any> PagedLoading.State<T>.dataOrNull: List<T>? get() = (this as? PagedLoading.State.Data)?.data
+
+/**
+ * Returns [PagedLoading.State.Error.throwable] if it is available or null otherwise
+ */
+val PagedLoading.State<*>.errorOrNull: Throwable? get() = (this as? PagedLoading.State.Error)?.throwable
+
+/**
  * A helper method to handle [PagedLoading.Event.Error].
  */
 fun <T : Any> PagedLoading<T>.handleErrors(

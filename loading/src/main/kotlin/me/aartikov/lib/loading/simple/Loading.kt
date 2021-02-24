@@ -86,6 +86,26 @@ fun <T : Any> Loading<T>.restart(fresh: Boolean = true) = load(fresh, dropData =
 val <T : Any> Loading<T>.state: Loading.State<T> get() = stateFlow.value
 
 /**
+ * Returns [Loading.State.Data.data] if it is available or null otherwise
+ */
+val <T : Any> Loading<T>.dataOrNull: T? get() = state.dataOrNull
+
+/**
+ * Returns [Loading.State.Error.throwable] if it is available or null otherwise
+ */
+val Loading<*>.errorOrNull: Throwable? get() = state.errorOrNull
+
+/**
+ * Returns [Loading.State.Data.data] if it is available or null otherwise
+ */
+val <T : Any> Loading.State<T>.dataOrNull: T? get() = (this as? Loading.State.Data)?.data
+
+/**
+ * Returns [Loading.State.Error.throwable] if it is available or null otherwise
+ */
+val Loading.State<*>.errorOrNull: Throwable? get() = (this as? Loading.State.Error)?.throwable
+
+/**
  * A helper method to handle [Loading.Event.Error].
  */
 fun <T : Any> Loading<T>.handleErrors(
