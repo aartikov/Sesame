@@ -15,6 +15,11 @@ android {
         versionCode libraryConfig.versionCode
         versionName libraryConfig.versionName
     }
+
+    sourceSets {
+        main.java.srcDirs += "src/main/kotlin"
+        test.java.srcDirs += "src/test/kotlin"
+    }
 }
 
 dependencies {
@@ -29,7 +34,7 @@ dependencies {
 
 task sourcesJar(type: Jar) {
     from android.sourceSets.main.java.srcDirs
-    classifier = "sources"
+    archiveClassifier.set("sources")
 }
 
 artifacts {

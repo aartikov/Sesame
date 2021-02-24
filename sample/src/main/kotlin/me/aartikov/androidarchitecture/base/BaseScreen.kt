@@ -32,7 +32,7 @@ abstract class BaseScreen<VM : BaseViewModel>(
 
         vm.bindToLifecycle(viewLifecycleOwner.lifecycle)
 
-        vm.navigationMessageQueue.bind(viewLifecycleOwner, navigationMessageDispatcher, node = this)
+        vm.navigationMessageQueue.bind(navigationMessageDispatcher, node = this, viewLifecycleOwner)
 
         vm.showError bind {
             Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
