@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Android Architecture</string>
+    <string name="app_name">Sesame sample</string>
 
     <!-- Menu -->
     <string name="counter_button">Counter</string>
@@ -23,5 +23,5 @@
     <string name="empty_view_text">No items to display</string>
 
     <!-- Clock -->
-    <string name="clock_description">Put app to background and check logs. The clock does\'t tick when it is inactive.</string>
+    <string name="clock_description">Put the app to background and check logs. The clock doesn\'t tick when it is inactive.</string>
 </resources>
