@@ -4,11 +4,11 @@
 Sesame is a set of architectural components for Android development. It is based on modern technologies such as coroutines and Flow. Sesame is easy to learn and simple to use. It is ideally suited for MVVM and MVI architecture.
 
 ## Components
-[property](https://github.com/aartikov/Sesame/tree/readme/property) - provides observable properties and one-time commands.
-[dialog](https://github.com/aartikov/Sesame/tree/readme/dialog) - allows to control dialogs from View Models.
-[navigation](https://github.com/aartikov/Sesame/tree/readme/navigation) - gives an universal way to navigate between screens.
-[activable](https://github.com/aartikov/Sesame/tree/readme/activable) - equips View Models with a simplest lifecycle (only 2 states and 2 callbacks).
-[loading](https://github.com/aartikov/Sesame/tree/readme/loading) - helps to load data (including paged one) and manage loading state.
+[property](https://github.com/aartikov/Sesame/tree/readme/property) - provides observable properties and one-time commands.  
+[dialog](https://github.com/aartikov/Sesame/tree/readme/dialog) - allows to control dialogs from View Models.  
+[navigation](https://github.com/aartikov/Sesame/tree/readme/navigation) - gives an universal way to navigate between screens.  
+[activable](https://github.com/aartikov/Sesame/tree/readme/activable) - equips View Models with a simplest lifecycle (only 2 states and 2 callbacks).  
+[loading](https://github.com/aartikov/Sesame/tree/readme/loading) - helps to load data (including paged one) and manage loading state.  
 [loop](https://github.com/aartikov/Sesame/tree/readme/loop) - provides an UDF (Unidirectional Data Flow) state manager.
 
 Sesame components are independent. Use only that you like.
