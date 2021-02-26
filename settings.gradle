@@ -1,4 +1,4 @@
-rootProject.name = "Android Architecture"
+rootProject.name = "Sesame"
 include ":activable"
 include ":dialog"
 include ":loading"
