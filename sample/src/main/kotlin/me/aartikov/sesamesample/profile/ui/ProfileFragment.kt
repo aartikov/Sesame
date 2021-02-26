@@ -7,14 +7,14 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
 import dagger.hilt.android.AndroidEntryPoint
 import me.aartikov.sesamesample.R
-import me.aartikov.sesamesample.base.BaseScreen
-import me.aartikov.sesamesample.databinding.ScreenProfileBinding
+import me.aartikov.sesamesample.base.BaseFragment
+import me.aartikov.sesamesample.databinding.FragmentProfileBinding
 import me.aartikov.sesame.loading.simple.Loading
 
 @AndroidEntryPoint
-class ProfileScreen : BaseScreen<ProfileViewModel>(R.layout.screen_profile, ProfileViewModel::class) {
+class ProfileFragment : BaseFragment<ProfileViewModel>(R.layout.fragment_profile, ProfileViewModel::class) {
 
-    private val binding by viewBinding(ScreenProfileBinding::bind)
+    private val binding by viewBinding(FragmentProfileBinding::bind)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

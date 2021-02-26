@@ -3,12 +3,12 @@ package me.aartikov.sesamesample
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import dagger.hilt.android.AndroidEntryPoint
-import me.aartikov.sesamesample.counter.CounterScreen
-import me.aartikov.sesamesample.dialogs.ClockScreen
-import me.aartikov.sesamesample.dialogs.DialogsScreen
-import me.aartikov.sesamesample.menu.MenuScreen
-import me.aartikov.sesamesample.movies.ui.MoviesScreen
-import me.aartikov.sesamesample.profile.ui.ProfileScreen
+import me.aartikov.sesamesample.counter.CounterFragment
+import me.aartikov.sesamesample.dialogs.ClockFragment
+import me.aartikov.sesamesample.dialogs.DialogsFragment
+import me.aartikov.sesamesample.menu.MenuFragment
+import me.aartikov.sesamesample.movies.ui.MoviesFragment
+import me.aartikov.sesamesample.profile.ui.ProfileFragment
 import me.aartikov.sesame.navigation.NavigationMessage
 import me.aartikov.sesame.navigation.NavigationMessageDispatcher
 import me.aartikov.sesame.navigation.NavigationMessageHandler
@@ -30,18 +30,18 @@ class MainActivity : AppCompatActivity(), NavigationMessageHandler {
         navigator = FragmentNavigator(R.id.container, supportFragmentManager)
 
         if (savedInstanceState == null) {
-            navigator.setRoot(MenuScreen())
+            navigator.setRoot(MenuFragment())
         }
     }
 
     override fun handleNavigationMessage(message: NavigationMessage): Boolean {
         when (message) {
             is Back -> navigator.back()
-            is OpenCounterScreen -> navigator.goTo(CounterScreen())
-            is OpenProfileScreen -> navigator.goTo(ProfileScreen())
-            is OpenDialogsScreen -> navigator.goTo(DialogsScreen())
-            is OpenMoviesScreen -> navigator.goTo(MoviesScreen())
-            is OpenClockScreen -> navigator.goTo(ClockScreen())
+            is OpenCounterScreen -> navigator.goTo(CounterFragment())
+            is OpenProfileScreen -> navigator.goTo(ProfileFragment())
+            is OpenDialogsScreen -> navigator.goTo(DialogsFragment())
+            is OpenMoviesScreen -> navigator.goTo(MoviesFragment())
+            is OpenClockScreen -> navigator.goTo(ClockFragment())
         }
         return true
     }

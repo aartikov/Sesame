@@ -8,6 +8,6 @@
     </style>
 
     <style name="ToolbarStyle" parent="@style/Widget.AppCompat.Toolbar">
-        <item name="titleTextColor"> #ffffff</item>
+        <item name="titleTextColor"> @color/white</item>
     </style>
 </resources>

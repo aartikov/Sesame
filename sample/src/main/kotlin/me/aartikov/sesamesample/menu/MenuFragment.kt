@@ -5,13 +5,13 @@ import android.view.View
 import by.kirich1409.viewbindingdelegate.viewBinding
 import dagger.hilt.android.AndroidEntryPoint
 import me.aartikov.sesamesample.R
-import me.aartikov.sesamesample.base.BaseScreen
-import me.aartikov.sesamesample.databinding.ScreenMenuBinding
+import me.aartikov.sesamesample.base.BaseFragment
+import me.aartikov.sesamesample.databinding.FragmentMenuBinding
 
 @AndroidEntryPoint
-class MenuScreen : BaseScreen<MenuViewModel>(R.layout.screen_menu, MenuViewModel::class) {
+class MenuFragment : BaseFragment<MenuViewModel>(R.layout.fragment_menu, MenuViewModel::class) {
 
-    private val binding by viewBinding(ScreenMenuBinding::bind)
+    private val binding by viewBinding(FragmentMenuBinding::bind)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

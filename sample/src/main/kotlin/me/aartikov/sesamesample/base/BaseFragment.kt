@@ -15,7 +15,7 @@ import me.aartikov.sesame.property.PropertyObserver
 import javax.inject.Inject
 import kotlin.reflect.KClass
 
-abstract class BaseScreen<VM : BaseViewModel>(
+abstract class BaseFragment<VM : BaseViewModel>(
     @LayoutRes contentLayoutId: Int,
     vmClass: KClass<VM>
 ) : Fragment(contentLayoutId), PropertyObserver, DialogObserver {

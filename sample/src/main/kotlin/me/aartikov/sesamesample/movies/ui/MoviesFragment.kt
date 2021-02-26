@@ -10,16 +10,16 @@ import com.xwray.groupie.GroupieAdapter
 import com.xwray.groupie.Section
 import dagger.hilt.android.AndroidEntryPoint
 import me.aartikov.sesamesample.R
-import me.aartikov.sesamesample.base.BaseScreen
-import me.aartikov.sesamesample.databinding.ScreenMoviesBinding
+import me.aartikov.sesamesample.base.BaseFragment
+import me.aartikov.sesamesample.databinding.FragmentMoviesBinding
 import me.aartikov.sesame.loading.paged.PagedLoading
 import me.aartikov.sesamesample.movies.utils.doOnScrollToEnd
 
 
 @AndroidEntryPoint
-class MoviesScreen : BaseScreen<MoviesViewModel>(R.layout.screen_movies, MoviesViewModel::class) {
+class MoviesFragment : BaseFragment<MoviesViewModel>(R.layout.fragment_movies, MoviesViewModel::class) {
 
-    private val binding by viewBinding(ScreenMoviesBinding::bind)
+    private val binding by viewBinding(FragmentMoviesBinding::bind)
 
     private val movieAdapter = GroupieAdapter()
     private val listSection = Section()

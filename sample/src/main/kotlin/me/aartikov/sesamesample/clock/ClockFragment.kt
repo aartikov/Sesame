@@ -5,13 +5,13 @@ import android.view.View
 import by.kirich1409.viewbindingdelegate.viewBinding
 import dagger.hilt.android.AndroidEntryPoint
 import me.aartikov.sesamesample.R
-import me.aartikov.sesamesample.base.BaseScreen
-import me.aartikov.sesamesample.databinding.ScreenClockBinding
+import me.aartikov.sesamesample.base.BaseFragment
+import me.aartikov.sesamesample.databinding.FragmentClockBinding
 
 @AndroidEntryPoint
-class ClockScreen : BaseScreen<ClockViewModel>(R.layout.screen_clock, ClockViewModel::class) {
+class ClockFragment : BaseFragment<ClockViewModel>(R.layout.fragment_clock, ClockViewModel::class) {
 
-    private val binding by viewBinding(ScreenClockBinding::bind)
+    private val binding by viewBinding(FragmentClockBinding::bind)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

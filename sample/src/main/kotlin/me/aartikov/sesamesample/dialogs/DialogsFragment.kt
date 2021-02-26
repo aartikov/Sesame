@@ -7,13 +7,13 @@ import androidx.appcompat.app.AlertDialog
 import by.kirich1409.viewbindingdelegate.viewBinding
 import dagger.hilt.android.AndroidEntryPoint
 import me.aartikov.sesamesample.R
-import me.aartikov.sesamesample.base.BaseScreen
-import me.aartikov.sesamesample.databinding.ScreenDialogsBinding
+import me.aartikov.sesamesample.base.BaseFragment
+import me.aartikov.sesamesample.databinding.FragmentDialogsBinding
 
 @AndroidEntryPoint
-class DialogsScreen : BaseScreen<DialogsViewModel>(R.layout.screen_dialogs, DialogsViewModel::class) {
+class DialogsFragment : BaseFragment<DialogsViewModel>(R.layout.fragment_dialogs, DialogsViewModel::class) {
 
-    private val binding by viewBinding(ScreenDialogsBinding::bind)
+    private val binding by viewBinding(FragmentDialogsBinding::bind)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
