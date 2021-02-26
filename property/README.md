@@ -1,6 +1,6 @@
 # Property
 
-This component provides observable properties and one-time commands.
+Provides observable properties and one-time commands.
 
 ## Core concepts
 
