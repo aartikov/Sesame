@@ -10,9 +10,9 @@ Provides observable properties and one-time commands.
 
 *Command* - one-time action such as showing a toast or an error dialog.
 
-*Property host* - a class that can contain observable properties and commands.
+*Property host* - a class that contains observable properties and commands.
 
-*Property observer* - a class that can observe observable properties and handle commands.
+*Property observer* - a class that observes properties and handles commands.
 
 ## How to use
 
@@ -61,7 +61,7 @@ class CounterFragment : Fragment(), PropertyObserver {
 }
 ```
 
-5. Bind properties and commands to UI updates:
+5. Bind UI to View Model:
 ```kotlin
     private val binding by viewBinding(FragmentCounterBinding::bind)
 
@@ -90,7 +90,27 @@ Sometimes it is required to run some code in a `PropertyHost` whenever certain p
     }
 ```
 
+## What is wrong with StateFlow?
+[StateFlow](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/-state-flow/) is an observable data holder. It works fine, but the syntax is not ideal for View Model's properties. The goal of Sesame property component is to improve the syntax.
+
+Compare:
+```kotlin
+    val count: StateFlow<Int> get() = _count
+    private val _count = MutableStateFlow(0)
+    
+    _count.value++
+```
+
+with:
+```kotlin
+    var count by state(0)
+        private set
+    
+    count++
+```
+
+By the way, Sesame properties use `StateFlow` under the hood, so this is not competition but cooperation.
+
 ## Interop with StateFlow
-Sesame observable properties use [StateFlow](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/-state-flow/) under the hood.
 To convert a `StateFlow` to an observable property use `stateFromFlow` method.
-To get a `StateFlow` from an observable property use `::someProperty.flow` extension property.
+To get a `StateFlow` from an observable property use `::someProperty.flow` syntax.
