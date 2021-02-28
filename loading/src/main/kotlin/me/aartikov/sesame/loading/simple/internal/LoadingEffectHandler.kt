@@ -15,6 +15,7 @@ internal class LoadingEffectHandler<T : Any>(private val loader: suspend (fresh:
     override suspend fun handleEffect(effect: Effect, actionConsumer: (Action<T>) -> Unit) {
         when (effect) {
             is Effect.Load -> load(effect.fresh, actionConsumer)
+            is Effect.CancelLoading -> cancelLoading()
         }
     }
 
@@ -37,5 +38,10 @@ internal class LoadingEffectHandler<T : Any>(private val loader: suspend (fresh:
                 }
             }
         }
+    }
+
+    private fun cancelLoading() {
+        job?.cancel()
+        job = null
     }
 }

@@ -12,7 +12,8 @@ internal sealed class State<out T> {
 }
 
 internal sealed class Action<out T> {
-    data class Load(val fresh: Boolean, val dropData: Boolean) : Action<Nothing>()
+    data class Load(val fresh: Boolean, val reset: Boolean) : Action<Nothing>()
+    data class Cancel(val reset: Boolean) : Action<Nothing>()
 
     data class DataLoaded<T>(val data: T) : Action<T>()
     object EmptyDataLoaded : Action<Nothing>()
@@ -24,6 +25,7 @@ internal sealed class Action<out T> {
 
 internal sealed class Effect {
     data class Load(val fresh: Boolean) : Effect()
+    object CancelLoading : Effect()
     data class EmitEvent(val event: Event) : Effect()
 }
 
@@ -34,7 +36,7 @@ internal class LoadingReducer<T> : Reducer<State<T>, Action<T>, Effect> {
     override fun reduce(state: State<T>, action: Action<T>): Next<State<T>, Effect> = when (action) {
 
         is Action.Load -> {
-            if (action.dropData) {
+            if (action.reset) {
                 next(
                     State.Loading,
                     Effect.Load(action.fresh)
@@ -52,6 +54,27 @@ internal class LoadingReducer<T> : Reducer<State<T>, Action<T>, Effect> {
                     is State.Data -> next(
                         State.Refresh(data = state.data),
                         Effect.Load(action.fresh)
+                    )
+                    else -> nothing()
+                }
+            }
+        }
+
+        is Action.Cancel -> {
+            if (action.reset) {
+                next(
+                    State.Empty,
+                    Effect.CancelLoading
+                )
+            } else {
+                when (state) {
+                    is State.Loading -> next(
+                        State.Empty,
+                        Effect.CancelLoading
+                    )
+                    is State.Refresh -> next(
+                        State.Data(state.data),
+                        Effect.CancelLoading
                     )
                     else -> nothing()
                 }

@@ -62,23 +62,33 @@ interface Loading<T : Any> {
     /**
      * Requests to load data.
      * @param fresh indicates that fresh data is required. See [OrdinaryLoader.load] and [FlowLoader.load]
-     * @param dropData if true than previously loaded data will be instantly dropped and in progress loading will be canceled.
+     * @param reset if true than previously loaded data will be instantly dropped and in progress loading will be canceled.
      * If false than previously loaded data will be preserved until successful outcome and a loading request will be ignored if another one is already in progress.
      */
-    fun load(fresh: Boolean, dropData: Boolean = false)
+    fun load(fresh: Boolean, reset: Boolean = false)
 
+    /**
+     * Requests to cancel in progress loading.
+     * @param reset if true than state will be reset to [Loading.State.Empty].
+     */
+    fun cancel(reset: Boolean = false)
 }
 
 /**
- * A shortcut for load(fresh = true, dropData = false). Requests to load fresh data and preserve the old one until successful outcome.
+ * A shortcut for load(fresh = true, reset = false). Requests to load fresh data and preserve the old one until successful outcome.
  */
-fun <T : Any> Loading<T>.refresh() = load(fresh = true, dropData = false)
+fun <T : Any> Loading<T>.refresh() = load(fresh = true, reset = false)
 
 /**
- * A shortcut for load(fresh, dropData = true). Requests to drop old data and load new one.
+ * A shortcut for load(fresh, reset = true). Requests to drop old data and load new one.
  * @param fresh indicates that fresh data is required. See [OrdinaryLoader.load] and [FlowLoader.load].
  */
-fun <T : Any> Loading<T>.restart(fresh: Boolean = true) = load(fresh, dropData = true)
+fun <T : Any> Loading<T>.restart(fresh: Boolean = true) = load(fresh, reset = true)
+
+/**
+ * A shortcut for cancel(reset = true). Cancels loading and sets state to [Loading.State.Empty].
+ */
+fun <T : Any> Loading<T>.reset() = cancel(reset = true)
 
 /**
  * Returns a current [Loading.State].

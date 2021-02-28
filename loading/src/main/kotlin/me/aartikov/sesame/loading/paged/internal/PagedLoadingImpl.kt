@@ -52,11 +52,15 @@ internal class PagedLoadingImpl<T : Any>(
         }
     }
 
-    override fun loadFirstPage(fresh: Boolean, dropData: Boolean) {
-        loop.dispatch(Action.LoadFirstPage(fresh, dropData))
+    override fun loadFirstPage(fresh: Boolean, reset: Boolean) {
+        loop.dispatch(Action.LoadFirstPage(fresh, reset))
     }
 
     override fun loadMore() {
         loop.dispatch(Action.LoadMore)
+    }
+
+    override fun cancel(reset: Boolean) {
+        loop.dispatch(Action.Cancel(reset))
     }
 }

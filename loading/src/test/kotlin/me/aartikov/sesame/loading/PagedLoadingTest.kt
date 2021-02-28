@@ -301,6 +301,36 @@ class PagedLoadingTest {
         job.cancel()
     }
 
+    @Test
+    fun `cancels loading and leaves previous data after cancel is called`() = runBlockingTest {
+        val loader = TestLoader(Result.Success(listOf("Value1", "Value2")))
+        val loading = PagedLoading(loader, initialState = State.Data(1, listOf("Previous value1", "Previous value2")))
+
+        val job = loading.attach(this)
+        loading.refresh()
+        delay(TestLoader.LOAD_DELAY / 2)
+        loading.cancel()
+        delay(TestLoader.LOAD_DELAY * 2)
+
+        assertEquals(State.Data(1, listOf("Previous value1", "Previous value2")), loading.state)
+        job.cancel()
+    }
+
+    @Test
+    fun `cancels loading and clears data after reset is called`() = runBlockingTest {
+        val loader = TestLoader(Result.Success(listOf("Value1", "Value2")))
+        val loading = PagedLoading(loader, initialState = State.Data(1, listOf("Previous value1", "Previous value2")))
+
+        val job = loading.attach(this)
+        loading.refresh()
+        delay(TestLoader.LOAD_DELAY / 2)
+        loading.reset()
+        delay(TestLoader.LOAD_DELAY * 2)
+
+        assertEquals(State.Empty, loading.state)
+        job.cancel()
+    }
+
     private class TestLoader(
         private val firstPageResult: Result,
         private val nextPageResult: (PagingInfo<String>) -> Result = { Result.Success(emptyList()) }

@@ -115,11 +115,11 @@ interface PagedLoading<T : Any> {
     /**
      * Requests to load a first page.
      * @param fresh indicates that fresh data is required. See [PagedLoader.loadFirstPage].
-     * @param dropData if true than previously loaded data will be instantly dropped and in progress loading will be canceled.
+     * @param reset if true than previously loaded data will be instantly dropped and in progress loading will be canceled.
      * Otherwise previously loaded data will be preserved until successful outcome, if another loadFirstPage request is in progress
      * than new one will be ignored, if loadMore request is in progress than it will be canceled.
      */
-    fun loadFirstPage(fresh: Boolean, dropData: Boolean = false)
+    fun loadFirstPage(fresh: Boolean, reset: Boolean = false)
 
     /**
      * Requests to load the next page. Loaded data will be added to the end of a previously loaded list.
@@ -127,18 +127,28 @@ interface PagedLoading<T : Any> {
      */
     fun loadMore()
 
+    /**
+     * Requests to cancel in progress loading.
+     * @param reset if true than state will be reset to [PagedLoading.State.Empty].
+     */
+    fun cancel(reset: Boolean = false)
 }
 
 /**
- * A shortcut for loadFirstPage(fresh = true, dropData = false). Requests to load a fresh first page and preserve the old data until successful outcome.
+ * A shortcut for loadFirstPage(fresh = true, reset = false). Requests to load a fresh first page and preserve the old data until successful outcome.
  */
-fun <T : Any> PagedLoading<T>.refresh() = loadFirstPage(fresh = true, dropData = false)
+fun <T : Any> PagedLoading<T>.refresh() = loadFirstPage(fresh = true, reset = false)
 
 /**
- * A shortcut for loadFirstPage(fresh, dropData = false). Requests to drop old data and load a first page.
+ * A shortcut for loadFirstPage(fresh, reset = false). Requests to drop old data and load a first page.
  * @param fresh indicates that fresh data is required. See [PagedLoader.loadFirstPage].
  */
-fun <T : Any> PagedLoading<T>.restart(fresh: Boolean = true) = loadFirstPage(fresh, dropData = true)
+fun <T : Any> PagedLoading<T>.restart(fresh: Boolean = true) = loadFirstPage(fresh, reset = true)
+
+/**
+ * A shortcut for cancel(reset = true). Cancels loading and sets state to [PagedLoading.State.Empty].
+ */
+fun <T : Any> PagedLoading<T>.reset() = cancel(reset = true)
 
 /**
  * Returns current [PagedLoading.State].

@@ -56,7 +56,11 @@ internal class LoadingImpl<T : Any>(
         }
     }
 
-    override fun load(fresh: Boolean, dropData: Boolean) {
-        loop.dispatch(Action.Load(fresh, dropData))
+    override fun load(fresh: Boolean, reset: Boolean) {
+        loop.dispatch(Action.Load(fresh, reset))
+    }
+
+    override fun cancel(reset: Boolean) {
+        loop.dispatch(Action.Cancel(reset))
     }
 }

@@ -216,6 +216,36 @@ class OrdinaryLoadingTest {
         job.cancel()
     }
 
+    @Test
+    fun `cancels loading and leaves previous data after cancel is called`() = runBlockingTest {
+        val loader = TestLoader(Result.Success("Value"))
+        val loading = OrdinaryLoading(loader, initialState = State.Data("Previous value"))
+
+        val job = loading.attach(this)
+        loading.refresh()
+        delay(TestLoader.LOAD_DELAY / 2)
+        loading.cancel()
+        delay(TestLoader.LOAD_DELAY * 2)
+
+        assertEquals(State.Data("Previous value"), loading.state)
+        job.cancel()
+    }
+
+    @Test
+    fun `cancels loading and clears data after reset is called`() = runBlockingTest {
+        val loader = TestLoader(Result.Success("Value"))
+        val loading = OrdinaryLoading(loader, initialState = State.Data("Previous value"))
+
+        val job = loading.attach(this)
+        loading.refresh()
+        delay(TestLoader.LOAD_DELAY / 2)
+        loading.reset()
+        delay(TestLoader.LOAD_DELAY * 2)
+
+        assertEquals(State.Empty, loading.state)
+        job.cancel()
+    }
+
     private class TestLoader(private val resultProvider: () -> Result) : OrdinaryLoader<String> {
 
         constructor(result: Result) : this({ result })

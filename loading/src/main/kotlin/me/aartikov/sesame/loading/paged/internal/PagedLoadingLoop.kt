@@ -15,8 +15,9 @@ internal sealed class State<out T> {
 }
 
 internal sealed class Action<out T> {
-    data class LoadFirstPage(val fresh: Boolean, val dropData: Boolean) : Action<Nothing>()
+    data class LoadFirstPage(val fresh: Boolean, val reset: Boolean) : Action<Nothing>()
     object LoadMore : Action<Nothing>()
+    data class Cancel(val reset: Boolean) : Action<Nothing>()
 
     data class NewPageLoaded<T>(val data: List<T>) : Action<T>()
     object EmptyPageLoaded : Action<Nothing>()
@@ -26,6 +27,7 @@ internal sealed class Action<out T> {
 internal sealed class Effect<out T> {
     data class LoadFirstPage(val fresh: Boolean) : Effect<Nothing>()
     data class LoadNextPage<T>(val pagingInfo: PagingInfo<T>) : Effect<T>()
+    object CancelLoading: Effect<Nothing>()
     data class EmitEvent(val event: Event) : Effect<Nothing>()
 }
 
@@ -36,7 +38,7 @@ internal class PagedLoadingReducer<T> : Reducer<State<T>, Action<T>, Effect<T>> 
     override fun reduce(state: State<T>, action: Action<T>): Next<State<T>, Effect<T>> = when (action) {
 
         is Action.LoadFirstPage -> {
-            if (action.dropData) {
+            if (action.reset) {
                 next(
                     State.Loading,
                     Effect.LoadFirstPage(action.fresh)
@@ -75,6 +77,31 @@ internal class PagedLoadingReducer<T> : Reducer<State<T>, Action<T>, Effect<T>> 
                     Effect.LoadNextPage(PagingInfo(state.pageCount, state.data))
                 )
                 else -> nothing()
+            }
+        }
+
+        is Action.Cancel -> {
+            if (action.reset) {
+                next(
+                    State.Empty,
+                    Effect.CancelLoading
+                )
+            } else {
+                when (state) {
+                    is State.Loading -> next(
+                        State.Empty,
+                        Effect.CancelLoading
+                    )
+                    is State.Refresh -> next(
+                        State.Data(state.pageCount, state.data),
+                        Effect.CancelLoading
+                    )
+                    is State.LoadingMore -> next(
+                        State.Data(state.pageCount, state.data),
+                        Effect.CancelLoading
+                    )
+                    else -> nothing()
+                }
             }
         }
 
