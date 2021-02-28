@@ -13,13 +13,14 @@ import kotlinx.coroutines.launch
  *
  * [StateT] - type of state that is stored in a state manager. State must be immutable
  * [ActionT] - type of action (some external command)
- * [EffectT] - type of side effects (such as starting network request or saving to database)
+ * [EffectT] - type of side effects (such as starting a network request or saving to database)
  */
 open class Loop<StateT, ActionT, EffectT>(
     initialState: StateT,
     private val reducer: Reducer<StateT, ActionT, EffectT>,
     private val actionSources: List<ActionSource<ActionT>>,
-    private val effectHandlers: List<EffectHandler<EffectT, ActionT>>
+    private val effectHandlers: List<EffectHandler<EffectT, ActionT>>,
+    private val logger: LoopLogger<StateT, ActionT, EffectT>? = null
 ) {
 
     /**
@@ -49,12 +50,15 @@ open class Loop<StateT, ActionT, EffectT>(
             throw IllegalStateException("Loop is already started")
         }
         started = true
+        logger?.logOnStarted(state)
 
         coroutineScope {
             try {
                 startActionSources(this)
                 for (action in actionChannel) {
+                    logger?.logBeforeReduce(state, action)
                     val next = reducer.reduce(state, action)
+                    logger?.logAfterReduce(state, action, next)
                     changeState(next.state)
                     handleEffects(this, next.effects)
                 }
