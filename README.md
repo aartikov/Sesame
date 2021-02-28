@@ -37,7 +37,16 @@ dependencies {
 ```
 
 ## Sample
-The [sample](https://github.com/aartikov/Sesame/tree/develop/sample) shows how to use Sesame.
+[The sample application](https://github.com/aartikov/Sesame/tree/develop/sample) consists of several screens. Each screen demonstraits certain Sesame feature.
+
+COUNTER - shows how to use properties and commands from [property](https://github.com/aartikov/Sesame/tree/readme/property).  
+PROFILE - loads ordinary data with [loading](https://github.com/aartikov/Sesame/tree/readme/loading).  
+DIALOGS - shows how to use [dialog](https://github.com/aartikov/Sesame/tree/readme/dialog).  
+MOVIES - loads paginated data with [loading](https://github.com/aartikov/Sesame/tree/readme/dialog).  
+CLOCK - shows how to use [activable](https://github.com/aartikov/Sesame/tree/readme/activable).  
+The whole app - demonstrates [navigation](https://github.com/aartikov/Sesame/tree/readme/activable).  
+
+There is no sample for [loop](https://github.com/aartikov/Sesame/tree/readme/loop). You can examine [LoadingLoop](https://github.com/aartikov/Sesame/blob/readme/loading/src/main/kotlin/me/aartikov/sesame/loading/simple/internal/LoadingLoop.kt) and [PagedLoadingLoop](https://github.com/aartikov/Sesame/blob/readme/loading/src/main/kotlin/me/aartikov/sesame/loading/paged/internal/PagedLoadingLoop.kt) as good examples how to use it.
 
 ## Developed by
 Artur Artikov <a href="mailto:a.artikov@gmail.com">a.artikov@gmail.com</a>
