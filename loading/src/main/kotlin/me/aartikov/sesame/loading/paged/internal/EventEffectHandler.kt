@@ -1,14 +1,12 @@
 package me.aartikov.sesame.loading.paged.internal
 
 import me.aartikov.sesame.loading.paged.PagedLoading
-import me.aartikov.sesame.loop.EffectHandler
+import me.aartikov.sesame.loop.SubtypeEffectHandler
 
 internal class EventEffectHandler<T>(private val emitEvent: (PagedLoading.Event) -> Unit) :
-    EffectHandler<Effect<T>, Action<T>> {
+    SubtypeEffectHandler<Effect<T>, Effect.EmitEvent, Action<T>>(Effect.EmitEvent::class.java) {
 
-    override suspend fun handleEffect(effect: Effect<T>, actionConsumer: (Action<T>) -> Unit) {
-        when (effect) {
-            is Effect.EmitEvent -> emitEvent(effect.event)
-        }
+    override suspend fun handleSubtypeEffect(effect: Effect.EmitEvent, actionConsumer: (Action<T>) -> Unit) {
+        emitEvent(effect.event)
     }
 }

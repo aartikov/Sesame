@@ -9,3 +9,20 @@ interface EffectHandler<in EffectT, out ActionT> {
      */
     suspend fun handleEffect(effect: EffectT, actionConsumer: (ActionT) -> Unit)
 }
+
+/**
+ * Handles only side effects of specified subtype.
+ */
+abstract class SubtypeEffectHandler<EffectT, SubtypeEffectT : EffectT, out ActionT>(
+    private val subType: Class<SubtypeEffectT>
+) : EffectHandler<EffectT, ActionT> {
+
+    final override suspend fun handleEffect(effect: EffectT, actionConsumer: (ActionT) -> Unit) {
+        if (subType.isInstance(effect)) {
+            @Suppress("UNCHECKED_CAST")
+            handleSubtypeEffect(effect as SubtypeEffectT, actionConsumer)
+        }
+    }
+
+    abstract suspend fun handleSubtypeEffect(effect: SubtypeEffectT, actionConsumer: (ActionT) -> Unit)
+}
