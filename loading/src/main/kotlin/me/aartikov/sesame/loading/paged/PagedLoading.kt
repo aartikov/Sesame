@@ -59,6 +59,7 @@ interface PagedLoading<T : Any> {
             val data: List<T>,
             val status: DataStatus = DataStatus.NORMAL
         ) : State<T>() {
+            val loadMoreEnabled: Boolean get() = status == DataStatus.NORMAL
             val refreshing: Boolean get() = status == DataStatus.REFRESHING
             val loadingMore: Boolean get() = status == DataStatus.LOADING_MORE
             val fullData: Boolean get() = status == DataStatus.FULL_DATA

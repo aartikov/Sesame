@@ -9,10 +9,10 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import com.xwray.groupie.GroupieAdapter
 import com.xwray.groupie.Section
 import dagger.hilt.android.AndroidEntryPoint
+import me.aartikov.sesame.loading.paged.PagedLoading
 import me.aartikov.sesamesample.R
 import me.aartikov.sesamesample.base.BaseFragment
 import me.aartikov.sesamesample.databinding.FragmentMoviesBinding
-import me.aartikov.sesame.loading.paged.PagedLoading
 import me.aartikov.sesamesample.movies.utils.doOnScrollToEnd
 
 
@@ -23,7 +23,7 @@ class MoviesFragment : BaseFragment<MoviesViewModel>(R.layout.fragment_movies, M
 
     private val movieAdapter = GroupieAdapter()
     private val listSection = Section()
-    private var scrollToEndListenerEnabled: Boolean = true
+    private var loadMoreEnabled: Boolean = true
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -57,7 +57,7 @@ class MoviesFragment : BaseFragment<MoviesViewModel>(R.layout.fragment_movies, M
                     }
                 }
 
-                scrollToEndListenerEnabled = state is PagedLoading.State.Data && !state.fullData
+                loadMoreEnabled = state is PagedLoading.State.Data && state.loadMoreEnabled
             }
         }
     }
@@ -69,7 +69,7 @@ class MoviesFragment : BaseFragment<MoviesViewModel>(R.layout.fragment_movies, M
             adapter = movieAdapter
             addItemDecoration(DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL))
             doOnScrollToEnd {
-                if (scrollToEndListenerEnabled) vm.onLoadMore()
+                if (loadMoreEnabled) vm.onLoadMore()
             }
         }
     }
