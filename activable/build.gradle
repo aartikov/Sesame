@@ -23,7 +23,7 @@ android {
 }
 
 dependencies {
-    implementation coroutines
+    implementation coroutines.core
     implementation androidx.lifecycle
 
     testImplementation tests.junit

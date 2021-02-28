@@ -56,7 +56,8 @@ dependencies {
     implementation daggerHilt.coreAndroid
     kapt daggerHilt.androidCompiler
 
-    implementation coroutines
+    implementation coroutines.core
+    implementation coroutines.android
     implementation dateTime
 
     implementation glide
