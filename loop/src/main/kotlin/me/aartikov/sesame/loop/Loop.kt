@@ -18,8 +18,8 @@ import kotlinx.coroutines.launch
 open class Loop<StateT, ActionT, EffectT>(
     initialState: StateT,
     private val reducer: Reducer<StateT, ActionT, EffectT>,
-    private val actionSources: List<ActionSource<ActionT>>,
-    private val effectHandlers: List<EffectHandler<EffectT, ActionT>>,
+    private val effectHandlers: List<EffectHandler<EffectT, ActionT>> = emptyList(),
+    private val actionSources: List<ActionSource<ActionT>> = emptyList(),
     private val logger: LoopLogger<StateT, ActionT, EffectT>? = null
 ) {
 
@@ -101,5 +101,14 @@ open class Loop<StateT, ActionT, EffectT>(
                 }
             }
         }
+    }
+}
+
+/**
+ * A helper method to start [Loop] in a [scope].
+ */
+fun <StateT, ActionT, EffectT> Loop<StateT, ActionT, EffectT>.startIn(scope: CoroutineScope) {
+    scope.launch {
+        start()
     }
 }

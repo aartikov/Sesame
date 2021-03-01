@@ -18,14 +18,13 @@ internal class PagedLoadingImpl<T : Any>(
 
     private val mutableStateFlow = MutableStateFlow(initialState)
 
-    private val mutableEventFlow = MutableSharedFlow<PagedLoading.Event>(
+    private val mutableEventFlow = MutableSharedFlow<Event>(
         extraBufferCapacity = 100, onBufferOverflow = BufferOverflow.DROP_OLDEST
     )
 
     private val loop: PagedLoadingLoop<T> = PagedLoadingLoop(
         initialState = initialState.toInternalState(),
         reducer = PagedLoadingReducer(),
-        actionSources = emptyList(),
         effectHandlers = listOf(
             PagedLoadingEffectHandler(loader),
             EventEffectHandler { event -> mutableEventFlow.tryEmit(event) }

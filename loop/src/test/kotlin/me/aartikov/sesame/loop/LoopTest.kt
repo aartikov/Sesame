@@ -82,13 +82,13 @@ private enum class TestEffect {
 }
 
 private class TestLoop(
-    actionSources: List<ActionSource<TestAction>> = emptyList(),
-    effectHandlers: List<EffectHandler<TestEffect, TestAction>> = emptyList()
+    effectHandlers: List<EffectHandler<TestEffect, TestAction>> = emptyList(),
+    actionSources: List<ActionSource<TestAction>> = emptyList()
 ) : Loop<TestState, TestAction, TestEffect>(
     TestState(""),
     TestReducer(),
-    actionSources,
-    effectHandlers
+    effectHandlers,
+    actionSources
 )
 
 

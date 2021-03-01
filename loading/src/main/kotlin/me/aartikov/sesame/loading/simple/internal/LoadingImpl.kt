@@ -27,12 +27,12 @@ internal class LoadingImpl<T : Any>(
     private val loop: LoadingLoop<T> = LoadingLoop(
         initialState = initialState.toInternalState(),
         reducer = LoadingReducer(),
-        actionSources = listOfNotNull(
-            loadingActionSource
-        ),
         effectHandlers = listOf(
             loadingEffectHandler,
             EventEffectHandler { event -> mutableEventFlow.tryEmit(event) }
+        ),
+        actionSources = listOfNotNull(
+            loadingActionSource
         )
     )
 
