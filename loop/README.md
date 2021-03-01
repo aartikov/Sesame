@@ -3,8 +3,8 @@
 Provides a simple MVI implementation.
 
 ## Core concepts of MVI
-The basic principle of any MVI implementation is how to manage a **state**. A state in MVI is immutable. The only way to change a state is to send an **action**. A new state is producer by **reducer** - a pure function with a signature `fun reduce(state: StateT, action: ActionT): StateT`.  
-But the most interesting part is how **side effects** are handled. Here implementations can vary. Just to remind you, side effects are operations other than state reducing: network calls, database queries, etc. Sesame Loop provides a consise way to handle side effects.
+The basic principles of any MVI implementation are common. A **state** in MVI is immutable. The only way to change a state is to send an **action**. A new state is producer by a **reducer** - a pure function that receives a previous state and an action.
+But the most interesting part is how **side effects** are handled. Implementations can vary. Just to remind you, side effects are additional operations: network calls, database queries, etc. Sesame Loop provides a consise way to handle side effects.
 
 ## How does Loop handle side effects?
 Loop extends the concept of reducer:
@@ -24,7 +24,7 @@ data class Next<StateT, EffectT>(
 )
 ```
 
-`Next` contains a new state (null means "no changes") and a list of side effects. A side effect does not executes operation by itself, it is just a description (data class) which operation has to be executed. So `reduce` is still a pure function.
+`Next` contains a new state (null means "no changes") and a list of side effects. A side effect does not execute operation by itself, it is just a description (data class) which operation has to be executed. So `reduce` is still a pure function.
 
 To execute side effects `EffectHandler` should be implemented:
 
@@ -38,7 +38,7 @@ An implementation can emit additional actions with `actionConsumer` callback. Fo
 
 ## How to use?
 
-1. Declare state, actions and effects.
+1. Declare a state, actions and effects.
 
 ```kotlin
 data class CounterState(
@@ -129,4 +129,4 @@ class CounterViewModel : ViewModel() {
 ```
 
 ## When to use Loop?
-The sample above shows that quite a lot of code has to be written to implement a simple counter with Sesame Loop. But don't rush to conclusion. Loop shines when a complex state management is required. It is much simpler to write, read and debug a non-trivial code such as [paged data loading](https://github.com/aartikov/Sesame/blob/readme/loading/src/main/kotlin/me/aartikov/sesame/loading/paged/internal/PagedLoadingLoop.kt) using Loop.
+The sample above shows that quite a lot of code is required to implement a simple counter with Sesame Loop. But don't rush to conclusion. Loop shines when a complex state management appears. It is much simpler to write, read and debug a non-trivial code such as [paged data loading](https://github.com/aartikov/Sesame/blob/readme/loading/src/main/kotlin/me/aartikov/sesame/loading/paged/internal/PagedLoadingLoop.kt) using Loop.

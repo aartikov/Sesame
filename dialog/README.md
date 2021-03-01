@@ -2,11 +2,11 @@
 
 Allows to control dialogs from View Models.
 
-## How it works?
+## How does it work?
 The component provides `DialogControl` class. This class stores a dialog state and allows to control it. Created in `ViewModel` an instance of `DialogControl` survives configuration changes. A View just displays a current state of `DialogControl` with a usual `AlertDialog`. There is no need to use `FragmentDialog` with this approach.
 
 
-## How to use
+## How to use?
 
 1. Use `dialogControl` function to create `DialogControl` in `ViewModel`. The first type parameter of this function is a type of data to display in a dialog, the second one is a type of result value. Both can be `Unit` if you don't need it.
 

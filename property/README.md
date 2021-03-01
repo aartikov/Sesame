@@ -14,7 +14,7 @@ Provides observable properties and one-time commands.
 
 *Property observer* - a class that observes properties and handles commands.
 
-## How to use
+## How to use?
 
 1. Implement `PropertyHost` interface in `ViewModel`:
 

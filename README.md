@@ -37,7 +37,7 @@ dependencies {
 ```
 
 ## Sample
-[The sample application](https://github.com/aartikov/Sesame/tree/develop/sample) consists of several screens. Each screen demonstraits certain Sesame feature.
+[The sample application](https://github.com/aartikov/Sesame/tree/develop/sample) consists of several screens. Each screen demonstrates certain Sesame feature.
 
 COUNTER - shows how to use properties and commands from [property](https://github.com/aartikov/Sesame/tree/readme/property).  
 PROFILE - loads ordinary data with [loading](https://github.com/aartikov/Sesame/tree/readme/loading).  

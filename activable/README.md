@@ -2,13 +2,13 @@
 
 Equips View Models with a very simple lifecycle.
 
-## Why View Model needs lifecycle?
-Despite that View Model should be abstracted away from the coresponding View (Activity or Fragment) it still needs to be aware of Android lifecycle. It is the common case when View Model subscribes to a Repository in order to update UI whenever something is changed in a database. But it is wasteful to keep a database subcription when a screen is placed to a backstack or the whole appilication is in background. It is better to subscribe and unsubscribe according to a lifecycle.
+## Why does View Model need lifecycle?
+Despite that View Model should be abstracted away from the corresponding View (Activity or Fragment) it still needs to be aware of Android lifecycle. It is the common case when View Model subscribes to a Repository in order to update UI whenever something is changed in a database. But it is wasteful to keep a database subcription when a screen is placed to a backstack or the whole application is in background. It is better to subscribe and unsubscribe according to a lifecycle.
 
-## How complex a lifecycle should be?
-Activity and Fragment lifecycles are quite complex. There are `onCreate`, `onStart`, `onResume`, `onPause`, `onStop` and `onDestroy` callbacks. Sesame  activable component is build on asumption that View Model doesn't need such a complex lifecycle.  
-First of all it doesn't need `onCreate` and `onDestroy`. Any initialization can be done in `init`-block instead of `onCreate`. `onDestroy` is required to clean up something. In View Models we typically cancel started coroutines and unsubscribe from flows in the clean-up phase. All of these are made automatically with help of `CoroutineScope`.  
-`onResume`-`onPause` and `onStart`-`onStop` are different callback pairs in Android. But View Model can be abstract enougth to ignore the difference. In other words View Model is only interested if a screen is active. The such simple lifecycle has just two methods: `onActive` and `onInactive`.
+## How complex should a lifecycle be?
+Activity and Fragment lifecycles are quite complex. There are `onCreate`, `onStart`, `onResume`, `onPause`, `onStop` and `onDestroy` callbacks. Sesame  activable component is build on assumption that View Model doesn't need such a complex lifecycle.  
+First of all it doesn't need `onCreate` and `onDestroy`. Any initialization can be done in `init`-block instead of `onCreate`. `onDestroy` is required to clean up something. In View Models we typically cancel started coroutines and unsubscribe from flows in the clean-up phase. All of these are made automatically with help of `viewModelScope`.  
+`onResume`-`onPause` and `onStart`-`onStop` are different callback pairs in Android. But View Model can be abstract enough to ignore the difference. In other words View Model is only interested if a screen is active. The such simple lifecycle has just two methods: `onActive` and `onInactive`.
 
 ## Make View Model activable
 1. Implement `Activable` interface in a base View Model class. [Kotlin delegation](https://kotlinlang.org/docs/delegation.html) is handy here.
