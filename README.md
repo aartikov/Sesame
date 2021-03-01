@@ -1,7 +1,7 @@
 # Sesame
 [![Release](https://jitpack.io/v/aartikov/Sesame.svg)](https://jitpack.io/#aartikov/Sesame) [![license](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
-Sesame is a set of architectural components for Android development. It is based on modern technologies such as coroutines and Flow. Sesame is easy to learn and simple to use. It is ideally suited for MVVM and MVI architecture.
+Sesame is a set of architecture components for Android development. It is based on modern technologies such as coroutines and Flow. Sesame is easy to learn and simple to use. It is ideally suited for MVVM and MVI architecture.
 
 ## Components
 [property](https://github.com/aartikov/Sesame/tree/readme/property) - provides observable properties and one-time commands.  
@@ -9,7 +9,7 @@ Sesame is a set of architectural components for Android development. It is based
 [navigation](https://github.com/aartikov/Sesame/tree/readme/navigation) - gives an universal way to navigate between screens.  
 [activable](https://github.com/aartikov/Sesame/tree/readme/activable) - equips View Models with a very simple lifecycle.  
 [loading](https://github.com/aartikov/Sesame/tree/readme/loading) - helps to load data (including paged one) and manage loading state.  
-[loop](https://github.com/aartikov/Sesame/tree/readme/loop) - provides an UDF (Unidirectional Data Flow) state manager.
+[loop](https://github.com/aartikov/Sesame/tree/readme/loop) - provides a simple MVI implementation.
 
 Sesame components are independent. Use only that you like.
 
@@ -46,7 +46,7 @@ MOVIES - loads paginated data with [loading](https://github.com/aartikov/Sesame/
 CLOCK - shows how to use [activable](https://github.com/aartikov/Sesame/tree/readme/activable).  
 The whole app - demonstrates [navigation](https://github.com/aartikov/Sesame/tree/readme/activable).  
 
-There is no sample for [loop](https://github.com/aartikov/Sesame/tree/readme/loop). You can examine [LoadingLoop](https://github.com/aartikov/Sesame/blob/readme/loading/src/main/kotlin/me/aartikov/sesame/loading/simple/internal/LoadingLoop.kt) and [PagedLoadingLoop](https://github.com/aartikov/Sesame/blob/readme/loading/src/main/kotlin/me/aartikov/sesame/loading/paged/internal/PagedLoadingLoop.kt) as good examples how to use it.
+There is no sample for [loop](https://github.com/aartikov/Sesame/tree/readme/loop). See [LoadingLoop](https://github.com/aartikov/Sesame/blob/readme/loading/src/main/kotlin/me/aartikov/sesame/loading/simple/internal/LoadingLoop.kt) and [PagedLoadingLoop](https://github.com/aartikov/Sesame/blob/readme/loading/src/main/kotlin/me/aartikov/sesame/loading/paged/internal/PagedLoadingLoop.kt) as good examples how to use it.
 
 ## Developed by
 Artur Artikov <a href="mailto:a.artikov@gmail.com">a.artikov@gmail.com</a>
