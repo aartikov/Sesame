@@ -17,7 +17,7 @@ class MoviesGateway @Inject constructor() {
 
     private var counter = 0
 
-    suspend fun getMovies(page: Int): List<Movie> = withContext(Dispatchers.IO) {
+    suspend fun loadMovies(page: Int): List<Movie> = withContext(Dispatchers.IO) {
         delay(1000)
         val success = counter % 4 != 0
         counter++
