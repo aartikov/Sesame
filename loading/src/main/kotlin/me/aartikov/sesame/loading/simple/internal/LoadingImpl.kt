@@ -13,14 +13,14 @@ import me.aartikov.sesame.loop.ActionSource
 import me.aartikov.sesame.loop.EffectHandler
 
 internal class LoadingImpl<T : Any>(
-    loadingEffectHandler: EffectHandler<Effect, Action<T>>,
+    loadingEffectHandler: EffectHandler<Effect<T>, Action<T>>,
     loadingActionSource: ActionSource<Action<T>>?,
     initialState: State<T>
 ) : Loading<T> {
 
     private val mutableStateFlow = MutableStateFlow(initialState)
 
-    private val mutableEventFlow = MutableSharedFlow<Event>(
+    private val mutableEventFlow = MutableSharedFlow<Event<T>>(
         extraBufferCapacity = 100, onBufferOverflow = BufferOverflow.DROP_OLDEST
     )
 
@@ -39,7 +39,7 @@ internal class LoadingImpl<T : Any>(
     override val stateFlow: StateFlow<State<T>>
         get() = mutableStateFlow
 
-    override val eventFlow: Flow<Event>
+    override val eventFlow: Flow<Event<T>>
         get() = mutableEventFlow
 
     override fun attach(scope: CoroutineScope): Job = scope.launch {

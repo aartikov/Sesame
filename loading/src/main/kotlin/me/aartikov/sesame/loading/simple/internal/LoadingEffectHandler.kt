@@ -8,11 +8,11 @@ import me.aartikov.sesame.loop.EffectHandler
 import java.util.concurrent.CancellationException
 
 internal class LoadingEffectHandler<T : Any>(private val loader: suspend (fresh: Boolean) -> T?) :
-    EffectHandler<Effect, Action<T>> {
+    EffectHandler<Effect<T>, Action<T>> {
 
     private var job: Job? = null
 
-    override suspend fun handleEffect(effect: Effect, actionConsumer: (Action<T>) -> Unit) {
+    override suspend fun handleEffect(effect: Effect<T>, actionConsumer: (Action<T>) -> Unit) {
         when (effect) {
             is Effect.Load -> load(effect.fresh, actionConsumer)
             is Effect.CancelLoading -> cancelLoading()

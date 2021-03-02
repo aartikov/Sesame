@@ -37,11 +37,17 @@ interface Loading<T : Any> {
     /**
      * Loading event.
      */
-    sealed class Event {
+    sealed class Event<out T> {
         /**
-         * An error occurred. [hasData] is true when there is previously loaded data. [hasData] is useful to not show an error dialog when a fullscreen error is already shown.
+         * An error occurred. [stateDuringLoading] a state that was during the failed loading.
          */
-        data class Error(val throwable: Throwable, val hasData: Boolean) : Event()
+        data class Error<T>(val throwable: Throwable, val stateDuringLoading: State<T>) : Event<T>() {
+
+            /**
+             * Is true when there is previously loaded data. It is useful to not show an error dialog when a fullscreen error is already shown.
+             */
+            val hasData get() = stateDuringLoading is State.Data
+        }
     }
 
     /**
@@ -52,7 +58,7 @@ interface Loading<T : Any> {
     /**
      * Flow of loading events.
      */
-    val eventFlow: Flow<Event>
+    val eventFlow: Flow<Event<T>>
 
     /**
      * Initializes a [Loading] object by providing a [CoroutineScope] to work in. Should be called once.
@@ -120,9 +126,9 @@ val Loading.State<*>.errorOrNull: Throwable? get() = (this as? Loading.State.Err
  */
 fun <T : Any> Loading<T>.handleErrors(
     scope: CoroutineScope,
-    handler: (Loading.Event.Error) -> Unit
+    handler: (Loading.Event.Error<T>) -> Unit
 ): Job {
-    return eventFlow.filterIsInstance<Loading.Event.Error>()
+    return eventFlow.filterIsInstance<Loading.Event.Error<T>>()
         .onEach {
             handler(it)
         }

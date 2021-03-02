@@ -23,17 +23,17 @@ internal sealed class Action<out T> {
     object EmptyDataObserved : Action<Nothing>()
 }
 
-internal sealed class Effect {
-    data class Load(val fresh: Boolean) : Effect()
-    object CancelLoading : Effect()
-    data class EmitEvent(val event: Event) : Effect()
+internal sealed class Effect<out T> {
+    data class Load(val fresh: Boolean) : Effect<Nothing>()
+    object CancelLoading : Effect<Nothing>()
+    data class EmitEvent<T>(val event: Event<T>) : Effect<T>()
 }
 
-internal typealias LoadingLoop<T> = Loop<State<T>, Action<T>, Effect>
+internal typealias LoadingLoop<T> = Loop<State<T>, Action<T>, Effect<T>>
 
-internal class LoadingReducer<T> : Reducer<State<T>, Action<T>, Effect> {
+internal class LoadingReducer<T> : Reducer<State<T>, Action<T>, Effect<T>> {
 
-    override fun reduce(state: State<T>, action: Action<T>): Next<State<T>, Effect> = when (action) {
+    override fun reduce(state: State<T>, action: Action<T>): Next<State<T>, Effect<T>> = when (action) {
 
         is Action.Load -> {
             if (action.reset) {
@@ -101,11 +101,11 @@ internal class LoadingReducer<T> : Reducer<State<T>, Action<T>, Effect> {
             when (state) {
                 is State.Loading -> next(
                     State.Error(action.throwable),
-                    Effect.EmitEvent(Event.Error(action.throwable, hasData = false))
+                    Effect.EmitEvent(Event.Error(action.throwable, state.toPublicState()))
                 )
                 is State.Refresh -> next(
                     State.Data(state.data),
-                    Effect.EmitEvent(Event.Error(action.throwable, hasData = true))
+                    Effect.EmitEvent(Event.Error(action.throwable, state.toPublicState()))
                 )
                 else -> nothing()
             }

@@ -102,7 +102,7 @@ class OrdinaryLoadingTest {
     fun `shows error when loader failed`() = runBlockingTest {
         val loader = TestLoader(Result.Error(LoadingFailedException()))
         val loading = OrdinaryLoading(loader)
-        val events = mutableListOf<Event>()
+        val events = mutableListOf<Event<String>>()
 
         val eventsJob = launch {
             loading.eventFlow.toList(events)
@@ -112,7 +112,7 @@ class OrdinaryLoadingTest {
         delay(TestLoader.LOAD_DELAY * 2)
 
         assertEquals(State.Error(LoadingFailedException()), loading.state)
-        assertEquals(listOf(Event.Error(LoadingFailedException(), hasData = false)), events)
+        assertEquals(listOf(Event.Error(LoadingFailedException(), State.Loading)), events)
         job.cancel()
         eventsJob.cancel()
     }
@@ -146,7 +146,7 @@ class OrdinaryLoadingTest {
     fun `leaves previous data and shows error when refresh failed`() = runBlockingTest {
         val loader = TestLoader(Result.Error(LoadingFailedException()))
         val loading = OrdinaryLoading(loader, initialState = State.Data("Previous value"))
-        val events = mutableListOf<Event>()
+        val events = mutableListOf<Event<String>>()
 
         val job = loading.attach(this)
         val eventsJob = launch {
@@ -156,7 +156,8 @@ class OrdinaryLoadingTest {
         delay(TestLoader.LOAD_DELAY * 2)
 
         assertEquals(State.Data("Previous value"), loading.state)
-        assertEquals(listOf(Event.Error(LoadingFailedException(), hasData = true)), events)
+        val expectedStateDuringLoading = State.Data("Previous value", refreshing = true)
+        assertEquals(listOf(Event.Error(LoadingFailedException(), expectedStateDuringLoading)), events)
         job.cancel()
         eventsJob.cancel()
     }
