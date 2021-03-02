@@ -2,7 +2,7 @@ package me.aartikov.sesame.loading.paged.internal
 
 import me.aartikov.sesame.loading.paged.PagedLoading
 
-internal fun <T : Any> State<T>.toPublicState(): PagedLoading.State<T> = when (this) {
+internal fun <T> State<T>.toPublicState(): PagedLoading.State<T> = when (this) {
     State.Empty -> PagedLoading.State.Empty
     State.Loading -> PagedLoading.State.Loading
     is State.Error -> PagedLoading.State.Error(this.throwable)
@@ -12,7 +12,7 @@ internal fun <T : Any> State<T>.toPublicState(): PagedLoading.State<T> = when (t
     is State.FullData -> PagedLoading.State.Data(pageCount, this.data, PagedLoading.DataStatus.FULL_DATA)
 }
 
-internal fun <T : Any> PagedLoading.State<T>.toInternalState() = when (this) {
+internal fun <T> PagedLoading.State<T>.toInternalState() = when (this) {
     PagedLoading.State.Empty -> State.Empty
     PagedLoading.State.Loading -> State.Loading
     is PagedLoading.State.Error -> State.Error(this.throwable)

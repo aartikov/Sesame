@@ -18,7 +18,7 @@ internal class PagedLoadingImpl<T : Any>(
 
     private val mutableStateFlow = MutableStateFlow(initialState)
 
-    private val mutableEventFlow = MutableSharedFlow<Event>(
+    private val mutableEventFlow = MutableSharedFlow<Event<T>>(
         extraBufferCapacity = 100, onBufferOverflow = BufferOverflow.DROP_OLDEST
     )
 
@@ -34,7 +34,7 @@ internal class PagedLoadingImpl<T : Any>(
     override val stateFlow: StateFlow<State<T>>
         get() = mutableStateFlow
 
-    override val eventFlow: Flow<Event>
+    override val eventFlow: Flow<Event<T>>
         get() = mutableEventFlow
 
     override fun attach(scope: CoroutineScope): Job = scope.launch {

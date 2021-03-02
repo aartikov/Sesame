@@ -28,7 +28,7 @@ internal sealed class Effect<out T> {
     data class LoadFirstPage(val fresh: Boolean) : Effect<Nothing>()
     data class LoadNextPage<T>(val pagingInfo: PagingInfo<T>) : Effect<T>()
     object CancelLoading: Effect<Nothing>()
-    data class EmitEvent(val event: Event) : Effect<Nothing>()
+    data class EmitEvent<T>(val event: Event<T>) : Effect<T>()
 }
 
 internal typealias PagedLoadingLoop<T> = Loop<State<T>, Action<T>, Effect<T>>
@@ -132,15 +132,15 @@ internal class PagedLoadingReducer<T> : Reducer<State<T>, Action<T>, Effect<T>> 
             when (state) {
                 is State.Loading -> next(
                     State.Error(action.throwable),
-                    Effect.EmitEvent(Event.Error(action.throwable, hasData = false))
+                    Effect.EmitEvent(Event.Error(action.throwable, state.toPublicState()))
                 )
                 is State.Refresh -> next(
                     State.Data(state.pageCount, state.data),
-                    Effect.EmitEvent(Event.Error(action.throwable, hasData = true))
+                    Effect.EmitEvent(Event.Error(action.throwable, state.toPublicState()))
                 )
                 is State.LoadingMore -> next(
                     State.Data(state.pageCount, state.data),
-                    Effect.EmitEvent(Event.Error(action.throwable, hasData = true))
+                    Effect.EmitEvent(Event.Error(action.throwable, state.toPublicState()))
                 )
                 else -> nothing()
             }

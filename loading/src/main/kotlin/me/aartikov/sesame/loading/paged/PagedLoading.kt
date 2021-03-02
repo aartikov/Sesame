@@ -91,11 +91,17 @@ interface PagedLoading<T : Any> {
     /**
      * Loading event.
      */
-    sealed class Event {
+    sealed class Event<out T> {
         /**
-         * An error occurred. [hasData] is true when there is previously loaded data. [hasData] is useful to not show an error dialog when a fullscreen error is already shown.
+         * An error occurred. [stateDuringLoading] a state that was during the failed loading.
          */
-        data class Error(val throwable: Throwable, val hasData: Boolean) : Event()
+        data class Error<T>(val throwable: Throwable, val stateDuringLoading: State<T>) : Event<T>() {
+
+            /**
+             * Is true when there is previously loaded data. It is useful to not show an error dialog when a fullscreen error is already shown.
+             */
+            val hasData get() = stateDuringLoading is State.Data
+        }
     }
 
     /**
@@ -106,7 +112,7 @@ interface PagedLoading<T : Any> {
     /**
      * Flow of loading events.
      */
-    val eventFlow: Flow<Event>
+    val eventFlow: Flow<Event<T>>
 
     /**
      * Initializes a [PagedLoading] object by providing a [CoroutineScope] to work in. Should be called once.
@@ -181,9 +187,9 @@ val PagedLoading.State<*>.errorOrNull: Throwable? get() = (this as? PagedLoading
  */
 fun <T : Any> PagedLoading<T>.handleErrors(
     scope: CoroutineScope,
-    handler: (PagedLoading.Event.Error) -> Unit
+    handler: (PagedLoading.Event.Error<T>) -> Unit
 ): Job {
-    return eventFlow.filterIsInstance<PagedLoading.Event.Error>()
+    return eventFlow.filterIsInstance<PagedLoading.Event.Error<T>>()
         .onEach {
             handler(it)
         }
