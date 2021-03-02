@@ -11,17 +11,17 @@ Organizing navigation in Android applications is not a straightforward task. The
 2. **Fragment transactions can cause crashes.**
    There are limitations when a fragment transaction can be executed.
    Calling `commit` after `onSaveInstanceState` causes `IllegalStateException: "Can not perform this action after onSaveInstanceState"`. Committing a transaction when the other one is not finished yet causes another exception `IllegalStateException: "FragmentManager is already executing transactions"`.
-   It is not simple to control that transactions are executed at a correct time because often navigation is required as completition of some asynchronous operation.
+   It is not simple to control that transactions are executed at a correct time because often navigation is required in consequence of some asynchronous operation.
 
 3. **Nested navigation is hard to implement.**
-   Navigation can be nested. Some navigation calls affect the inner screen container, other calls - the outer one. View Models ideally should not be aware of this logic.
+   Navigation can be nested. Navigation calls change screens on different hierarchy levels. View Models ideally should not be aware of this logic.
    
 ## How does it work?
-Instead of calling navigation methods directly Sesame provides navigation messages - a marker interface `NavigationMessage`. View Model sends navigation messages by enqueuing them to `NavigationMessageQueue`. On the Activity/Fragment side navigation messages are passed to `NavigationMessageDispatcher`. The dispatcher handles messages, but it doesn't do it by itself. It delegates this task to `NavigationMessageHandler`s. A `NavigationMessageHandler` is responsible for navigation execution (starting activities or commiting fragment transactions). There could be several navigation message handlers. In that case they work like a chain - if some handler doesn't handle a message then this message is passed further.
+Instead of calling navigation methods directly Sesame provides navigation messages - a marker interface `NavigationMessage`. View Model sends navigation messages by enqueuing them to `NavigationMessageQueue`. On the Activity/Fragment side navigation messages are passed to `NavigationMessageDispatcher`. The dispatcher handles messages, but it doesn't do it by itself. It delegates this task to `NavigationMessageHandler`s. A `NavigationMessageHandler` is responsible for navigation implementation (starting activities or committing fragment transactions). There could be several navigation message handlers. In that case they work like a chain - if some handler doesn't handle a message then this message is passed further.
 
 ## How does it solve the problems?
 
-1. `NavigationMessage` and `NavigationMessageQueue` allow to call navigation from View Models.
+1. `NavigationMessage`s and `NavigationMessageQueue` allow to call navigation from View Models.
 
 2. It is guaranteed that fragment transactions are commited when it is legal. `NavigationMessageQueue` passes messages only when the corresponding Activity/Fragment is in resumed state. `NavigationMessageDispatcher` has an internal queue to handle messages sequentially.
 
@@ -51,7 +51,7 @@ class MenuViewModel : ViewModel() {
 }
 ```
 
-3. Setup `NavigationMessageDispatcher` in activities and fragments. There should be a single instance of this class per Activity.
+3. Setup `NavigationMessageDispatcher` in an activity and fragments. This has to be the same instance.
 ```kotlin
 class MainActivity : AppCompatActivity() {
 
@@ -82,7 +82,7 @@ class MenuFragment: Fragment() {
 }
 ```
 
-4. Implement `NavigationMessageHandler`. Return value of `handleNavigationMessage` indicates if a message was handled. If there is only one `NavigationMessageHandler` all messages should be handled there. The implementation uses a [wrapper](https://github.com/aartikov/Sesame/blob/readme/sample/src/main/kotlin/me/aartikov/sesamesample/FragmentNavigator.kt) on top of FragmentManager to execute fragment transactions but `NavController` from Android Architecture Components can be used as well.
+4. Implement `NavigationMessageHandler`. Returned `true` from `handleNavigationMessage` indicates that a message was handled. If there is only one `NavigationMessageHandler` all the messages should be handled there. The example uses [FragmentNavigator](https://github.com/aartikov/Sesame/blob/master/sample/src/main/kotlin/me/aartikov/sesamesample/FragmentNavigator.kt) - a wrapper on top of FragmentManager, but `NavController` from Android Architecture Components can be used as well.
 ```kotlin
 class MainActivity : AppCompatActivity(), NavigationMessageHandler {
     

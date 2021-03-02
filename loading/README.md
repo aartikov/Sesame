@@ -4,7 +4,7 @@ Helps to manage state for data loading.
 ## How to use?
 
 ### Ordinary loading
-For loading without pagination a state looks like that:
+For ordinary loading (without pagination) a state looks like that:
 
 ```kotlin
 sealed class State<out T> {
@@ -15,7 +15,7 @@ sealed class State<out T> {
 }
 ```
 
-To create `OrdinaryLoading` specify a suspend function that loads data.  Use loading in View Model:
+`OrdinaryLoading` manages loading state. To create it specify a suspend function that loads data. Use it in View Model:
 
 ```kotlin
 interface ProfileRepository {
@@ -43,7 +43,7 @@ class ProfileViewModel(private val profileRepository: ProfileRepository) : ViewM
 ```
 
 ### Flow loading
-A state for `FlowLoading` is the same as for `OrdinaryLoading`. But it allows to add a cache (an observable data source):
+A state for `FlowLoading` is the same as for `OrdinaryLoading`. But `FlowLoading` allows to add a cache (an observable data source):
 
 ```
 interface ProfileRepository {
@@ -76,21 +76,21 @@ class ProfileViewModel(private val profileRepository: ProfileRepository) : ViewM
 ```
 
 ### Paged loading
-Paged loading state is more complex:
+A paged loading state is more complex:
 ```kotlin
-    sealed class State<out T> {
-        object Empty : State<Nothing>()
-        object Loading : State<Nothing>()
-        data class Error(val throwable: Throwable) : State<Nothing>()
-        data class Data<T>(val pageCount: Int, val data: List<T>, val status: DataStatus) : State<T>()
-    }
+sealed class State<out T> {
+    object Empty : State<Nothing>()
+    object Loading : State<Nothing>()
+    data class Error(val throwable: Throwable) : State<Nothing>()
+    data class Data<T>(val pageCount: Int, val data: List<T>, val status: DataStatus) : State<T>()
+}
 
-    enum class DataStatus {
-        NORMAL,
-        REFRESHING,
-        LOADING_MORE,
-        FULL_DATA
-    }
+enum class DataStatus {
+    NORMAL,
+    REFRESHING,
+    LOADING_MORE,
+    FULL_DATA
+}
 ```
 
 To create `PagedLoading` specify how to load pages. Use it in View Model:
@@ -104,7 +104,7 @@ interface MoviesRepository {
 class MoviesViewModel(private val moviesRepository: MoviesRepository) : ViewModel() {
 
     private val moviesLoading = PagedLoading<Movie>(
-        { moviesRepository.loadMovies(it.loadedPageCount) }
+        loadPage = { moviesRepository.loadMovies(it.loadedPageCount) }
     )
 
     val moviesState = moviesLoading.stateFlow
@@ -125,7 +125,7 @@ class MoviesViewModel(private val moviesRepository: MoviesRepository) : ViewMode
 ```
 
 ### Error handling
-Loading shows a fullscreen error as `State.Error` if there is no previously loaded data. If data is already loaded and refreshing failed than state is not changed to `State.Error`, so some error dialog is required. To do it use `handleErrors` method:
+Loading shows an error as `State.Error` if there is no previously loaded data. If refreshing fails when some data has already been loaded an error dialog should be shown on top. To do it use `handleErrors` method:
 
 ```kotlin
     init {

@@ -1,15 +1,15 @@
 # Sesame
 [![Release](https://jitpack.io/v/aartikov/Sesame.svg)](https://jitpack.io/#aartikov/Sesame) [![license](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
-Sesame is a set of architecture components for Android development. It is based on modern technologies such as coroutines and Flow. Sesame is easy to learn and simple to use. It is ideally suited for MVVM and MVI architecture.
+Sesame is a set of architecture components for Android development. It is based on modern technologies including coroutines and Flow. Sesame is simple to learn and easy to use. It is ideally suited for MVVM and MVI architectures.
 
 ## Components
-[property](https://github.com/aartikov/Sesame/tree/readme/property) - provides observable properties and one-time commands.  
-[dialog](https://github.com/aartikov/Sesame/tree/readme/dialog) - allows to control dialogs from View Models.  
-[navigation](https://github.com/aartikov/Sesame/tree/readme/navigation) - gives an universal way to navigate between screens.  
-[activable](https://github.com/aartikov/Sesame/tree/readme/activable) - equips View Models with a very simple lifecycle.  
-[loading](https://github.com/aartikov/Sesame/tree/readme/loading) - helps to manage state for data loading (including paged one).  
-[loop](https://github.com/aartikov/Sesame/tree/readme/loop) - provides a simple MVI implementation.
+[property](https://github.com/aartikov/Sesame/tree/master/property) - provides observable properties and one-time commands.  
+[dialog](https://github.com/aartikov/Sesame/tree/master/dialog) - allows to control dialogs from View Models.  
+[navigation](https://github.com/aartikov/Sesame/tree/master/navigation) - gives an universal way to navigate between screens.  
+[activable](https://github.com/aartikov/Sesame/tree/master/activable) - equips View Models with a very simple lifecycle.  
+[loading](https://github.com/aartikov/Sesame/tree/master/loading) - helps to manage state for data loading (including paged one).  
+[loop](https://github.com/aartikov/Sesame/tree/master/loop) - provides a simple MVI implementation.
 
 Sesame components are independent. Use only that you like.
 
@@ -37,18 +37,18 @@ dependencies {
 ```
 
 ## Sample
-[The sample application](https://github.com/aartikov/Sesame/tree/develop/sample) consists of several screens. Each screen demonstrates certain Sesame feature.
+[The sample application](https://github.com/aartikov/Sesame/tree/master/sample) consists of several screens. Each screen demonstrates certain Sesame feature.
 
-COUNTER - shows how to use properties and commands from [property](https://github.com/aartikov/Sesame/tree/readme/property).  
-PROFILE - loads ordinary data with [loading](https://github.com/aartikov/Sesame/tree/readme/loading).  
-DIALOGS - shows how to use [dialog](https://github.com/aartikov/Sesame/tree/readme/dialog).  
-MOVIES - loads paginated data with [loading](https://github.com/aartikov/Sesame/tree/readme/dialog).  
-CLOCK - shows how to use [activable](https://github.com/aartikov/Sesame/tree/readme/activable).  
-The whole app - demonstrates [navigation](https://github.com/aartikov/Sesame/tree/readme/activable).  
+COUNTER - shows how to use properties and commands from [property](https://github.com/aartikov/Sesame/tree/master/property).  
+PROFILE - loads ordinary data with [loading](https://github.com/aartikov/Sesame/tree/master/loading).  
+DIALOGS - shows how to use [dialog](https://github.com/aartikov/Sesame/tree/master/dialog).  
+MOVIES - loads paginated data with [loading](https://github.com/aartikov/Sesame/tree/master/loading).  
+CLOCK - shows how to use [activable](https://github.com/aartikov/Sesame/tree/master/activable).  
+The whole app - demonstrates [navigation](https://github.com/aartikov/Sesame/tree/master/navigation).  
 
-There is no sample for [loop](https://github.com/aartikov/Sesame/tree/readme/loop). See [LoadingLoop](https://github.com/aartikov/Sesame/blob/readme/loading/src/main/kotlin/me/aartikov/sesame/loading/simple/internal/LoadingLoop.kt) and [PagedLoadingLoop](https://github.com/aartikov/Sesame/blob/readme/loading/src/main/kotlin/me/aartikov/sesame/loading/paged/internal/PagedLoadingLoop.kt) as good examples how to use it.
+There is no sample for [loop](https://github.com/aartikov/Sesame/tree/master/loop). See [LoadingLoop](https://github.com/aartikov/Sesame/blob/master/loading/src/main/kotlin/me/aartikov/sesame/loading/simple/internal/LoadingLoop.kt) and [PagedLoadingLoop](https://github.com/aartikov/Sesame/blob/master/loading/src/main/kotlin/me/aartikov/sesame/loading/paged/internal/PagedLoadingLoop.kt) as good examples how to use it.
 
-## Developed by
+## Contact the author
 Artur Artikov <a href="mailto:a.artikov@gmail.com">a.artikov@gmail.com</a>
 
 ## License
