@@ -8,7 +8,7 @@ Sesame is a set of architecture components for Android development. It is based 
 [dialog](https://github.com/aartikov/Sesame/tree/readme/dialog) - allows to control dialogs from View Models.  
 [navigation](https://github.com/aartikov/Sesame/tree/readme/navigation) - gives an universal way to navigate between screens.  
 [activable](https://github.com/aartikov/Sesame/tree/readme/activable) - equips View Models with a very simple lifecycle.  
-[loading](https://github.com/aartikov/Sesame/tree/readme/loading) - helps to load data (including paged one) and manage loading state.  
+[loading](https://github.com/aartikov/Sesame/tree/readme/loading) - helps to manage state for data loading (including paged one).  
 [loop](https://github.com/aartikov/Sesame/tree/readme/loop) - provides a simple MVI implementation.
 
 Sesame components are independent. Use only that you like.
