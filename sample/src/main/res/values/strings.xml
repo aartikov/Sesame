@@ -1,0 +1,27 @@
+<resources>
+    <string name="app_name">Sesame sample</string>
+
+    <!-- Menu -->
+    <string name="counter_button">Counter</string>
+    <string name="profile_button">Profile</string>
+    <string name="dialogs_button">Dialogs</string>
+    <string name="movies_button">Movies</string>
+    <string name="clock_button">Clock</string>
+
+    <!-- Profile -->
+    <string name="retry_button">Retry</string>
+
+    <!-- Dialogs -->
+    <string name="ok_button">OK</string>
+    <string name="cancel_button">Cancel</string>
+    <string name="show_dialog_button_text">Show Dialog</string>
+    <string name="show_for_result_button_text">Show For Result</string>
+    <string name="dialog_title">Dialog</string>
+    <string name="dialog_for_result_title">Dialog for result</string>
+
+    <!-- Movies -->
+    <string name="empty_view_text">No items to display</string>
+
+    <!-- Clock -->
+    <string name="clock_description">Put the app to background and check logs. The clock doesn\'t tick when it is inactive.</string>
+</resources>

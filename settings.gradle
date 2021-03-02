@@ -1,3 +1,8 @@
-include ':lib'
-include ':app'
-rootProject.name = "Android Architecture"
+rootProject.name = "Sesame"
+include ":activable"
+include ":dialog"
+include ":loading"
+include ":loop"
+include ":navigation"
+include ":property"
+include ":sample"

@@ -1,0 +1,65 @@
+apply plugin: "com.android.application"
+apply plugin: "kotlin-android"
+apply plugin: "kotlin-kapt"
+apply plugin: "dagger.hilt.android.plugin"
+
+android {
+    compileSdkVersion 30
+    buildToolsVersion "30.0.3"
+
+    defaultConfig {
+        applicationId "me.aartikov.sesamesample"
+        minSdkVersion 21
+        targetSdkVersion 30
+        versionCode 1
+        versionName "1.0"
+    }
+
+    compileOptions {
+        coreLibraryDesugaringEnabled true
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions { jvmTarget = "1.8" }
+
+    buildFeatures {
+        viewBinding = true
+    }
+
+    sourceSets {
+        main.java.srcDirs += "src/main/kotlin"
+    }
+}
+
+dependencies {
+    coreLibraryDesugaring desugaring
+
+    implementation project(":activable")
+    implementation project(":dialog")
+    implementation project(":loading")
+    implementation project(":navigation")
+    implementation project(":property")
+
+    implementation androidx.coreKtx
+    implementation androidx.appCompat
+    implementation androidx.fragment
+    implementation androidx.constraintLayout
+    implementation androidx.swipeRefresh
+    implementation androidx.cardView
+
+    implementation material
+
+    implementation groupie.core
+    implementation groupie.androidExtensions
+
+    implementation daggerHilt.coreAndroid
+    kapt daggerHilt.androidCompiler
+
+    implementation coroutines.core
+    implementation coroutines.android
+    implementation dateTime
+
+    implementation glide
+    implementation viewBindingDelegates
+}
