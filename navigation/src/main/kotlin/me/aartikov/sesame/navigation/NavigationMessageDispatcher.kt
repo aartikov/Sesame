@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.receiveAsFlow
 
 /**
  * Coordinates handling of [navigation messages][NavigationMessage].
- * There should be single instance of this class per Activity.
+ * There should be a single instance of this class per Activity.
  */
 class NavigationMessageDispatcher(
     private val nodeWalker: NodeWalker = DefaultNodeWalker()

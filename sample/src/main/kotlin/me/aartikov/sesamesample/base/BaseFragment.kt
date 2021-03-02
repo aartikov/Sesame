@@ -38,4 +38,8 @@ abstract class BaseFragment<VM : BaseViewModel>(
             Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
         }
     }
+
+    fun onBackPressed() {
+        vm.onBackPressed()
+    }
 }

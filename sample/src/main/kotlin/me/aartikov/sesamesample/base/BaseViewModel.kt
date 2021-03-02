@@ -9,6 +9,7 @@ import me.aartikov.sesame.navigation.NavigationMessage
 import me.aartikov.sesame.navigation.NavigationMessageQueue
 import me.aartikov.sesame.property.PropertyHost
 import me.aartikov.sesame.property.command
+import me.aartikov.sesamesample.Back
 
 abstract class BaseViewModel : ViewModel(), PropertyHost, Activable by Activable() {
 
@@ -23,6 +24,10 @@ abstract class BaseViewModel : ViewModel(), PropertyHost, Activable by Activable
 
     protected fun showError(e: Throwable) {
         showError(e.message ?: "Error")
+    }
+
+    open fun onBackPressed() {
+        navigate(Back)
     }
 
     protected fun <T> Flow<T>.toActivableFlow(): Flow<T> {

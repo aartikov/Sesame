@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 /**
- * TEA-like state manager. Stores current state. Receives actions from [dispatch] method or from external [actionSources].
+ * A state manager. Stores current state. Receives actions from [dispatch] method or from external [actionSources].
  * Sends actions to [Reducer]. [Reducer] generates [Next]-object (new state + side effects). Side effects are handled by [effectHandlers].
  *
  * [StateT] - type of state that is stored in a state manager. State must be immutable
