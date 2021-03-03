@@ -42,7 +42,7 @@ dependencies {
 COUNTER - shows how to use properties and commands from [property](https://github.com/aartikov/Sesame/tree/master/property).  
 PROFILE - loads ordinary data with [loading](https://github.com/aartikov/Sesame/tree/master/loading).  
 DIALOGS - shows how to use [dialog](https://github.com/aartikov/Sesame/tree/master/dialog).  
-MOVIES - loads paginated data with [loading](https://github.com/aartikov/Sesame/tree/master/loading).  
+MOVIES - loads paged data with [loading](https://github.com/aartikov/Sesame/tree/master/loading).  
 CLOCK - shows how to use [activable](https://github.com/aartikov/Sesame/tree/master/activable).  
 The whole app - demonstrates [navigation](https://github.com/aartikov/Sesame/tree/master/navigation).  
 
