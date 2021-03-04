@@ -35,11 +35,11 @@ android {
 dependencies {
     coreLibraryDesugaring desugaring
 
-    implementation project(":activable")
-    implementation project(":dialog")
-    implementation project(":loading")
-    implementation project(":navigation")
-    implementation project(":property")
+    implementation project(":sesame-activable")
+    implementation project(":sesame-dialog")
+    implementation project(":sesame-loading")
+    implementation project(":sesame-navigation")
+    implementation project(":sesame-property")
 
     implementation androidx.coreKtx
     implementation androidx.appCompat

@@ -3,9 +3,6 @@ plugins {
     id "kotlin-android"
 }
 
-ext {
-    PUBLISH_ARTIFACT_ID = "sesame-activable"
-}
 apply from: "${rootDir}/publish.gradle"
 
 android {
@@ -23,8 +20,8 @@ android {
 }
 
 dependencies {
-    implementation coroutines.core
     implementation androidx.lifecycle
+    implementation coroutines.core
 
     testImplementation tests.junit
     testImplementation tests.coroutinesTest

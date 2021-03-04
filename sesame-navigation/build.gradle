@@ -3,9 +3,6 @@ plugins {
     id "kotlin-android"
 }
 
-ext {
-    PUBLISH_ARTIFACT_ID = "sesame-dialog"
-}
 apply from: "${rootDir}/publish.gradle"
 
 android {
@@ -24,10 +21,12 @@ android {
 
 dependencies {
     implementation androidx.lifecycle
+    implementation androidx.fragment
     implementation coroutines.core
 
     testImplementation tests.junit
     testImplementation tests.mockitoCore
+    testImplementation tests.mockitoInline
     testImplementation tests.mockitoKotlin
     testImplementation tests.coroutinesTest
 }

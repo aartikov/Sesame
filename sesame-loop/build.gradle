@@ -3,9 +3,6 @@ plugins {
     id "kotlin-android"
 }
 
-ext {
-    PUBLISH_ARTIFACT_ID = "sesame-loading"
-}
 apply from: "${rootDir}/publish.gradle"
 
 android {
@@ -23,7 +20,6 @@ android {
 }
 
 dependencies {
-    implementation project(":loop")
     implementation coroutines.core
 
     testImplementation tests.junit
