@@ -14,25 +14,14 @@ Sesame is a set of architecture components for Android development. It is based 
 Sesame components are independent. Use only that you like.
 
 ## Gradle Setup
-Add jitpack.io repository in project level build.gradle:
-
-```gradle
-repositories {
-    ...
-    maven { url 'https://jitpack.io' }
-}
-```
-
-Add the components you need in module level build.gradle:
-
 ```gradle
 dependencies {
-    implementation 'com.github.aartikov.Sesame:property:1.0.0-alpha1'
-    implementation 'com.github.aartikov.Sesame:dialog:1.0.0-alpha1'
-    implementation 'com.github.aartikov.Sesame:navigation:1.0.0-alpha1'
-    implementation 'com.github.aartikov.Sesame:activable:1.0.0-alpha1'
-    implementation 'com.github.aartikov.Sesame:loading:1.0.0-alpha1'
-    implementation 'com.github.aartikov.Sesame:loop:1.0.0-alpha1'
+    implementation 'com.github.aartikov.sesame-property:1.0.0-alpha1'
+    implementation 'com.github.aartikov.sesame-dialog:1.0.0-alpha1'
+    implementation 'com.github.aartikov.sesame-navigation:1.0.0-alpha1'
+    implementation 'com.github.aartikov.sesame-activable:1.0.0-alpha1'
+    implementation 'com.github.aartikov.sesame-loading:1.0.0-alpha1'
+    implementation 'com.github.aartikov.sesame-loop:1.0.0-alpha1'
 }
 ```
 

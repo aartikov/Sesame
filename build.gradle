@@ -2,11 +2,10 @@ apply from: "dependencies.gradle"
 apply from: "androidLibraryConfig.gradle"
 
 buildscript {
-    ext.kotlin_version = "1.4.21"
+    ext.kotlin_version = "1.4.31"
     repositories {
         google()
         jcenter()
-        mavenCentral()
     }
     dependencies {
         classpath "com.android.tools.build:gradle:4.1.2"

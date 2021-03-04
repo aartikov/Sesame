@@ -1,9 +1,12 @@
 plugins {
     id "com.android.library"
     id "kotlin-android"
-    id "maven"
 }
-group = libraryConfig.group
+
+ext {
+    PUBLISH_ARTIFACT_ID = "sesame-navigation"
+}
+apply from: "${rootDir}/publish.gradle"
 
 android {
     compileSdkVersion libraryConfig.compileSdkVersion
@@ -11,9 +14,6 @@ android {
 
     defaultConfig {
         minSdkVersion libraryConfig.minSdkVersion
-        targetSdkVersion libraryConfig.targetSdkVersion
-        versionCode libraryConfig.versionCode
-        versionName libraryConfig.versionName
     }
 
     sourceSets {
@@ -32,13 +32,4 @@ dependencies {
     testImplementation tests.mockitoInline
     testImplementation tests.mockitoKotlin
     testImplementation tests.coroutinesTest
-}
-
-task sourcesJar(type: Jar) {
-    from android.sourceSets.main.java.srcDirs
-    archiveClassifier.set("sources")
-}
-
-artifacts {
-    archives sourcesJar
 }
