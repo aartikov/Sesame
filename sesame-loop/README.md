@@ -128,4 +128,4 @@ class CounterViewModel : ViewModel() {
 ```
 
 ## When to use Loop?
-The sample above shows that quite a lot of code is required to implement a simple counter with Sesame Loop. But don't rush to conclusion. Loop shines when a complex state management appears. It is much simpler to write, read and debug a non-trivial code such as [paged data loading](https://github.com/aartikov/Sesame/blob/master/loading/src/main/kotlin/me/aartikov/sesame/loading/paged/internal/PagedLoadingLoop.kt) using Loop.
+The sample above shows that quite a lot of code is required to implement a simple counter with Sesame Loop. But don't rush to conclusion. Loop shines when a complex state management appears. It is much simpler to write, read and debug a non-trivial code such as [paged data loading](https://github.com/aartikov/Sesame/blob/master/sesame-loading/src/main/kotlin/me/aartikov/sesame/loading/paged/internal/PagedLoadingLoop.kt) using Loop.

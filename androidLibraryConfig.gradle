@@ -1,11 +1,7 @@
 ext {
     libraryConfig = [
-            minSdkVersion: 21,
+            minSdkVersion    : 21,
             compileSdkVersion: 30,
-            targetSdkVersion: 30,
-            versionCode: 1,
-            versionName: "1.0",
-            buildToolsVersion: "30.0.3",
-            group: "com.github.aartikov",
+            buildToolsVersion: "30.0.3"
     ]
 }
