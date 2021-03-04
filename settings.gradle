@@ -1,8 +1,8 @@
 rootProject.name = "Sesame"
-include ":activable"
-include ":dialog"
-include ":loading"
-include ":loop"
-include ":navigation"
-include ":property"
+include ':sesame-activable'
+include ':sesame-dialog'
+include ':sesame-loading'
+include ':sesame-loop'
+include ':sesame-navigation'
+include ':sesame-property'
 include ":sample"
