@@ -20,7 +20,7 @@ class DialogShowingTest {
     fun `shows dialog when lifecycle is started and show is called`() {
         val dialogObserver = TestDialogObserver()
         val mockedDialog = mock<Dialog>()
-        val dialogControl = dialogControl<Unit, Unit>()
+        val dialogControl = DialogControl<Unit, Unit>()
         with(dialogObserver) { dialogControl bind { _, _ -> mockedDialog } }
 
         dialogObserver.dialogObserverLifecycleOwner.moveToState(Lifecycle.State.STARTED)
@@ -34,7 +34,7 @@ class DialogShowingTest {
     fun `doesn't show dialog when lifecycle is stopped and show is called`() {
         val dialogObserver = TestDialogObserver()
         val mockedDialog = mock<Dialog>()
-        val dialogControl = dialogControl<Unit, Unit>()
+        val dialogControl = DialogControl<Unit, Unit>()
         with(dialogObserver) { dialogControl bind { _, _ -> mockedDialog } }
 
         dialogObserver.dialogObserverLifecycleOwner.moveToState(Lifecycle.State.CREATED)
@@ -47,7 +47,7 @@ class DialogShowingTest {
     fun `shows only last dialog when show is called several times and then lifecycle is started`() {
         val dialogObserver = TestDialogObserver()
         val mockedDialog = mock<Dialog>()
-        val dialogControl = dialogControl<Int, Unit>()
+        val dialogControl = DialogControl<Int, Unit>()
         val values = mutableListOf<Int>()
         with(dialogObserver) {
             dialogControl bind { data, _ ->
@@ -71,7 +71,7 @@ class DialogShowingTest {
     fun `closes dialog when lifecycle is started and dismiss is called`() {
         val dialogObserver = TestDialogObserver()
         val mockedDialog = mock<Dialog>()
-        val dialogControl = dialogControl<Unit, Unit>()
+        val dialogControl = DialogControl<Unit, Unit>()
         with(dialogObserver) { dialogControl bind { _, _ -> mockedDialog } }
 
         dialogObserver.dialogObserverLifecycleOwner.moveToState(Lifecycle.State.STARTED)
@@ -86,7 +86,7 @@ class DialogShowingTest {
     fun `doesn't closes dialog when lifecycle is stopped and dismiss is called`() {
         val dialogObserver = TestDialogObserver()
         val mockedDialog = mock<Dialog>()
-        val dialogControl = dialogControl<Unit, Unit>()
+        val dialogControl = DialogControl<Unit, Unit>()
         with(dialogObserver) { dialogControl bind { _, _ -> mockedDialog } }
 
         dialogObserver.dialogObserverLifecycleOwner.moveToState(Lifecycle.State.STARTED)
@@ -102,7 +102,7 @@ class DialogShowingTest {
     fun `closes dialog when dismiss is called and then lifecycle is started`() {
         val dialogObserver = TestDialogObserver()
         val mockedDialog = mock<Dialog>()
-        val dialogControl = dialogControl<Unit, Unit>()
+        val dialogControl = DialogControl<Unit, Unit>()
         with(dialogObserver) { dialogControl bind { _, _ -> mockedDialog } }
 
         dialogObserver.dialogObserverLifecycleOwner.moveToState(Lifecycle.State.STARTED)
@@ -119,7 +119,7 @@ class DialogShowingTest {
     fun `show dialog when lifecycle is started and showForResult is called`() = runBlockingTest {
         val dialogObserver = TestDialogObserver()
         val mockedDialog = mock<Dialog>()
-        val dialogControl = dialogControl<Unit, Unit>()
+        val dialogControl = DialogControl<Unit, Unit>()
         with(dialogObserver) { dialogControl bind { _, _ -> mockedDialog } }
 
         dialogObserver.dialogObserverLifecycleOwner.moveToState(Lifecycle.State.STARTED)
@@ -133,7 +133,7 @@ class DialogShowingTest {
     fun `doesn't show dialog when lifecycle is stopped and showForResult is called`() = runBlockingTest {
         val dialogObserver = TestDialogObserver()
         val mockedDialog = mock<Dialog>()
-        val dialogControl = dialogControl<Unit, Unit>()
+        val dialogControl = DialogControl<Unit, Unit>()
         with(dialogObserver) { dialogControl bind { _, _ -> mockedDialog } }
 
         dialogObserver.dialogObserverLifecycleOwner.moveToState(Lifecycle.State.CREATED)
@@ -147,7 +147,7 @@ class DialogShowingTest {
     fun `closes dialog when sendResult is called`() {
         val dialogObserver = TestDialogObserver()
         val mockedDialog = mock<Dialog>()
-        val dialogControl = dialogControl<Unit, String>()
+        val dialogControl = DialogControl<Unit, String>()
         with(dialogObserver) { dialogControl bind { _, _ -> mockedDialog } }
 
         dialogObserver.dialogObserverLifecycleOwner.moveToState(Lifecycle.State.STARTED)
