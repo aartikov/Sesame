@@ -8,12 +8,12 @@ The component provides `DialogControl` class. This class stores a dialog state a
 
 ## How to use?
 
-1. Use `dialogControl` function to create `DialogControl` in `ViewModel`. Its first type parameter is a type of data to display in a dialog, the second one is a type of result value. Both can be `Unit` if you don't need it.
+1. Create `DialogControl` in `ViewModel`. Its first type parameter is a type of data to display in a dialog, the second one is a type of result value. Both can be `Unit` if you don't need it.
 
 ```kotlin
 enum class DialogResult { OK, CANCEL }
 
-val dialog = dialogControl<String, DialogResult>()
+val dialog = DialogControl<String, DialogResult>()
 ```
 
 2. To just show a dialog call:
