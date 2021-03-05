@@ -9,7 +9,7 @@ class DialogResultTest {
 
     @Test
     fun `returns a result when sendResult is called`() = runBlockingTest {
-        val dialogControl = dialogControl<String, String>()
+        val dialogControl = DialogControl<String, String>()
 
         var result: String? = null
         val job = launch {
@@ -23,7 +23,7 @@ class DialogResultTest {
 
     @Test
     fun `returns null as a result when dismiss is called`() = runBlockingTest {
-        val dialogControl = dialogControl<String, String>()
+        val dialogControl = DialogControl<String, String>()
 
         var result: String? = null
         val job = launch {
@@ -37,7 +37,7 @@ class DialogResultTest {
 
     @Test
     fun `returns null as a result when other dialog is shown`() = runBlockingTest {
-        val dialogControl = dialogControl<String, String>()
+        val dialogControl = DialogControl<String, String>()
 
         var result: String? = null
         val job = launch {
@@ -51,7 +51,7 @@ class DialogResultTest {
 
     @Test
     fun `skips a result when showForResult was not called`() = runBlockingTest {
-        val dialogControl = dialogControl<String, String>()
+        val dialogControl = DialogControl<String, String>()
 
         var result: String? = null
         dialogControl.sendResult("Value 1") // skipped

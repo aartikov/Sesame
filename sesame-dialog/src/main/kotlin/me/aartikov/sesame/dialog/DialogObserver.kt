@@ -30,7 +30,7 @@ interface DialogObserver {
             }
 
             try {
-                state.collect { state ->
+                stateFlow.collect { state ->
                     when (state) {
                         is DialogControl.State.Shown<T> -> {
                             closeDialog()
@@ -39,7 +39,7 @@ interface DialogObserver {
                             dialog?.show()
                         }
 
-                        is DialogControl.State.Hidded -> {
+                        is DialogControl.State.Hidden -> {
                             closeDialog()
                         }
                     }

@@ -2,21 +2,24 @@ package me.aartikov.sesame.dialog
 
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 
 /**
  * Helps to manage a dialog state in View Model.
- * Use [dialogControl] to create it.
  * Use [DialogObserver] to display a dialog.
  */
-class DialogControl<T : Any, R : Any> internal constructor() {
+class DialogControl<T : Any, R : Any> {
 
-    internal sealed class State<out T : Any> {
+    sealed class State<out T : Any> {
         data class Shown<T : Any>(val data: T, val forResult: Boolean) : State<T>()
-        object Hidded : State<Nothing>()
+        object Hidden : State<Nothing>()
     }
 
-    internal val state = MutableStateFlow<State<T>>(State.Hidded)
+    private val mutableStateFlow = MutableStateFlow<State<T>>(State.Hidden)
     private val resultChannel = Channel<R?>(Channel.RENDEZVOUS)
+
+    val stateFlow: StateFlow<State<T>>
+        get() = mutableStateFlow
 
     /**
      * Shows a dialog.
@@ -26,7 +29,7 @@ class DialogControl<T : Any, R : Any> internal constructor() {
         if (isShownForResult()) {
             resultChannel.offer(null)
         }
-        state.value = State.Shown(data, forResult = false)
+        mutableStateFlow.value = State.Shown(data, forResult = false)
     }
 
     /**
@@ -38,7 +41,7 @@ class DialogControl<T : Any, R : Any> internal constructor() {
         if (isShownForResult()) {
             resultChannel.offer(null)
         }
-        state.value = State.Shown(data, forResult = true)
+        mutableStateFlow.value = State.Shown(data, forResult = true)
         return resultChannel.receive()
     }
 
@@ -46,7 +49,7 @@ class DialogControl<T : Any, R : Any> internal constructor() {
      * Sends result for a dialog shown for result. Should be called from a view side (See: [DialogObserver.bind]).
      */
     fun sendResult(result: R) {
-        state.value = State.Hidded
+        mutableStateFlow.value = State.Hidden
         this.resultChannel.offer(result)
     }
 
@@ -54,19 +57,19 @@ class DialogControl<T : Any, R : Any> internal constructor() {
      * Hides a dialog. If a dialog was shown for result than null will be returned as a result.
      */
     fun dismiss() {
-        if (state.value == State.Hidded) {
+        if (mutableStateFlow.value == State.Hidden) {
             return
         }
 
         val wasShownForResult = isShownForResult()
-        state.value = State.Hidded
+        mutableStateFlow.value = State.Hidden
         if (wasShownForResult) {
             resultChannel.offer(null)
         }
     }
 
     private fun isShownForResult(): Boolean {
-        return (state.value as? State.Shown<T>)?.forResult == true
+        return (mutableStateFlow.value as? State.Shown<T>)?.forResult == true
     }
 }
 
@@ -79,10 +82,3 @@ fun <R : Any> DialogControl<Unit, R>.show() = show(Unit)
  * A shortcut to show a dialog for result without custom data.
  */
 suspend fun <R : Any> DialogControl<Unit, R>.showForResult(): R? = showForResult(Unit)
-
-/**
- * Creates [DialogControl].
- */
-fun <T : Any, R : Any> dialogControl(): DialogControl<T, R> {
-    return DialogControl()
-}
