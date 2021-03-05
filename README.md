@@ -17,12 +17,12 @@ Sesame components are independent. Use only that you like.
 ## Gradle Setup
 ```gradle
 dependencies {
-    implementation 'com.github.aartikov:sesame-property:1.0.0-alpha2'
-    implementation 'com.github.aartikov:sesame-dialog:1.0.0-alpha2'
-    implementation 'com.github.aartikov:sesame-navigation:1.0.0-alpha2'
-    implementation 'com.github.aartikov:sesame-activable:1.0.0-alpha2'
-    implementation 'com.github.aartikov:sesame-loading:1.0.0-alpha2'
-    implementation 'com.github.aartikov:sesame-loop:1.0.0-alpha2'
+    implementation 'com.github.aartikov:sesame-property:1.0.0-alpha3'
+    implementation 'com.github.aartikov:sesame-dialog:1.0.0-alpha3'
+    implementation 'com.github.aartikov:sesame-navigation:1.0.0-alpha3'
+    implementation 'com.github.aartikov:sesame-activable:1.0.0-alpha3'
+    implementation 'com.github.aartikov:sesame-loading:1.0.0-alpha3'
+    implementation 'com.github.aartikov:sesame-loop:1.0.0-alpha3'
 }
 ```
 

@@ -9,7 +9,7 @@ apply plugin: 'signing'
 
 ext {
     PUBLISH_GROUP_ID = 'com.github.aartikov'
-    PUBLISH_VERSION = '1.0.0-alpha2'
+    PUBLISH_VERSION = '1.0.0-alpha3'
     DESCRIPTION = 'Sesame is a set of architecture components for Android development'
 
     GITHUB_USER = 'aartikov'
