@@ -3,8 +3,6 @@ plugins {
     id "kotlin"
 }
 
-apply from: "${rootDir}/publish.gradle"
-
 java {
     sourceCompatibility = JavaVersion.VERSION_1_8
     targetCompatibility = JavaVersion.VERSION_1_8
@@ -16,3 +14,5 @@ dependencies {
     testImplementation tests.junit
     testImplementation tests.coroutinesTest
 }
+
+apply from: "${rootDir}/publish.gradle"

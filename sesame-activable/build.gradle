@@ -3,8 +3,6 @@ plugins {
     id "kotlin-android"
 }
 
-apply from: "${rootDir}/publish.gradle"
-
 android {
     compileSdkVersion libraryConfig.compileSdkVersion
     buildToolsVersion libraryConfig.buildToolsVersion
@@ -26,3 +24,5 @@ dependencies {
     testImplementation tests.junit
     testImplementation tests.coroutinesTest
 }
+
+apply from: "${rootDir}/publish.gradle"
