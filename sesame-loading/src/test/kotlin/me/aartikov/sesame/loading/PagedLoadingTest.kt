@@ -28,7 +28,7 @@ class PagedLoadingTest {
 
         val job = loading.attach(this)
 
-        assertEquals(PagedLoading.State.Empty, loading.state)
+        assertEquals(State.Empty, loading.state)
         job.cancel()
     }
 

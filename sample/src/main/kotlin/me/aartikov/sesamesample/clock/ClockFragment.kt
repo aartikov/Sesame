@@ -1,4 +1,4 @@
-package me.aartikov.sesamesample.dialogs
+package me.aartikov.sesamesample.clock
 
 import android.os.Bundle
 import android.view.View
