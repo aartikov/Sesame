@@ -1,4 +1,4 @@
-package me.aartikov.sesamesample.dialogs
+package me.aartikov.sesamesample.clock
 
 import android.util.Log
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -9,8 +9,8 @@ import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
-import me.aartikov.sesamesample.base.BaseViewModel
 import me.aartikov.sesame.property.stateFromFlow
+import me.aartikov.sesamesample.base.BaseViewModel
 import javax.inject.Inject
 
 @HiltViewModel

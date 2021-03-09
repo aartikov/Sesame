@@ -7,8 +7,8 @@ import me.aartikov.sesame.navigation.NavigationMessage
 import me.aartikov.sesame.navigation.NavigationMessageDispatcher
 import me.aartikov.sesame.navigation.NavigationMessageHandler
 import me.aartikov.sesamesample.base.BaseFragment
+import me.aartikov.sesamesample.clock.ClockFragment
 import me.aartikov.sesamesample.counter.CounterFragment
-import me.aartikov.sesamesample.dialogs.ClockFragment
 import me.aartikov.sesamesample.dialogs.DialogsFragment
 import me.aartikov.sesamesample.menu.MenuFragment
 import me.aartikov.sesamesample.movies.ui.MoviesFragment
