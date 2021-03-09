@@ -147,7 +147,7 @@ interface PagedLoading<T : Any> {
 fun <T : Any> PagedLoading<T>.refresh() = loadFirstPage(fresh = true, reset = false)
 
 /**
- * A shortcut for loadFirstPage(fresh, reset = false). Requests to drop old data and load a first page.
+ * A shortcut for loadFirstPage(fresh, reset = true). Requests to drop old data and load a first page.
  * @param fresh indicates that fresh data is required. See [PagedLoader.loadFirstPage].
  */
 fun <T : Any> PagedLoading<T>.restart(fresh: Boolean = true) = loadFirstPage(fresh, reset = true)
