@@ -22,6 +22,7 @@ class FormFragment : BaseFragment<FormViewModel>(R.layout.fragment_form, FormVie
             vm.phoneInput bind phoneInputLayout
             vm.passwordInput bind passwordInputLayout
             vm.confirmPasswordInput bind confirmPasswordInputLayout
+            vm.termsCheckBox bind termsCheckbox
         }
     }
 }

@@ -2,6 +2,7 @@ package me.aartikov.sesame.input
 
 import android.text.Editable
 import android.text.TextWatcher
+import android.widget.CompoundButton
 import android.widget.EditText
 import com.google.android.material.textfield.TextInputLayout
 import me.aartikov.sesame.property.PropertyObserver
@@ -16,6 +17,10 @@ interface InputObserver : PropertyObserver {
     infix fun InputControl.bind(editText: EditText) {
         bindText(this, editText)
         bindFocus(this, editText)
+    }
+
+    infix fun CheckControl.bind(checkBox: CompoundButton) {
+        bindChecked(this, checkBox)
     }
 
     private fun bindText(inputControl: InputControl, editText: EditText) {
@@ -71,6 +76,24 @@ interface InputObserver : PropertyObserver {
     private fun bindError(inputControl: InputControl, textInputLayout: TextInputLayout) {
         inputControl::error bind {
             textInputLayout.error = it
+        }
+    }
+
+    private fun bindChecked(checkControl: CheckControl, checkBox: CompoundButton) {
+        var updatingChecked = false
+
+        checkControl::checked bind { checked ->
+            if (checked != checkBox.isChecked) {
+                updatingChecked = true
+                checkBox.isChecked = checked
+                updatingChecked = false
+            }
+        }
+
+        checkBox.setOnCheckedChangeListener { _, isChecked ->
+            if (!updatingChecked) {
+                checkControl.onCheckedChanged(isChecked)
+            }
         }
     }
 }
