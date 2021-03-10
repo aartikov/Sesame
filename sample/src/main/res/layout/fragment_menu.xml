@@ -44,6 +44,13 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:text="@string/clock_button" />
+
+        <Button
+            android:id="@+id/form_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/form_button" />
     </LinearLayout>
 
 </FrameLayout>

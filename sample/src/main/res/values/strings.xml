@@ -7,6 +7,7 @@
     <string name="dialogs_button">Dialogs</string>
     <string name="movies_button">Movies</string>
     <string name="clock_button">Clock</string>
+    <string name="form_button">Form</string>
 
     <!-- Profile -->
     <string name="retry_button">Retry</string>
@@ -24,4 +25,13 @@
 
     <!-- Clock -->
     <string name="clock_description">Put the app to background and check logs. The clock doesn\'t tick when it is inactive.</string>
+
+    <!-- Form -->
+    <string name="name_hint">Name</string>
+    <string name="email_hint">E-mail</string>
+    <string name="phone_hint">Phone</string>
+    <string name="password_hint">Password</string>
+    <string name="confirm_password_hint">Confirm Password</string>
+    <string name="terms_hint">Accept Terms of Use</string>
+    <string name="submit_button">Submit</string>
 </resources>

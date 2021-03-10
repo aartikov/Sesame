@@ -40,6 +40,7 @@ dependencies {
     implementation project(":sesame-loading")
     implementation project(":sesame-navigation")
     implementation project(":sesame-property")
+    implementation project(":sesame-input")
 
     implementation androidx.coreKtx
     implementation androidx.appCompat

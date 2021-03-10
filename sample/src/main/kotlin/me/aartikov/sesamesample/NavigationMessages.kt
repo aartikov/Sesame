@@ -8,3 +8,4 @@ object OpenProfileScreen : NavigationMessage
 object OpenDialogsScreen : NavigationMessage
 object OpenMoviesScreen : NavigationMessage
 object OpenClockScreen : NavigationMessage
+object OpenFormScreen : NavigationMessage
