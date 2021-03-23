@@ -24,9 +24,6 @@ dependencies {
     implementation coroutines.core
 
     testImplementation tests.junit
-    testImplementation tests.mockitoCore
-    testImplementation tests.mockitoKotlin
-    testImplementation tests.coroutinesTest
 }
 
 apply from: "${rootDir}/publish.gradle"

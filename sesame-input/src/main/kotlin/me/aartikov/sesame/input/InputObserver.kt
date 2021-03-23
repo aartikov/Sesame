@@ -15,6 +15,7 @@ interface InputObserver : PropertyObserver {
     }
 
     infix fun InputControl.bind(editText: EditText) {
+        editText.applyOptions(this.singleLine, this.maxLength, this.keyboardOptions)
         bindText(this, editText)
         bindFocus(this, editText)
     }

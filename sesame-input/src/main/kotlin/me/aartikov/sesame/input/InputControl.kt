@@ -6,7 +6,10 @@ import me.aartikov.sesame.property.state
 
 class InputControl(
     override val propertyHostScope: CoroutineScope,
-    initialText: String
+    initialText: String = "",
+    val singleLine: Boolean = true,
+    val maxLength: Int = Int.MAX_VALUE,
+    val keyboardOptions: KeyboardOptions = KeyboardOptions.Default
 ) : PropertyHost {
 
     var text: String by state(initialText)
@@ -22,5 +25,18 @@ class InputControl(
     }
 }
 
-fun PropertyHost.InputControl(initialText: String = "") =
-    InputControl(propertyHostScope, initialText)
+fun PropertyHost.InputControl(
+    initialText: String = "",
+    singleLine: Boolean = true,
+    maxLength: Int = Int.MAX_VALUE,
+    keyboardOptions: KeyboardOptions = KeyboardOptions()
+): InputControl {
+
+    return InputControl(
+        propertyHostScope,
+        initialText,
+        singleLine,
+        maxLength,
+        keyboardOptions
+    )
+}
