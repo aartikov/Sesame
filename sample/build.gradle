@@ -64,4 +64,5 @@ dependencies {
 
     implementation glide
     implementation viewBindingDelegates
+    implementation libPhoneNumber
 }

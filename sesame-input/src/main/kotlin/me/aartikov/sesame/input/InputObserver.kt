@@ -10,14 +10,11 @@ import me.aartikov.sesame.property.PropertyObserver
 interface InputObserver : PropertyObserver {
 
     infix fun InputControl.bind(textInputLayout: TextInputLayout) {
-        this bind textInputLayout.editText!!
-        bindError(this, textInputLayout)
-    }
-
-    infix fun InputControl.bind(editText: EditText) {
+        val editText = textInputLayout.editText!!
         editText.applyOptions(this.singleLine, this.maxLength, this.keyboardOptions)
         bindText(this, editText)
         bindFocus(this, editText)
+        bindError(this, textInputLayout)
     }
 
     infix fun CheckControl.bind(checkBox: CompoundButton) {
@@ -76,7 +73,7 @@ interface InputObserver : PropertyObserver {
 
     private fun bindError(inputControl: InputControl, textInputLayout: TextInputLayout) {
         inputControl::error bind {
-            textInputLayout.error = it
+            textInputLayout.error = it?.resolve(textInputLayout.context)
         }
     }
 

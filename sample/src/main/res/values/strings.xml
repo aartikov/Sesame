@@ -39,4 +39,13 @@
     <string name="confirm_password_hint">Confirm Password</string>
     <string name="terms_hint">Accept Terms of Use</string>
     <string name="submit_button">Submit</string>
+
+    <string name="field_is_blank_error_message">Please fill this field</string>
+    <string name="invalid_email_error_message">Invalid e-mail address</string>
+    <string name="invalid_phone_error_message">Invalid phone number</string>
+    <string name="minimum_symbols_error_message">Minimum %d symbols</string>
+    <string name="passwords_do_not_match">Passwords do not match</string>
+    <string name="terms_are_accepted_error_message">Please accept the terms of use</string>
+
+    <string name="form_is_valid">Form is valid</string>
 </resources>
