@@ -1,6 +1,11 @@
 <resources>
     <string name="app_name">Sesame sample</string>
 
+    <!-- Common -->
+    <string name="common_ok">OK</string>
+    <string name="common_cancel">Cancel</string>
+    <string name="common_retry">Retry</string>
+
     <!-- Menu -->
     <string name="counter_button">Counter</string>
     <string name="profile_button">Profile</string>
@@ -9,16 +14,16 @@
     <string name="clock_button">Clock</string>
     <string name="form_button">Form</string>
 
-    <!-- Profile -->
-    <string name="retry_button">Retry</string>
+    <!-- Counter -->
+    <string name="overflow_message">It\'s enough!</string>
 
     <!-- Dialogs -->
-    <string name="ok_button">OK</string>
-    <string name="cancel_button">Cancel</string>
     <string name="show_dialog_button_text">Show Dialog</string>
     <string name="show_for_result_button_text">Show For Result</string>
     <string name="dialog_title">Dialog</string>
+    <string name="dialog_message">Some message</string>
     <string name="dialog_for_result_title">Dialog for result</string>
+    <string name="dialog_message_for_result">Some message for result</string>
 
     <!-- Movies -->
     <string name="empty_view_text">No items to display</string>

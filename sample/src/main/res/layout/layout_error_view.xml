@@ -22,6 +22,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="18dp"
-        android:text="@string/retry_button" />
+        android:text="@string/common_retry" />
 
 </LinearLayout>

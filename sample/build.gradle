@@ -38,6 +38,7 @@ dependencies {
     implementation project(":sesame-activable")
     implementation project(":sesame-dialog")
     implementation project(":sesame-loading")
+    implementation project(":sesame-localized-string")
     implementation project(":sesame-navigation")
     implementation project(":sesame-property")
     implementation project(":sesame-input")

@@ -36,7 +36,7 @@ abstract class BaseFragment<VM : BaseViewModel>(
         vm.navigationMessageQueue.bind(navigationMessageDispatcher, node = this, viewLifecycleOwner)
 
         vm.showError bind {
-            Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), it.resolve(requireContext()), Toast.LENGTH_SHORT).show()
         }
     }
 

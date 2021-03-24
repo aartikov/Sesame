@@ -25,7 +25,9 @@ class CounterFragment : BaseFragment<CounterViewModel>(R.layout.fragment_counter
             vm::minusButtonEnabled bind minusButton::setEnabled
             vm::plusButtonEnabled bind plusButton::setEnabled
 
-            vm.showMessage bind { Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show() }
+            vm.showMessage bind {
+                Toast.makeText(requireContext(), it.resolve(requireContext()), Toast.LENGTH_SHORT).show()
+            }
         }
     }
 }
