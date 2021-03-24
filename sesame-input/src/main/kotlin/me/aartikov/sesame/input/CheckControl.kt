@@ -3,6 +3,7 @@ package me.aartikov.sesame.input
 import kotlinx.coroutines.CoroutineScope
 import me.aartikov.sesame.localizedstring.LocalizedString
 import me.aartikov.sesame.property.PropertyHost
+import me.aartikov.sesame.property.computed
 import me.aartikov.sesame.property.state
 
 class CheckControl(
@@ -11,8 +12,12 @@ class CheckControl(
 ) : Control<Boolean>, PropertyHost {
 
     var checked: Boolean by state(initialChecked)
+    var visible by state(true)
+    var enabled by state(true)
     override var error: LocalizedString? by state(null)
-    override var skipInValidation by state(false)   // TODO: computed from visible and enabled
+    override val skipInValidation by computed(::visible, ::enabled) { visible, enabled ->
+        !visible || !enabled
+    }
 
     override val value by ::checked
 

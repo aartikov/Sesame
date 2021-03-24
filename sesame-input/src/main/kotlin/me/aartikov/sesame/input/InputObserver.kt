@@ -2,6 +2,7 @@ package me.aartikov.sesame.input
 
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.View
 import android.widget.CompoundButton
 import android.widget.EditText
 import com.google.android.material.textfield.TextInputLayout
@@ -15,10 +16,14 @@ interface InputObserver : PropertyObserver {
         bindText(this, editText)
         bindFocus(this, editText)
         bindError(this, textInputLayout)
+        ::visible bind { textInputLayout.visibility = if (it) View.VISIBLE else View.GONE }
+        ::enabled bind { textInputLayout.isEnabled = it }
     }
 
     infix fun CheckControl.bind(checkBox: CompoundButton) {
         bindChecked(this, checkBox)
+        ::visible bind { checkBox.visibility = if (it) View.VISIBLE else View.GONE }
+        ::enabled bind { checkBox.isEnabled = it }
     }
 
     private fun bindText(inputControl: InputControl, editText: EditText) {
