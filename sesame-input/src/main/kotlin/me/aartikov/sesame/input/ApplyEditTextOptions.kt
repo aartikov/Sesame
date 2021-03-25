@@ -22,6 +22,7 @@ private fun getInputType(singleLine: Boolean, keyboardOptions: KeyboardOptions):
         KeyboardType.Number -> InputType.TYPE_CLASS_NUMBER
         KeyboardType.NumberPassword -> InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_VARIATION_PASSWORD
         KeyboardType.Password -> InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
+        KeyboardType.VisiblePassword -> InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
         KeyboardType.Phone -> InputType.TYPE_CLASS_PHONE
         KeyboardType.Text -> InputType.TYPE_CLASS_TEXT
         KeyboardType.Uri -> InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_URI
@@ -42,13 +43,7 @@ private fun getInputType(singleLine: Boolean, keyboardOptions: KeyboardOptions):
         0
     }
 
-    val autoCorrectFlags = if (isTextClass && keyboardOptions.autoCorrect) {
-        InputType.TYPE_TEXT_FLAG_AUTO_CORRECT
-    } else {
-        0
-    }
-
-    return typeFlags or multiLineFlags or capitalizationFlags or autoCorrectFlags
+    return typeFlags or multiLineFlags or capitalizationFlags
 }
 
 private fun getImeOptions(keyboardOptions: KeyboardOptions): Int {

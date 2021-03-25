@@ -2,7 +2,6 @@ package me.aartikov.sesame.input
 
 data class KeyboardOptions(
     val capitalization: KeyboardCapitalization = KeyboardCapitalization.None,
-    val autoCorrect: Boolean = true,
     val keyboardType: KeyboardType = KeyboardType.Text,
     val imeAction: ImeAction = ImeAction.Default
 ) {
@@ -25,6 +24,7 @@ enum class KeyboardType {
     Number,
     NumberPassword,
     Password,
+    VisiblePassword,
     Phone,
     Text,
     Uri
