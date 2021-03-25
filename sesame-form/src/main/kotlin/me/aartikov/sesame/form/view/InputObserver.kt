@@ -15,7 +15,7 @@ interface InputObserver : PropertyObserver {
 
     infix fun InputControl.bind(textInputLayout: TextInputLayout) {
         val editText = textInputLayout.editText!!
-        editText.applyOptions(this.singleLine, this.maxLength, this.keyboardOptions)
+        editText.applyOptions(this.singleLine, this.maxLength, this.filter, this.formatter, this.keyboardOptions)
         bindText(this, editText)
         bindFocus(this, editText)
         bindError(this, textInputLayout)

@@ -1,10 +1,9 @@
 package me.aartikov.sesame.form
 
 data class KeyboardOptions(
-    val capitalization: KeyboardCapitalization = KeyboardCapitalization.None,
     val keyboardType: KeyboardType = KeyboardType.Text,
-    val imeAction: ImeAction = ImeAction.Default,
-    val filter: ((Char) -> Boolean)? = null
+    val capitalization: KeyboardCapitalization = KeyboardCapitalization.None,
+    val imeAction: ImeAction = ImeAction.Default
 ) {
 
     companion object {

@@ -4,15 +4,25 @@ import android.text.InputFilter
 import android.text.InputType
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
+import me.aartikov.sesame.InputFormatter
 import me.aartikov.sesame.form.view.SymbolFilter
 
-fun EditText.applyOptions(singleLine: Boolean, maxLength: Int, keyboardOptions: KeyboardOptions) {
+fun EditText.applyOptions(
+    singleLine: Boolean,
+    maxLength: Int,
+    filter: ((Char) -> Boolean)?,
+    formatter: InputFormatter?,
+    keyboardOptions: KeyboardOptions
+) {
+
     inputType = getInputType(singleLine, keyboardOptions)
     imeOptions = getImeOptions(keyboardOptions)
 
-    if (keyboardOptions.filter != null) {
-        filters += SymbolFilter(keyboardOptions.filter)
+    if (filter != null) {
+        filters += SymbolFilter(filter)
     }
+
+    formatter?.install(this)
 
     if (maxLength != Int.MAX_VALUE) {
         filters += InputFilter.LengthFilter(maxLength)

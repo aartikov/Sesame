@@ -1,6 +1,7 @@
 package me.aartikov.sesame.form
 
 import kotlinx.coroutines.CoroutineScope
+import me.aartikov.sesame.InputFormatter
 import me.aartikov.sesame.localizedstring.LocalizedString
 import me.aartikov.sesame.property.PropertyHost
 import me.aartikov.sesame.property.computed
@@ -11,7 +12,9 @@ class InputControl(
     initialText: String = "",
     val singleLine: Boolean = true,
     val maxLength: Int = Int.MAX_VALUE,
-    val keyboardOptions: KeyboardOptions = KeyboardOptions.Default
+    val keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
+    val filter: ((Char) -> Boolean)? = null,
+    val formatter: InputFormatter? = null
 ) : Control<String>, PropertyHost {
 
     var text: String by state(initialText)
@@ -38,7 +41,9 @@ fun PropertyHost.InputControl(
     initialText: String = "",
     singleLine: Boolean = true,
     maxLength: Int = Int.MAX_VALUE,
-    keyboardOptions: KeyboardOptions = KeyboardOptions()
+    keyboardOptions: KeyboardOptions = KeyboardOptions(),
+    filter: ((Char) -> Boolean)? = null,
+    formatter: InputFormatter? = null
 ): InputControl {
 
     return InputControl(
@@ -46,6 +51,8 @@ fun PropertyHost.InputControl(
         initialText,
         singleLine,
         maxLength,
-        keyboardOptions
+        keyboardOptions,
+        filter,
+        formatter
     )
 }

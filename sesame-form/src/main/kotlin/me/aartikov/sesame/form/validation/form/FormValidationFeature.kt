@@ -12,12 +12,12 @@ import me.aartikov.sesame.property.flow
 
 interface FormValidationFeature {
 
-    fun setup(coroutineScope: CoroutineScope, formValidator: FormValidator)
+    fun install(coroutineScope: CoroutineScope, formValidator: FormValidator)
 }
 
 object HideErrorOnValueChanged : FormValidationFeature {
 
-    override fun setup(coroutineScope: CoroutineScope, formValidator: FormValidator) {
+    override fun install(coroutineScope: CoroutineScope, formValidator: FormValidator) {
         formValidator.validators.forEach { (control, _) ->
             hideErrorOnValueChanged(coroutineScope, control)
         }
@@ -35,7 +35,7 @@ object HideErrorOnValueChanged : FormValidationFeature {
 
 object RevalidateOnValueChanged : FormValidationFeature {
 
-    override fun setup(coroutineScope: CoroutineScope, formValidator: FormValidator) {
+    override fun install(coroutineScope: CoroutineScope, formValidator: FormValidator) {
         formValidator.validators.forEach { (_, validator) ->
             revalidateOnValueChanged(coroutineScope, validator)
         }
@@ -56,7 +56,7 @@ object RevalidateOnValueChanged : FormValidationFeature {
 
 object ValidateOnFocusLost : FormValidationFeature {
 
-    override fun setup(coroutineScope: CoroutineScope, formValidator: FormValidator) {
+    override fun install(coroutineScope: CoroutineScope, formValidator: FormValidator) {
         formValidator.validators.forEach { (_, validator) ->
             if (validator is InputValidator) {
                 validateOnFocusLost(coroutineScope, validator)

@@ -15,45 +15,38 @@ import me.aartikov.sesamesample.base.BaseViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class FormViewModel @Inject constructor(
-    private val phoneUtil: PhoneUtil
-) : BaseViewModel() {
+class FormViewModel @Inject constructor() : BaseViewModel() {
 
     companion object {
+        private const val NAME_MAX_LENGTH = 100
         private const val PASSWORD_MIN_SYMBOLS = 6
+        private const val RUS_PHONE_DIGIT_COUNT = 11
     }
 
     val showMessage = command<LocalizedString>()
 
     val nameInput = InputControl(
-        maxLength = 100,
+        maxLength = NAME_MAX_LENGTH,
         keyboardOptions = KeyboardOptions(
             capitalization = KeyboardCapitalization.Words
         )
     )
 
     val emailInput = InputControl(
-        keyboardOptions = KeyboardOptions(
-            keyboardType = KeyboardType.Email
-        )
+        keyboardOptions = KeyboardOptions(KeyboardType.Email)
     )
 
     val phoneInput = InputControl(
-        keyboardOptions = KeyboardOptions(
-            keyboardType = KeyboardType.Phone
-        )
+        keyboardOptions = KeyboardOptions(KeyboardType.Phone),
+        formatter = PhoneNumberFormatter
     )
 
     val passwordInput = InputControl(
-        keyboardOptions = KeyboardOptions(
-            keyboardType = KeyboardType.Password
-        )
+        keyboardOptions = KeyboardOptions(KeyboardType.Password)
     )
 
     val confirmPasswordInput = InputControl(
-        keyboardOptions = KeyboardOptions(
-            keyboardType = KeyboardType.Password
-        )
+        keyboardOptions = KeyboardOptions(KeyboardType.Password)
     )
 
     val termsCheckBox = CheckControl()
@@ -72,7 +65,10 @@ class FormViewModel @Inject constructor(
 
         input(phoneInput) {
             isNotBlank(R.string.field_is_blank_error_message)
-            validation(phoneUtil::isValidPhone, R.string.invalid_phone_error_message)
+            validation(
+                { str -> str.count { it.isDigit() } == RUS_PHONE_DIGIT_COUNT },
+                R.string.invalid_phone_error_message
+            )
         }
 
         input(passwordInput) {

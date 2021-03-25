@@ -57,7 +57,7 @@ fun PropertyHost.formValidator(buildBlock: FormValidatorBuilder.() -> Unit): For
         .build()
         .apply {
             features.forEach { feature ->
-                feature.setup(propertyHostScope, this)
+                feature.install(propertyHostScope, this)
             }
         }
 }
