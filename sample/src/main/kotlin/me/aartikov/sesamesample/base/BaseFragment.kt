@@ -9,7 +9,7 @@ import androidx.fragment.app.createViewModelLazy
 import androidx.lifecycle.LifecycleOwner
 import me.aartikov.sesame.activable.bindToLifecycle
 import me.aartikov.sesame.dialog.DialogObserver
-import me.aartikov.sesame.form.InputObserver
+import me.aartikov.sesame.form.view.InputObserver
 import me.aartikov.sesame.navigation.NavigationMessageDispatcher
 import me.aartikov.sesame.navigation.bind
 import me.aartikov.sesame.property.PropertyObserver

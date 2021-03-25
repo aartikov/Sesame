@@ -1,4 +1,4 @@
-package me.aartikov.sesame.form
+package me.aartikov.sesame.form.view
 
 import android.text.Editable
 import android.text.TextWatcher
@@ -6,6 +6,9 @@ import android.view.View
 import android.widget.CompoundButton
 import android.widget.EditText
 import com.google.android.material.textfield.TextInputLayout
+import me.aartikov.sesame.form.CheckControl
+import me.aartikov.sesame.form.InputControl
+import me.aartikov.sesame.form.applyOptions
 import me.aartikov.sesame.property.PropertyObserver
 
 interface InputObserver : PropertyObserver {
