@@ -1,5 +1,6 @@
 package me.aartikov.sesame.input.validation.form
 
+import androidx.annotation.StringRes
 import me.aartikov.sesame.input.CheckControl
 import me.aartikov.sesame.input.Control
 import me.aartikov.sesame.input.InputControl
@@ -50,4 +51,32 @@ fun formValidator(buildBlock: FormValidatorBuilder.() -> Unit): FormValidator {
     return FormValidatorBuilder()
         .apply(buildBlock)
         .build()
+}
+
+fun FormValidatorBuilder.checked(
+    checkControl: CheckControl,
+    errorMessage: LocalizedString,
+    showError: ((LocalizedString) -> Unit)? = null
+) {
+    this.check(
+        checkControl,
+        validation = {
+            if (it) ValidationResult.Valid else ValidationResult.Invalid(errorMessage)
+        },
+        showError
+    )
+}
+
+fun FormValidatorBuilder.checked(
+    checkControl: CheckControl,
+    @StringRes errorMessageRes: Int,
+    showError: ((LocalizedString) -> Unit)? = null
+) {
+    this.check(
+        checkControl,
+        validation = {
+            if (it) ValidationResult.Valid else ValidationResult.Invalid(LocalizedString.resource(errorMessageRes))
+        },
+        showError
+    )
 }

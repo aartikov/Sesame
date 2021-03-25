@@ -4,6 +4,7 @@ import android.util.Patterns
 import dagger.hilt.android.lifecycle.HiltViewModel
 import me.aartikov.sesame.input.*
 import me.aartikov.sesame.input.validation.control.*
+import me.aartikov.sesame.input.validation.form.checked
 import me.aartikov.sesame.input.validation.form.formValidator
 import me.aartikov.sesame.localizedstring.LocalizedString
 import me.aartikov.sesame.property.command
@@ -17,7 +18,7 @@ class FormViewModel @Inject constructor(
 ) : BaseViewModel() {
 
     companion object {
-        private val PASSWORD_MIN_SYMBOLS = 6
+        private const val PASSWORD_MIN_SYMBOLS = 6
     }
 
     val showMessage = command<LocalizedString>()
