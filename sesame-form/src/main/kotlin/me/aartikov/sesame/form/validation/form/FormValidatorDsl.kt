@@ -9,10 +9,12 @@ import me.aartikov.sesame.form.validation.control.ControlValidator
 import me.aartikov.sesame.form.validation.control.InputValidatorBuilder
 import me.aartikov.sesame.form.validation.control.ValidationResult
 import me.aartikov.sesame.localizedstring.LocalizedString
+import me.aartikov.sesame.property.PropertyHost
 
 class FormValidatorBuilder {
 
     private val validators = mutableMapOf<Control<*>, ControlValidator<*>>()
+    var features = listOf<FormValidationFeature>()
 
     fun validator(validator: ControlValidator<*>) {
         val control = validator.control
@@ -47,10 +49,17 @@ class FormValidatorBuilder {
     }
 }
 
-fun formValidator(buildBlock: FormValidatorBuilder.() -> Unit): FormValidator {
+fun PropertyHost.formValidator(buildBlock: FormValidatorBuilder.() -> Unit): FormValidator {
+    val features: List<FormValidationFeature>
     return FormValidatorBuilder()
         .apply(buildBlock)
+        .apply { features = this.features }
         .build()
+        .apply {
+            features.forEach { feature ->
+                feature.setup(propertyHostScope, this)
+            }
+        }
 }
 
 fun FormValidatorBuilder.checked(

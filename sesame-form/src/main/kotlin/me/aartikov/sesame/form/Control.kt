@@ -6,7 +6,7 @@ interface Control<ValueT> {
 
     val value: ValueT
 
-    val error: LocalizedString?
+    var error: LocalizedString?
 
     val skipInValidation: Boolean
 }

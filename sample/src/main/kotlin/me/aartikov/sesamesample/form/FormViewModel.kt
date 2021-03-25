@@ -4,6 +4,8 @@ import android.util.Patterns
 import dagger.hilt.android.lifecycle.HiltViewModel
 import me.aartikov.sesame.form.*
 import me.aartikov.sesame.form.validation.control.*
+import me.aartikov.sesame.form.validation.form.RevalidateOnValueChanged
+import me.aartikov.sesame.form.validation.form.ValidateOnFocusLost
 import me.aartikov.sesame.form.validation.form.checked
 import me.aartikov.sesame.form.validation.form.formValidator
 import me.aartikov.sesame.localizedstring.LocalizedString
@@ -57,6 +59,9 @@ class FormViewModel @Inject constructor(
     val termsCheckBox = CheckControl()
 
     private val formValidator = formValidator {
+
+        features = listOf(ValidateOnFocusLost, RevalidateOnValueChanged)
+
         input(nameInput) {
             isNotBlank(R.string.field_is_blank_error_message)
         }
