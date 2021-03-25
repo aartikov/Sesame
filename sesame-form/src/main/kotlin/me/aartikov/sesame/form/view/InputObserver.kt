@@ -1,5 +1,6 @@
 package me.aartikov.sesame.form.view
 
+import android.graphics.Rect
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
@@ -21,12 +22,14 @@ interface InputObserver : PropertyObserver {
         bindError(this, textInputLayout)
         ::visible bind { textInputLayout.visibility = if (it) View.VISIBLE else View.GONE }
         ::enabled bind { textInputLayout.isEnabled = it }
+        scrollTo bind { scrollToView(textInputLayout) }
     }
 
     infix fun CheckControl.bind(checkBox: CompoundButton) {
         bindChecked(this, checkBox)
         ::visible bind { checkBox.visibility = if (it) View.VISIBLE else View.GONE }
         ::enabled bind { checkBox.isEnabled = it }
+        scrollTo bind { scrollToView(checkBox) }
     }
 
     private fun bindText(inputControl: InputControl, editText: EditText) {
@@ -101,5 +104,10 @@ interface InputObserver : PropertyObserver {
                 checkControl.onCheckedChanged(isChecked)
             }
         }
+    }
+
+    private fun scrollToView(view: View) {
+        val rect = Rect(0, 0, view.width, view.height)
+        view.requestRectangleOnScreen(rect, false)
     }
 }

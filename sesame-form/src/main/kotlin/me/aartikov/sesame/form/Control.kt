@@ -9,4 +9,6 @@ interface Control<ValueT> {
     var error: LocalizedString?
 
     val skipInValidation: Boolean
+
+    fun requestFocus()
 }

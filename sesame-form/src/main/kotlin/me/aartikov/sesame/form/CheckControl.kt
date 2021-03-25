@@ -3,6 +3,7 @@ package me.aartikov.sesame.form
 import kotlinx.coroutines.CoroutineScope
 import me.aartikov.sesame.localizedstring.LocalizedString
 import me.aartikov.sesame.property.PropertyHost
+import me.aartikov.sesame.property.command
 import me.aartikov.sesame.property.computed
 import me.aartikov.sesame.property.state
 
@@ -18,11 +19,16 @@ class CheckControl(
     override val skipInValidation by computed(::visible, ::enabled) { visible, enabled ->
         !visible || !enabled
     }
+    val scrollTo = command<Unit>()
 
     override val value by ::checked
 
     fun onCheckedChanged(checked: Boolean) {
         this.checked = checked
+    }
+
+    override fun requestFocus() {
+        scrollTo()
     }
 }
 

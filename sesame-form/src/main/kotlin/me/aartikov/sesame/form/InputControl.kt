@@ -4,6 +4,7 @@ import kotlinx.coroutines.CoroutineScope
 import me.aartikov.sesame.InputFormatter
 import me.aartikov.sesame.localizedstring.LocalizedString
 import me.aartikov.sesame.property.PropertyHost
+import me.aartikov.sesame.property.command
 import me.aartikov.sesame.property.computed
 import me.aartikov.sesame.property.state
 
@@ -25,6 +26,7 @@ class InputControl(
     override val skipInValidation by computed(::visible, ::enabled) { visible, enabled ->
         !visible || !enabled
     }
+    val scrollTo = command<Unit>()
 
     override val value by ::text
 
@@ -34,6 +36,11 @@ class InputControl(
 
     fun onFocusChanged(hasFocus: Boolean) {
         this.hasFocus = hasFocus
+    }
+
+    override fun requestFocus() {
+        scrollTo()
+        hasFocus = true
     }
 }
 

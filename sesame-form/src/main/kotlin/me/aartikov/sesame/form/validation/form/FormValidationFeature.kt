@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.onEach
 import me.aartikov.sesame.form.Control
 import me.aartikov.sesame.form.validation.control.ControlValidator
 import me.aartikov.sesame.form.validation.control.InputValidator
+import me.aartikov.sesame.form.validation.control.ValidationResult
 import me.aartikov.sesame.property.flow
 
 interface FormValidationFeature {
@@ -73,5 +74,25 @@ object ValidateOnFocusLost : FormValidationFeature {
                 inputValidator.validate()
             }
             .launchIn(coroutineScope)
+    }
+}
+
+object FocusOnFirstInvalidControlAfterValidation : FormValidationFeature {
+
+    override fun install(coroutineScope: CoroutineScope, formValidator: FormValidator) {
+        formValidator.validatedEventFlow
+            .onEach {
+                if (it.displayResult) {
+                    focusFirstInvalidControl(it.result)
+                }
+            }
+            .launchIn(coroutineScope)
+    }
+
+    private fun focusFirstInvalidControl(validationResult: FormValidationResult) {
+        val control = validationResult.controlResults.entries
+            .firstOrNull { it.value is ValidationResult.Invalid }?.key
+
+        control?.requestFocus()
     }
 }
