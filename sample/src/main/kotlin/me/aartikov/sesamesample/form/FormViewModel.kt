@@ -74,6 +74,10 @@ class FormViewModel @Inject constructor() : BaseViewModel() {
                 PASSWORD_MIN_SYMBOLS,
                 LocalizedString.resource(R.string.minimum_symbols_error_message, PASSWORD_MIN_SYMBOLS)
             )
+            validation(
+                { str -> str.any { it.isDigit() } },
+                LocalizedString.resource(R.string.must_contain_digit_error_message)
+            )
         }
 
         input(confirmPasswordInput) {
