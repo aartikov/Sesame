@@ -1,4 +1,4 @@
-package me.aartikov.sesame.input
+package me.aartikov.sesame.form
 
 data class KeyboardOptions(
     val capitalization: KeyboardCapitalization = KeyboardCapitalization.None,

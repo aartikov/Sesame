@@ -1,13 +1,13 @@
-package me.aartikov.sesame.input.validation.form
+package me.aartikov.sesame.form.validation.form
 
 import androidx.annotation.StringRes
-import me.aartikov.sesame.input.CheckControl
-import me.aartikov.sesame.input.Control
-import me.aartikov.sesame.input.InputControl
-import me.aartikov.sesame.input.validation.control.CheckValidator
-import me.aartikov.sesame.input.validation.control.ControlValidator
-import me.aartikov.sesame.input.validation.control.InputValidatorBuilder
-import me.aartikov.sesame.input.validation.control.ValidationResult
+import me.aartikov.sesame.form.CheckControl
+import me.aartikov.sesame.form.Control
+import me.aartikov.sesame.form.InputControl
+import me.aartikov.sesame.form.validation.control.CheckValidator
+import me.aartikov.sesame.form.validation.control.ControlValidator
+import me.aartikov.sesame.form.validation.control.InputValidatorBuilder
+import me.aartikov.sesame.form.validation.control.ValidationResult
 import me.aartikov.sesame.localizedstring.LocalizedString
 
 class FormValidatorBuilder {

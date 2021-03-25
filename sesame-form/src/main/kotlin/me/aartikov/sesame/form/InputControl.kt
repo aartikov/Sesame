@@ -1,4 +1,4 @@
-package me.aartikov.sesame.input
+package me.aartikov.sesame.form
 
 import kotlinx.coroutines.CoroutineScope
 import me.aartikov.sesame.localizedstring.LocalizedString

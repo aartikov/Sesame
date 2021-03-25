@@ -1,7 +1,7 @@
-package me.aartikov.sesame.input.validation.control
+package me.aartikov.sesame.form.validation.control
 
 import androidx.annotation.StringRes
-import me.aartikov.sesame.input.InputControl
+import me.aartikov.sesame.form.InputControl
 import me.aartikov.sesame.localizedstring.LocalizedString
 
 class InputValidatorBuilder(

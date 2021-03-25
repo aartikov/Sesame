@@ -1,6 +1,6 @@
-package me.aartikov.sesame.input.validation.control
+package me.aartikov.sesame.form.validation.control
 
-import me.aartikov.sesame.input.Control
+import me.aartikov.sesame.form.Control
 
 interface ControlValidator<ControlT : Control<*>> {
 

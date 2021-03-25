@@ -1,4 +1,4 @@
-package me.aartikov.sesame.input
+package me.aartikov.sesame.form
 
 import android.text.InputFilter
 import android.text.InputType

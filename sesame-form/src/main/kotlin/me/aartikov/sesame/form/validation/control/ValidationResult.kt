@@ -1,4 +1,4 @@
-package me.aartikov.sesame.input.validation.control
+package me.aartikov.sesame.form.validation.control
 
 import me.aartikov.sesame.localizedstring.LocalizedString
 

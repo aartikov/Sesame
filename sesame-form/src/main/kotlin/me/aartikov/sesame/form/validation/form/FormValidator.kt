@@ -1,8 +1,8 @@
-package me.aartikov.sesame.input.validation.form
+package me.aartikov.sesame.form.validation.form
 
-import me.aartikov.sesame.input.Control
-import me.aartikov.sesame.input.validation.control.ControlValidator
-import me.aartikov.sesame.input.validation.control.ValidationResult
+import me.aartikov.sesame.form.Control
+import me.aartikov.sesame.form.validation.control.ControlValidator
+import me.aartikov.sesame.form.validation.control.ValidationResult
 
 class FormValidator(
     val validators: Map<Control<*>, ControlValidator<*>>
