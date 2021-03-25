@@ -4,7 +4,6 @@ import android.text.InputFilter
 import android.text.InputType
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
-import me.aartikov.sesame.InputFormatter
 import me.aartikov.sesame.form.view.SymbolFilter
 
 fun EditText.applyOptions(

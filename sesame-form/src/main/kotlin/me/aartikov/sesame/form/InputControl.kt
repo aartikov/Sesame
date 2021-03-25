@@ -1,7 +1,6 @@
 package me.aartikov.sesame.form
 
 import kotlinx.coroutines.CoroutineScope
-import me.aartikov.sesame.InputFormatter
 import me.aartikov.sesame.localizedstring.LocalizedString
 import me.aartikov.sesame.property.PropertyHost
 import me.aartikov.sesame.property.command

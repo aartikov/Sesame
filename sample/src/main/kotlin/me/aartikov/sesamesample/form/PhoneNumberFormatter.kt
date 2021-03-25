@@ -1,7 +1,7 @@
 package me.aartikov.sesamesample.form
 
 import android.widget.EditText
-import me.aartikov.sesame.InputFormatter
+import me.aartikov.sesame.form.InputFormatter
 import ru.tinkoff.decoro.MaskImpl
 import ru.tinkoff.decoro.slots.PredefinedSlots
 import ru.tinkoff.decoro.watchers.MaskFormatWatcher
