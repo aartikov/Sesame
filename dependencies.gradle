@@ -21,7 +21,8 @@ ext {
             hilt                : "2.33-beta",
             viewBindingDelegates: "1.4.1",
             dateTime            : "0.1.1",
-            decoro              : "1.5.0"
+            decoro              : "1.5.0",
+            konfetti            : "1.3.2"
     ]
 
     desugaring = "com.android.tools:desugar_jdk_libs:${versions.desugaring}"
@@ -69,4 +70,6 @@ ext {
     viewBindingDelegates = "com.kirich1409.viewbindingpropertydelegate:vbpd-noreflection:${versions.viewBindingDelegates}"
 
     decoro = "ru.tinkoff.decoro:decoro:${versions.decoro}"
+
+    konfetti = "nl.dionsegijn:konfetti:${versions.konfetti}"
 }

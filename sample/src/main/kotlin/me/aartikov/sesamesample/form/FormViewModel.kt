@@ -20,8 +20,6 @@ class FormViewModel @Inject constructor() : BaseViewModel() {
         private const val RUS_PHONE_DIGIT_COUNT = 11
     }
 
-    val showMessage = command<LocalizedString>()
-
     val nameInput = InputControl(
         maxLength = NAME_MAX_LENGTH,
         keyboardOptions = KeyboardOptions(
@@ -47,6 +45,8 @@ class FormViewModel @Inject constructor() : BaseViewModel() {
     )
 
     val termsCheckBox = CheckControl()
+
+    val dropKonfetti = command<Unit>()
 
     private val formValidator = formValidator {
 
@@ -87,7 +87,7 @@ class FormViewModel @Inject constructor() : BaseViewModel() {
     fun onSubmitClicked() {
         val result = formValidator.validate()
         if (result.isValid) {
-            showMessage(LocalizedString.resource(R.string.form_is_valid))
+            dropKonfetti()
         }
     }
 }
