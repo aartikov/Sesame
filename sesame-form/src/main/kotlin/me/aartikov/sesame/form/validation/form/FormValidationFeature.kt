@@ -5,7 +5,7 @@ import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import me.aartikov.sesame.form.Control
+import me.aartikov.sesame.form.ValidatableControl
 import me.aartikov.sesame.form.validation.control.ControlValidator
 import me.aartikov.sesame.form.validation.control.InputValidator
 import me.aartikov.sesame.form.validation.control.ValidationResult
@@ -24,7 +24,7 @@ object HideErrorOnValueChanged : FormValidationFeature {
         }
     }
 
-    private fun hideErrorOnValueChanged(coroutineScope: CoroutineScope, control: Control<*>) {
+    private fun hideErrorOnValueChanged(coroutineScope: CoroutineScope, control: ValidatableControl<*>) {
         control::value.flow
             .drop(1)
             .onEach {

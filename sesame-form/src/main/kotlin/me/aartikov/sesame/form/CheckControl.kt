@@ -10,7 +10,7 @@ import me.aartikov.sesame.property.state
 class CheckControl(
     override val propertyHostScope: CoroutineScope,
     initialChecked: Boolean
-) : Control<Boolean>, PropertyHost {
+) : ValidatableControl<Boolean>, PropertyHost {
 
     var checked: Boolean by state(initialChecked)
     var visible by state(true)

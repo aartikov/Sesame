@@ -15,7 +15,7 @@ class InputControl(
     val keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     val filter: ((Char) -> Boolean)? = null,
     val formatter: InputFormatter? = null
-) : Control<String>, PropertyHost {
+) : ValidatableControl<String>, PropertyHost {
 
     var text: String by state(initialText)
     var visible by state(true)

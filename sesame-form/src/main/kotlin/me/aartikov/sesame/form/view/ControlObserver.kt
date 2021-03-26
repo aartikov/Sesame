@@ -12,7 +12,7 @@ import me.aartikov.sesame.form.InputControl
 import me.aartikov.sesame.form.applyOptions
 import me.aartikov.sesame.property.PropertyObserver
 
-interface InputObserver : PropertyObserver {
+interface ControlObserver : PropertyObserver {
 
     infix fun InputControl.bind(textInputLayout: TextInputLayout) {
         val editText = textInputLayout.editText!!

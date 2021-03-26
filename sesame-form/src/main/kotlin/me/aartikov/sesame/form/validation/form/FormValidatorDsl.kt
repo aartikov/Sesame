@@ -2,8 +2,8 @@ package me.aartikov.sesame.form.validation.form
 
 import androidx.annotation.StringRes
 import me.aartikov.sesame.form.CheckControl
-import me.aartikov.sesame.form.Control
 import me.aartikov.sesame.form.InputControl
+import me.aartikov.sesame.form.ValidatableControl
 import me.aartikov.sesame.form.validation.control.CheckValidator
 import me.aartikov.sesame.form.validation.control.ControlValidator
 import me.aartikov.sesame.form.validation.control.InputValidatorBuilder
@@ -13,7 +13,7 @@ import me.aartikov.sesame.property.PropertyHost
 
 class FormValidatorBuilder {
 
-    private val validators = mutableMapOf<Control<*>, ControlValidator<*>>()
+    private val validators = mutableMapOf<ValidatableControl<*>, ControlValidator<*>>()
     var features = listOf<FormValidationFeature>()
 
     fun validator(validator: ControlValidator<*>) {

@@ -2,7 +2,7 @@ package me.aartikov.sesame.form
 
 import me.aartikov.sesame.localizedstring.LocalizedString
 
-interface Control<ValueT> {
+interface ValidatableControl<ValueT> {
 
     val value: ValueT
 
