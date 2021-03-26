@@ -33,7 +33,7 @@ class FormViewModel @Inject constructor() : BaseViewModel() {
 
     val phoneInput = InputControl(
         keyboardOptions = KeyboardOptions(KeyboardType.Phone),
-        formatter = PhoneNumberFormatter
+        formatter = RussianPhoneNumberFormatter
     )
 
     val passwordInput = InputControl(
