@@ -12,7 +12,7 @@ class FormValidator(
 ) {
 
     private val mutableValidatedEventFlow = MutableSharedFlow<FormValidatedEvent>(
-        extraBufferCapacity = 100,
+        extraBufferCapacity = 1,
         onBufferOverflow = BufferOverflow.DROP_OLDEST
     )
     val validatedEventFlow get() = mutableValidatedEventFlow.asSharedFlow()

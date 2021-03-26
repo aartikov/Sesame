@@ -83,13 +83,13 @@ object FocusOnFirstInvalidControlAfterValidation : FormValidationFeature {
         formValidator.validatedEventFlow
             .onEach {
                 if (it.displayResult) {
-                    focusFirstInvalidControl(it.result)
+                    focusOnFirstInvalidControl(it.result)
                 }
             }
             .launchIn(coroutineScope)
     }
 
-    private fun focusFirstInvalidControl(validationResult: FormValidationResult) {
+    private fun focusOnFirstInvalidControl(validationResult: FormValidationResult) {
         val control = validationResult.controlResults.entries
             .firstOrNull { it.value is ValidationResult.Invalid }?.key
 

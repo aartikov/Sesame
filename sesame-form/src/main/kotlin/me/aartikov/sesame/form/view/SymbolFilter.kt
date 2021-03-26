@@ -3,7 +3,7 @@ package me.aartikov.sesame.form.view
 import android.text.InputFilter
 import android.text.Spanned
 
-class SymbolFilter(
+internal class SymbolFilter(
     private val filter: (Char) -> Boolean
 ) : InputFilter {
 

@@ -16,12 +16,14 @@ class CheckControl(
     var visible by state(true)
     var enabled by state(true)
     override var error: LocalizedString? by state(null)
-    override val skipInValidation by computed(::visible, ::enabled) { visible, enabled ->
-        !visible || !enabled
-    }
+
     val scrollTo = command<Unit>()
 
     override val value by ::checked
+
+    override val skipInValidation by computed(::visible, ::enabled) { visible, enabled ->
+        !visible || !enabled
+    }
 
     fun onCheckedChanged(checked: Boolean) {
         this.checked = checked

@@ -16,7 +16,7 @@ interface ControlObserver : PropertyObserver {
 
     infix fun InputControl.bind(textInputLayout: TextInputLayout) {
         val editText = textInputLayout.editText!!
-        editText.applyOptions(this.singleLine, this.maxLength, this.filter, this.formatter, this.keyboardOptions)
+        editText.applyOptions(singleLine, maxLength, filter, formatter, keyboardOptions)
         bindText(this, editText)
         bindFocus(this, editText)
         bindError(this, textInputLayout)
@@ -33,14 +33,14 @@ interface ControlObserver : PropertyObserver {
     }
 
     private fun bindText(inputControl: InputControl, editText: EditText) {
-        var updatingText = false
+        var updating = false
 
         inputControl::text bind { text ->
             val editable = editText.text
             if (!text.contentEquals(editable)) {
-                updatingText = true
+                updating = true
                 editable.replace(0, editable.length, text)
-                updatingText = false
+                updating = false
             }
         }
 
@@ -50,7 +50,7 @@ interface ControlObserver : PropertyObserver {
             }
 
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                if (!updatingText) {
+                if (!updating) {
                     inputControl.onTextChanged(s.toString())
                 }
             }
@@ -61,22 +61,22 @@ interface ControlObserver : PropertyObserver {
     }
 
     private fun bindFocus(inputControl: InputControl, editText: EditText) {
-        var updatingFocus = false
+        var updating = false
 
         inputControl::hasFocus bind { hasFocus ->
             if (hasFocus != editText.hasFocus()) {
-                updatingFocus = true
+                updating = true
                 if (hasFocus) {
                     editText.requestFocus()
                 } else {
                     editText.clearFocus()
                 }
-                updatingFocus = false
+                updating = false
             }
         }
 
         editText.setOnFocusChangeListener { _, hasFocus ->
-            if (!updatingFocus) {
+            if (!updating) {
                 inputControl.onFocusChanged(hasFocus)
             }
         }
@@ -89,18 +89,18 @@ interface ControlObserver : PropertyObserver {
     }
 
     private fun bindChecked(checkControl: CheckControl, checkBox: CompoundButton) {
-        var updatingChecked = false
+        var updating = false
 
         checkControl::checked bind { checked ->
             if (checked != checkBox.isChecked) {
-                updatingChecked = true
+                updating = true
                 checkBox.isChecked = checked
-                updatingChecked = false
+                updating = false
             }
         }
 
         checkBox.setOnCheckedChangeListener { _, isChecked ->
-            if (!updatingChecked) {
+            if (!updating) {
                 checkControl.onCheckedChanged(isChecked)
             }
         }

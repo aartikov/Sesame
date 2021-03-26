@@ -22,12 +22,14 @@ class InputControl(
     var enabled by state(true)
     var hasFocus: Boolean by state(false)
     override var error: LocalizedString? by state(null)
-    override val skipInValidation by computed(::visible, ::enabled) { visible, enabled ->
-        !visible || !enabled
-    }
+
     val scrollTo = command<Unit>()
 
     override val value by ::text
+
+    override val skipInValidation by computed(::visible, ::enabled) { visible, enabled ->
+        !visible || !enabled
+    }
 
     fun onTextChanged(text: String) {
         this.text = text

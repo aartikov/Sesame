@@ -1,6 +1,7 @@
 package me.aartikov.sesame.form.validation.form
 
 import androidx.annotation.StringRes
+import kotlinx.coroutines.CoroutineScope
 import me.aartikov.sesame.form.CheckControl
 import me.aartikov.sesame.form.InputControl
 import me.aartikov.sesame.form.ValidatableControl
@@ -44,22 +45,19 @@ class FormValidatorBuilder {
         validator(inputValidator)
     }
 
-    fun build(): FormValidator {
-        return FormValidator(validators)
+    fun build(coroutineScope: CoroutineScope): FormValidator {
+        return FormValidator(validators).apply {
+            features.forEach { feature ->
+                feature.install(coroutineScope, this)
+            }
+        }
     }
 }
 
 fun PropertyHost.formValidator(buildBlock: FormValidatorBuilder.() -> Unit): FormValidator {
-    val features: List<FormValidationFeature>
     return FormValidatorBuilder()
         .apply(buildBlock)
-        .apply { features = this.features }
-        .build()
-        .apply {
-            features.forEach { feature ->
-                feature.install(propertyHostScope, this)
-            }
-        }
+        .build(propertyHostScope)
 }
 
 fun FormValidatorBuilder.checked(
@@ -81,11 +79,5 @@ fun FormValidatorBuilder.checked(
     @StringRes errorMessageRes: Int,
     showError: ((LocalizedString) -> Unit)? = null
 ) {
-    this.check(
-        checkControl,
-        validation = {
-            if (it) ValidationResult.Valid else ValidationResult.Invalid(LocalizedString.resource(errorMessageRes))
-        },
-        showError
-    )
+    checked(checkControl, LocalizedString.resource(errorMessageRes), showError)
 }
