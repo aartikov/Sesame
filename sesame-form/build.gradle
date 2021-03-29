@@ -18,8 +18,8 @@ android {
 }
 
 dependencies {
-    implementation project(':sesame-property')
-    implementation project(':sesame-localized-string')
+    api project(':sesame-property')
+    api project(':sesame-localized-string')
     implementation androidx.annotation
     implementation androidx.lifecycle
     implementation material
