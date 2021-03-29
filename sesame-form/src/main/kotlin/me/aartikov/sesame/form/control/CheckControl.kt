@@ -9,15 +9,15 @@ import me.aartikov.sesame.property.state
 
 class CheckControl(
     override val propertyHostScope: CoroutineScope,
-    initialChecked: Boolean
+    initialChecked: Boolean = false
 ) : ValidatableControl<Boolean>, PropertyHost {
 
     var checked: Boolean by state(initialChecked)
-    var visible by state(true)
-    var enabled by state(true)
+    var visible: Boolean by state(true)
+    var enabled: Boolean by state(true)
     override var error: LocalizedString? by state(null)
 
-    val scrollTo = command<Unit>()
+    val scrollToIt = command<Unit>()
 
     override val value by ::checked
 
@@ -30,7 +30,7 @@ class CheckControl(
     }
 
     override fun requestFocus() {
-        scrollTo()
+        scrollToIt()
     }
 }
 

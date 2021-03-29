@@ -90,9 +90,9 @@ object FocusOnFirstInvalidControlAfterValidation : FormValidationFeature {
     }
 
     private fun focusOnFirstInvalidControl(validationResult: FormValidationResult) {
-        val control = validationResult.controlResults.entries
+        val firstInvalidControl = validationResult.controlResults.entries
             .firstOrNull { it.value is ValidationResult.Invalid }?.key
 
-        control?.requestFocus()
+        firstInvalidControl?.requestFocus()
     }
 }

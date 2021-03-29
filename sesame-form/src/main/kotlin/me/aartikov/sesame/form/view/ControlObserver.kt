@@ -22,14 +22,14 @@ interface ControlObserver : PropertyObserver {
         bindError(this, textInputLayout)
         ::visible bind { textInputLayout.visibility = if (it) View.VISIBLE else View.GONE }
         ::enabled bind { textInputLayout.isEnabled = it }
-        scrollTo bind { scrollToView(textInputLayout) }
+        scrollToIt bind { scrollToView(textInputLayout) }
     }
 
     infix fun CheckControl.bind(checkBox: CompoundButton) {
         bindChecked(this, checkBox)
         ::visible bind { checkBox.visibility = if (it) View.VISIBLE else View.GONE }
         ::enabled bind { checkBox.isEnabled = it }
-        scrollTo bind { scrollToView(checkBox) }
+        scrollToIt bind { scrollToView(checkBox) }
     }
 
     private fun bindText(inputControl: InputControl, editText: EditText) {

@@ -18,12 +18,12 @@ class InputControl(
 ) : ValidatableControl<String>, PropertyHost {
 
     var text: String by state(initialText)
-    var visible by state(true)
-    var enabled by state(true)
+    var visible: Boolean by state(true)
+    var enabled: Boolean by state(true)
     var hasFocus: Boolean by state(false)
     override var error: LocalizedString? by state(null)
 
-    val scrollTo = command<Unit>()
+    val scrollToIt = command<Unit>()
 
     override val value by ::text
 
@@ -40,7 +40,7 @@ class InputControl(
     }
 
     override fun requestFocus() {
-        scrollTo()
+        scrollToIt()
         hasFocus = true
     }
 }
@@ -49,7 +49,7 @@ fun PropertyHost.InputControl(
     initialText: String = "",
     singleLine: Boolean = true,
     maxLength: Int = Int.MAX_VALUE,
-    keyboardOptions: KeyboardOptions = KeyboardOptions(),
+    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     filter: ((Char) -> Boolean)? = null,
     formatter: InputFormatter? = null
 ): InputControl {
