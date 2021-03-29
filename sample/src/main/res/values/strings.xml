@@ -1,27 +1,50 @@
 <resources>
     <string name="app_name">Sesame sample</string>
 
+    <!-- Common -->
+    <string name="common_ok">OK</string>
+    <string name="common_cancel">Cancel</string>
+    <string name="common_retry">Retry</string>
+
     <!-- Menu -->
     <string name="counter_button">Counter</string>
     <string name="profile_button">Profile</string>
     <string name="dialogs_button">Dialogs</string>
     <string name="movies_button">Movies</string>
     <string name="clock_button">Clock</string>
+    <string name="form_button">Form</string>
 
-    <!-- Profile -->
-    <string name="retry_button">Retry</string>
+    <!-- Counter -->
+    <string name="overflow_message">It\'s enough!</string>
 
     <!-- Dialogs -->
-    <string name="ok_button">OK</string>
-    <string name="cancel_button">Cancel</string>
     <string name="show_dialog_button_text">Show Dialog</string>
     <string name="show_for_result_button_text">Show For Result</string>
     <string name="dialog_title">Dialog</string>
+    <string name="dialog_message">Some message</string>
     <string name="dialog_for_result_title">Dialog for result</string>
+    <string name="dialog_message_for_result">Some message for result</string>
 
     <!-- Movies -->
     <string name="empty_view_text">No items to display</string>
 
     <!-- Clock -->
     <string name="clock_description">Put the app to background and check logs. The clock doesn\'t tick when it is inactive.</string>
+
+    <!-- Form -->
+    <string name="name_hint">Name</string>
+    <string name="email_hint">E-mail</string>
+    <string name="phone_hint">Phone</string>
+    <string name="password_hint">Password</string>
+    <string name="confirm_password_hint">Confirm Password</string>
+    <string name="terms_hint">Accept Terms of Use</string>
+    <string name="submit_button">Submit</string>
+
+    <string name="field_is_blank_error_message">Please fill this field</string>
+    <string name="invalid_email_error_message">Invalid e-mail address</string>
+    <string name="invalid_phone_error_message">Invalid phone number</string>
+    <string name="minimum_symbols_error_message">Minimum %d symbols</string>
+    <string name="must_contain_digit_error_message">Must contain a digit</string>
+    <string name="passwords_do_not_match">Passwords do not match</string>
+    <string name="terms_are_accepted_error_message">Please accept the terms of use</string>
 </resources>

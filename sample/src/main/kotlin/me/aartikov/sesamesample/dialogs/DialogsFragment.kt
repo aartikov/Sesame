@@ -25,8 +25,8 @@ class DialogsFragment : BaseFragment<DialogsViewModel>(R.layout.fragment_dialogs
             vm.dialog bind { message, dc ->
                 AlertDialog.Builder(requireContext())
                     .setTitle(R.string.dialog_title)
-                    .setMessage(message)
-                    .setPositiveButton(R.string.ok_button) { _, _ ->
+                    .setMessage(message.resolve(requireContext()))
+                    .setPositiveButton(R.string.common_ok) { _, _ ->
                         dc.dismiss()
                     }
                     .create()
@@ -35,17 +35,19 @@ class DialogsFragment : BaseFragment<DialogsViewModel>(R.layout.fragment_dialogs
             vm.dialogForResult bind { message, dc ->
                 AlertDialog.Builder(requireContext())
                     .setTitle(R.string.dialog_for_result_title)
-                    .setMessage(message)
-                    .setPositiveButton(R.string.ok_button) { _, _ ->
+                    .setMessage(message.resolve(requireContext()))
+                    .setPositiveButton(R.string.common_ok) { _, _ ->
                         dc.sendResult(DialogResult.Ok)
                     }
-                    .setNegativeButton(R.string.cancel_button) { _, _ ->
+                    .setNegativeButton(R.string.common_cancel) { _, _ ->
                         dc.sendResult(DialogResult.Cancel)
                     }
                     .create()
             }
 
-            vm.showMessage bind { Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show() }
+            vm.showMessage bind {
+                Toast.makeText(requireContext(), it.resolve(requireContext()), Toast.LENGTH_SHORT).show()
+            }
         }
     }
 }

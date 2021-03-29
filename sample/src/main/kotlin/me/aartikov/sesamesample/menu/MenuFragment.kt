@@ -22,6 +22,7 @@ class MenuFragment : BaseFragment<MenuViewModel>(R.layout.fragment_menu, MenuVie
             dialogsButton.setOnClickListener { vm.onDialogsButtonClicked() }
             moviesButton.setOnClickListener { vm.onMoviesButtonClicked() }
             clockButton.setOnClickListener { vm.onClockButtonClicked() }
+            formButton.setOnClickListener { vm.onFormButtonClicked() }
         }
     }
 }

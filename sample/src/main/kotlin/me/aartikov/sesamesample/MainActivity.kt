@@ -10,6 +10,7 @@ import me.aartikov.sesamesample.base.BaseFragment
 import me.aartikov.sesamesample.clock.ClockFragment
 import me.aartikov.sesamesample.counter.CounterFragment
 import me.aartikov.sesamesample.dialogs.DialogsFragment
+import me.aartikov.sesamesample.form.FormFragment
 import me.aartikov.sesamesample.menu.MenuFragment
 import me.aartikov.sesamesample.movies.ui.MoviesFragment
 import me.aartikov.sesamesample.profile.ui.ProfileFragment
@@ -46,6 +47,7 @@ class MainActivity : AppCompatActivity(), NavigationMessageHandler {
             is OpenDialogsScreen -> navigator.goTo(DialogsFragment())
             is OpenMoviesScreen -> navigator.goTo(MoviesFragment())
             is OpenClockScreen -> navigator.goTo(ClockFragment())
+            is OpenFormScreen -> navigator.goTo(FormFragment())
         }
         return true
     }

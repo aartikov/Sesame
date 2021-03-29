@@ -27,4 +27,8 @@ class MenuViewModel @Inject constructor() : BaseViewModel() {
     fun onClockButtonClicked() {
         navigate(OpenClockScreen)
     }
+
+    fun onFormButtonClicked() {
+        navigate(OpenFormScreen)
+    }
 }
