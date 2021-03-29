@@ -50,12 +50,12 @@ interface ControlObserver : PropertyObserver {
             }
 
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                if (!updating) {
-                    inputControl.onTextChanged(s.toString())
-                }
             }
 
             override fun afterTextChanged(s: Editable) {
+                if (!updating) {
+                    inputControl.onTextChanged(s.toString())
+                }
             }
         })
     }
