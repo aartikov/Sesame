@@ -16,6 +16,8 @@ import nl.dionsegijn.konfetti.models.Size
 @AndroidEntryPoint
 class FormFragment : BaseFragment<FormViewModel>(R.layout.fragment_form, FormViewModel::class) {
 
+    override val titleRes: Int = R.string.form_title
+
     private val binding by viewBinding(FragmentFormBinding::bind)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

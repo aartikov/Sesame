@@ -25,6 +25,8 @@ abstract class BaseFragment<VM : BaseViewModel>(
     override val dialogObserverLifecycleOwner: LifecycleOwner get() = viewLifecycleOwner
     val vm: VM by createViewModelLazy(vmClass, { viewModelStore })
 
+    abstract val titleRes: Int
+
     @Inject
     internal lateinit var navigationMessageDispatcher: NavigationMessageDispatcher
 

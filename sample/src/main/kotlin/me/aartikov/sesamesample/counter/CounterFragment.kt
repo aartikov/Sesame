@@ -12,6 +12,8 @@ import me.aartikov.sesamesample.databinding.FragmentCounterBinding
 @AndroidEntryPoint
 class CounterFragment : BaseFragment<CounterViewModel>(R.layout.fragment_counter, CounterViewModel::class) {
 
+    override val titleRes: Int = R.string.counter_title
+
     private val binding by viewBinding(FragmentCounterBinding::bind)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

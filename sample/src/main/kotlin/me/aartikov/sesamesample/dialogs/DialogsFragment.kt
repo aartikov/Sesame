@@ -13,6 +13,8 @@ import me.aartikov.sesamesample.databinding.FragmentDialogsBinding
 @AndroidEntryPoint
 class DialogsFragment : BaseFragment<DialogsViewModel>(R.layout.fragment_dialogs, DialogsViewModel::class) {
 
+    override val titleRes: Int = R.string.dialogs_title
+
     private val binding by viewBinding(FragmentDialogsBinding::bind)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

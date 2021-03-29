@@ -19,6 +19,8 @@ import me.aartikov.sesamesample.movies.utils.doOnScrollToEnd
 @AndroidEntryPoint
 class MoviesFragment : BaseFragment<MoviesViewModel>(R.layout.fragment_movies, MoviesViewModel::class) {
 
+    override val titleRes: Int = R.string.movies_title
+
     private val binding by viewBinding(FragmentMoviesBinding::bind)
 
     private val movieAdapter = GroupieAdapter()

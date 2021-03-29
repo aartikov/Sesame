@@ -6,18 +6,15 @@
     <string name="common_cancel">Cancel</string>
     <string name="common_retry">Retry</string>
 
-    <!-- Menu -->
-    <string name="counter_button">Counter</string>
-    <string name="profile_button">Profile</string>
-    <string name="dialogs_button">Dialogs</string>
-    <string name="movies_button">Movies</string>
-    <string name="clock_button">Clock</string>
-    <string name="form_button">Form</string>
-
     <!-- Counter -->
+    <string name="counter_title">Counter</string>
     <string name="overflow_message">It\'s enough!</string>
 
+    <!-- Profile -->
+    <string name="profile_title">Profile</string>
+
     <!-- Dialogs -->
+    <string name="dialogs_title">Dialogs</string>
     <string name="show_dialog_button_text">Show Dialog</string>
     <string name="show_for_result_button_text">Show For Result</string>
     <string name="dialog_title">Dialog</string>
@@ -26,12 +23,15 @@
     <string name="dialog_message_for_result">Some message for result</string>
 
     <!-- Movies -->
+    <string name="movies_title">Movies</string>
     <string name="empty_view_text">No items to display</string>
 
     <!-- Clock -->
+    <string name="clock_title">Clock</string>
     <string name="clock_description">Put the app to background and check logs. The clock doesn\'t tick when it is inactive.</string>
 
     <!-- Form -->
+    <string name="form_title">Form</string>
     <string name="name_hint">Name</string>
     <string name="email_hint">E-mail</string>
     <string name="phone_hint">Phone</string>

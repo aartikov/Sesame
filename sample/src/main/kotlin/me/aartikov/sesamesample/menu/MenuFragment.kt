@@ -11,6 +11,8 @@ import me.aartikov.sesamesample.databinding.FragmentMenuBinding
 @AndroidEntryPoint
 class MenuFragment : BaseFragment<MenuViewModel>(R.layout.fragment_menu, MenuViewModel::class) {
 
+    override val titleRes: Int = R.string.app_name
+
     private val binding by viewBinding(FragmentMenuBinding::bind)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

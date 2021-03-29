@@ -6,13 +6,15 @@ import androidx.core.view.isVisible
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
 import dagger.hilt.android.AndroidEntryPoint
+import me.aartikov.sesame.loading.simple.Loading
 import me.aartikov.sesamesample.R
 import me.aartikov.sesamesample.base.BaseFragment
 import me.aartikov.sesamesample.databinding.FragmentProfileBinding
-import me.aartikov.sesame.loading.simple.Loading
 
 @AndroidEntryPoint
 class ProfileFragment : BaseFragment<ProfileViewModel>(R.layout.fragment_profile, ProfileViewModel::class) {
+
+    override val titleRes: Int = R.string.profile_title
 
     private val binding by viewBinding(FragmentProfileBinding::bind)
 

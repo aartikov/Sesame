@@ -49,10 +49,16 @@ class MainActivity : AppCompatActivity(), NavigationMessageHandler {
             is OpenClockScreen -> navigator.goTo(ClockFragment())
             is OpenFormScreen -> navigator.goTo(FormFragment())
         }
+        updateTitle()
         return true
     }
 
     override fun onBackPressed() {
         (navigator.currentScreen as? BaseFragment<*>)?.onBackPressed()
+    }
+
+    private fun updateTitle() {
+        val titleRes = (navigator.currentScreen as? BaseFragment<*>)?.titleRes ?: R.string.app_name
+        supportActionBar?.setTitle(titleRes)
     }
 }
