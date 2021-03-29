@@ -11,7 +11,7 @@ The component provides `DialogControl` class. This class stores a dialog state a
 1. Create `DialogControl` in `ViewModel`. Its first type parameter is a type of data to display in a dialog, the second one is a type of result value. Both can be `Unit` if you don't need it.
 
 ```kotlin
-enum class DialogResult { OK, CANCEL }
+enum class DialogResult { Ok, Cancel }
 
 val dialog = DialogControl<String, DialogResult>()
 ```
@@ -49,10 +49,10 @@ override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
             .setTitle(R.string.dialog_title)
             .setMessage(message)
             .setPositiveButton(R.string.ok_button) { _, _ ->
-                dc.sendResult(DialogResult.OK)
+                dc.sendResult(DialogResult.Ok)
             }
             .setNegativeButton(R.string.cancel_button) { _, _ ->
-                dc.sendResult(DialogResult.CANCEL)
+                dc.sendResult(DialogResult.Cancel)
             }
             .create()
     }

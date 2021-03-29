@@ -22,9 +22,9 @@ class DialogsViewModel @Inject constructor() : BaseViewModel() {
 
     fun onShowForResultButtonClicked() {
         viewModelScope.launch {
-            val result = dialogForResult.showForResult("Some message for result") ?: DialogResult.CANCEL
+            val result = dialogForResult.showForResult("Some message for result") ?: DialogResult.Cancel
 
-            if (result == DialogResult.OK) {
+            if (result == DialogResult.Ok) {
                 showMessage("OK")
             } else {
                 showMessage("Cancel")

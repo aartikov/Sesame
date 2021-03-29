@@ -86,10 +86,10 @@ sealed class State<out T> {
 }
 
 enum class DataStatus {
-    NORMAL,
-    REFRESHING,
-    LOADING_MORE,
-    FULL_DATA
+    Normal,
+    Refreshing,
+    LoadingMore,
+    FullData
 }
 ```
 

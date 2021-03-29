@@ -37,10 +37,10 @@ class DialogsFragment : BaseFragment<DialogsViewModel>(R.layout.fragment_dialogs
                     .setTitle(R.string.dialog_for_result_title)
                     .setMessage(message)
                     .setPositiveButton(R.string.ok_button) { _, _ ->
-                        dc.sendResult(DialogResult.OK)
+                        dc.sendResult(DialogResult.Ok)
                     }
                     .setNegativeButton(R.string.cancel_button) { _, _ ->
-                        dc.sendResult(DialogResult.CANCEL)
+                        dc.sendResult(DialogResult.Cancel)
                     }
                     .create()
             }
