@@ -6,7 +6,7 @@ import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import me.aartikov.sesame.loading.simple.isEmpty
 import me.aartikov.sesame.loop.EffectHandler
-import java.util.concurrent.CancellationException
+import kotlin.coroutines.cancellation.CancellationException
 
 internal class LoadingEffectHandler<T : Any>(private val load: suspend (fresh: Boolean) -> T?) :
     EffectHandler<Effect<T>, Action<T>> {
@@ -28,17 +28,17 @@ internal class LoadingEffectHandler<T : Any>(private val load: suspend (fresh: B
         job = launch {
             try {
                 val data = load(fresh)
-                if (!isActive) return@launch
-
-                if (data == null || isEmpty(data)) {
-                    actionConsumer(Action.EmptyDataLoaded)
-                } else {
-                    actionConsumer(Action.DataLoaded(data))
+                if (isActive) {
+                    if (data == null || isEmpty(data)) {
+                        actionConsumer(Action.EmptyDataLoaded)
+                    } else {
+                        actionConsumer(Action.DataLoaded(data))
+                    }
                 }
+            } catch (e: CancellationException) {
+                throw e
             } catch (e: Exception) {
-                if (!isActive) return@launch
-
-                if (e !is CancellationException) {
+                if (isActive) {
                     actionConsumer(Action.LoadingError(e))
                 }
             }

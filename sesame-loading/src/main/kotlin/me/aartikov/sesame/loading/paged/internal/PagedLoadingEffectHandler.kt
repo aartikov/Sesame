@@ -7,7 +7,7 @@ import kotlinx.coroutines.launch
 import me.aartikov.sesame.loading.paged.PagedLoader
 import me.aartikov.sesame.loading.paged.PagingInfo
 import me.aartikov.sesame.loop.EffectHandler
-import java.util.concurrent.CancellationException
+import kotlin.coroutines.cancellation.CancellationException
 
 internal class PagedLoadingEffectHandler<T : Any>(private val loader: PagedLoader<T>) :
     EffectHandler<Effect<T>, Action<T>> {
@@ -30,17 +30,17 @@ internal class PagedLoadingEffectHandler<T : Any>(private val loader: PagedLoade
         job = launch {
             try {
                 val data = loader.loadFirstPage(fresh)
-                if (!isActive) return@launch
-
-                if (data.isEmpty()) {
-                    actionConsumer(Action.EmptyPageLoaded)
-                } else {
-                    actionConsumer(Action.NewPageLoaded(data))
+                if (isActive) {
+                    if (data.isEmpty()) {
+                        actionConsumer(Action.EmptyPageLoaded)
+                    } else {
+                        actionConsumer(Action.NewPageLoaded(data))
+                    }
                 }
+            } catch (e: CancellationException) {
+                throw e
             } catch (e: Exception) {
-                if (!isActive) return@launch
-
-                if (e !is CancellationException) {
+                if (isActive) {
                     actionConsumer(Action.LoadingError(e))
                 }
             }
@@ -55,17 +55,17 @@ internal class PagedLoadingEffectHandler<T : Any>(private val loader: PagedLoade
         job = launch {
             try {
                 val data = loader.loadNextPage(pagingInfo)
-                if (!isActive) return@launch
-
-                if (data.isEmpty()) {
-                    actionConsumer(Action.EmptyPageLoaded)
-                } else {
-                    actionConsumer(Action.NewPageLoaded(data))
+                if (isActive) {
+                    if (data.isEmpty()) {
+                        actionConsumer(Action.EmptyPageLoaded)
+                    } else {
+                        actionConsumer(Action.NewPageLoaded(data))
+                    }
                 }
+            } catch (e: CancellationException) {
+                throw e
             } catch (e: Exception) {
-                if (!isActive) return@launch
-
-                if (e !is CancellationException) {
+                if (isActive) {
                     actionConsumer(Action.LoadingError(e))
                 }
             }
