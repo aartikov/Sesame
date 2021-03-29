@@ -5,7 +5,7 @@ import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import me.aartikov.sesame.form.ValidatableControl
+import me.aartikov.sesame.form.control.ValidatableControl
 import me.aartikov.sesame.form.validation.control.ControlValidator
 import me.aartikov.sesame.form.validation.control.InputValidator
 import me.aartikov.sesame.form.validation.control.ValidationResult

@@ -2,7 +2,7 @@ package me.aartikov.sesamesample.form
 
 import android.util.Patterns
 import dagger.hilt.android.lifecycle.HiltViewModel
-import me.aartikov.sesame.form.*
+import me.aartikov.sesame.form.control.*
 import me.aartikov.sesame.form.validation.control.*
 import me.aartikov.sesame.form.validation.form.*
 import me.aartikov.sesame.localizedstring.LocalizedString

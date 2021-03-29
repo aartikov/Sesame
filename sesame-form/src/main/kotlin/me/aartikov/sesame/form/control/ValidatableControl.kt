@@ -1,4 +1,4 @@
-package me.aartikov.sesame.form
+package me.aartikov.sesame.form.control
 
 import me.aartikov.sesame.localizedstring.LocalizedString
 

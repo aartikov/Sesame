@@ -7,9 +7,9 @@ import android.view.View
 import android.widget.CompoundButton
 import android.widget.EditText
 import com.google.android.material.textfield.TextInputLayout
-import me.aartikov.sesame.form.CheckControl
-import me.aartikov.sesame.form.InputControl
 import me.aartikov.sesame.form.applyOptions
+import me.aartikov.sesame.form.control.CheckControl
+import me.aartikov.sesame.form.control.InputControl
 import me.aartikov.sesame.property.PropertyObserver
 
 interface ControlObserver : PropertyObserver {

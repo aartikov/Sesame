@@ -2,9 +2,9 @@ package me.aartikov.sesame.form.validation.form
 
 import androidx.annotation.StringRes
 import kotlinx.coroutines.CoroutineScope
-import me.aartikov.sesame.form.CheckControl
-import me.aartikov.sesame.form.InputControl
-import me.aartikov.sesame.form.ValidatableControl
+import me.aartikov.sesame.form.control.CheckControl
+import me.aartikov.sesame.form.control.InputControl
+import me.aartikov.sesame.form.control.ValidatableControl
 import me.aartikov.sesame.form.validation.control.CheckValidator
 import me.aartikov.sesame.form.validation.control.ControlValidator
 import me.aartikov.sesame.form.validation.control.InputValidatorBuilder

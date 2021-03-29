@@ -2,7 +2,7 @@ package me.aartikov.sesame.form.validation.form
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.*
-import me.aartikov.sesame.form.ValidatableControl
+import me.aartikov.sesame.form.control.ValidatableControl
 import me.aartikov.sesame.property.PropertyHost
 import me.aartikov.sesame.property.StateDelegate
 import me.aartikov.sesame.property.flow

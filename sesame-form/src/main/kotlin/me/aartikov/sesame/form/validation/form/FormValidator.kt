@@ -3,7 +3,7 @@ package me.aartikov.sesame.form.validation.form
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
-import me.aartikov.sesame.form.ValidatableControl
+import me.aartikov.sesame.form.control.ValidatableControl
 import me.aartikov.sesame.form.validation.control.ControlValidator
 import me.aartikov.sesame.form.validation.control.ValidationResult
 

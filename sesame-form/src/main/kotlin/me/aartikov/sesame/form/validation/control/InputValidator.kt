@@ -1,6 +1,6 @@
 package me.aartikov.sesame.form.validation.control
 
-import me.aartikov.sesame.form.InputControl
+import me.aartikov.sesame.form.control.InputControl
 
 class InputValidator constructor(
     override val control: InputControl,

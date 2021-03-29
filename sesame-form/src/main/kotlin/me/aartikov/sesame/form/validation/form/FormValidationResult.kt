@@ -1,6 +1,6 @@
 package me.aartikov.sesame.form.validation.form
 
-import me.aartikov.sesame.form.ValidatableControl
+import me.aartikov.sesame.form.control.ValidatableControl
 import me.aartikov.sesame.form.validation.control.ValidationResult
 
 data class FormValidationResult(

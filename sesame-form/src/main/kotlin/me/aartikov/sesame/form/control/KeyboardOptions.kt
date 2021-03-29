@@ -1,4 +1,4 @@
-package me.aartikov.sesame.form
+package me.aartikov.sesame.form.control
 
 data class KeyboardOptions(
     val keyboardType: KeyboardType = KeyboardType.Text,
