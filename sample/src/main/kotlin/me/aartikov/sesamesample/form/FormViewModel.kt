@@ -7,9 +7,15 @@ import me.aartikov.sesame.form.validation.control.*
 import me.aartikov.sesame.form.validation.form.*
 import me.aartikov.sesame.localizedstring.LocalizedString
 import me.aartikov.sesame.property.command
+import me.aartikov.sesame.property.computed
 import me.aartikov.sesamesample.R
 import me.aartikov.sesamesample.base.BaseViewModel
 import javax.inject.Inject
+
+enum class SubmitButtonState {
+    Valid,
+    Invalid
+}
 
 @HiltViewModel
 class FormViewModel @Inject constructor() : BaseViewModel() {
@@ -86,6 +92,12 @@ class FormViewModel @Inject constructor() : BaseViewModel() {
         }
 
         checked(termsCheckBox, R.string.terms_are_accepted_error_message)
+    }
+
+    private val validationResult by dynamicValidationResult(formValidator)
+
+    val submitButtonState by computed(::validationResult) {
+        if (it.isValid) SubmitButtonState.Valid else SubmitButtonState.Invalid
     }
 
     fun onSubmitClicked() {

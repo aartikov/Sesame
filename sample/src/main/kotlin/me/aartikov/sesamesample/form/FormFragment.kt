@@ -29,6 +29,10 @@ class FormFragment : BaseFragment<FormViewModel>(R.layout.fragment_form, FormVie
             vm.confirmPasswordInput bind confirmPasswordInputLayout
             vm.termsCheckBox bind termsCheckbox
             vm.termsCheckBox::error bind { termsError.localizedText = it }
+            vm::submitButtonState bind {
+                val buttonColorRes = if (it == SubmitButtonState.Valid) R.color.green else R.color.red
+                submitButton.setBackgroundColor(ContextCompat.getColor(requireContext(), buttonColorRes))
+            }
             submitButton.setOnClickListener { vm.onSubmitClicked() }
             vm.dropKonfetti bind { binding.konfetti.drop() }
         }
