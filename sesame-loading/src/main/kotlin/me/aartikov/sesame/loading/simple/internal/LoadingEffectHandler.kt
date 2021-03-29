@@ -2,6 +2,7 @@ package me.aartikov.sesame.loading.simple.internal
 
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import me.aartikov.sesame.loading.simple.isEmpty
 import me.aartikov.sesame.loop.EffectHandler
@@ -26,13 +27,17 @@ internal class LoadingEffectHandler<T : Any>(private val load: suspend (fresh: B
         job?.cancel()
         job = launch {
             try {
-                val data = loader(fresh)
+                val data = load(fresh)
+                if (!isActive) return@launch
+
                 if (data == null || isEmpty(data)) {
                     actionConsumer(Action.EmptyDataLoaded)
                 } else {
                     actionConsumer(Action.DataLoaded(data))
                 }
             } catch (e: Exception) {
+                if (!isActive) return@launch
+
                 if (e !is CancellationException) {
                     actionConsumer(Action.LoadingError(e))
                 }

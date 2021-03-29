@@ -2,6 +2,7 @@ package me.aartikov.sesame.loading.paged.internal
 
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import me.aartikov.sesame.loading.paged.PagedLoader
 import me.aartikov.sesame.loading.paged.PagingInfo
@@ -29,12 +30,16 @@ internal class PagedLoadingEffectHandler<T : Any>(private val loader: PagedLoade
         job = launch {
             try {
                 val data = loader.loadFirstPage(fresh)
+                if (!isActive) return@launch
+
                 if (data.isEmpty()) {
                     actionConsumer(Action.EmptyPageLoaded)
                 } else {
                     actionConsumer(Action.NewPageLoaded(data))
                 }
             } catch (e: Exception) {
+                if (!isActive) return@launch
+
                 if (e !is CancellationException) {
                     actionConsumer(Action.LoadingError(e))
                 }
@@ -50,12 +55,16 @@ internal class PagedLoadingEffectHandler<T : Any>(private val loader: PagedLoade
         job = launch {
             try {
                 val data = loader.loadNextPage(pagingInfo)
+                if (!isActive) return@launch
+
                 if (data.isEmpty()) {
                     actionConsumer(Action.EmptyPageLoaded)
                 } else {
                     actionConsumer(Action.NewPageLoaded(data))
                 }
             } catch (e: Exception) {
+                if (!isActive) return@launch
+
                 if (e !is CancellationException) {
                     actionConsumer(Action.LoadingError(e))
                 }
