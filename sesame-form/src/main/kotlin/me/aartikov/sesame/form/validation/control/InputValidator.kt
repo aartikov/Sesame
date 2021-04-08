@@ -1,7 +1,15 @@
 package me.aartikov.sesame.form.validation.control
 
 import me.aartikov.sesame.form.control.InputControl
+import me.aartikov.sesame.form.validation.form.FormValidatorBuilder
 
+/**
+ * Validator for [InputControl].
+ * @param required specifies if blank input is considered valid.
+ * @param validations a list of functions that implements validation logic. Validations are processed sequentially until first error.
+ *
+ * Use [FormValidatorBuilder.input] to create it with a handy DSL.
+ */
 class InputValidator constructor(
     override val control: InputControl,
     private val required: Boolean = true,

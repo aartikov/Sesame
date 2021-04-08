@@ -8,6 +8,10 @@ import me.aartikov.sesame.property.StateDelegate
 import me.aartikov.sesame.property.flow
 import me.aartikov.sesame.property.stateFromFlow
 
+/**
+ * Validates a form dynamically and emits validation result. Validation called whenever a value or skipInValidation
+ * of some control is changed.
+ */
 fun PropertyHost.dynamicValidationResult(formValidator: FormValidator): StateDelegate<FormValidationResult> {
     val result = MutableStateFlow(formValidator.validate(displayResult = false))
     formValidator.validators.forEach { (control, _) ->
