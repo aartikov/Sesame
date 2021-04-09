@@ -28,12 +28,20 @@ class MainActivity : AppCompatActivity(), NavigationMessageHandler {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        navigationMessageDispatcher.attach(this)
         navigator = FragmentNavigator(R.id.container, supportFragmentManager)
-
         if (savedInstanceState == null) {
             navigator.setRoot(MenuFragment())
         }
+    }
+
+    override fun onResumeFragments() {
+        super.onResumeFragments()
+        navigationMessageDispatcher.resume()
+    }
+
+    override fun onPause() {
+        navigationMessageDispatcher.pause()
+        super.onPause()
     }
 
     override fun handleNavigationMessage(message: NavigationMessage): Boolean {

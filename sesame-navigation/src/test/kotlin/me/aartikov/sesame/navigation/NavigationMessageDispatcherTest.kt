@@ -1,10 +1,7 @@
 package me.aartikov.sesame.navigation
 
-import androidx.lifecycle.Lifecycle
 import com.nhaarman.mockitokotlin2.*
 import me.aartikov.sesame.navigation.utils.MainDispatcherRule
-import me.aartikov.sesame.navigation.utils.TestLifecycleOwner
-import org.junit.Assert.assertEquals
 import org.junit.Rule
 import org.junit.Test
 
@@ -14,61 +11,31 @@ class NavigationMessageDispatcherTest {
     val mainDispatcherRule = MainDispatcherRule()
 
     @Test
-    fun `doesn't handles navigation messages when is not attached`() {
+    fun `returns error when is not resumed`() {
         val testMessage = object : NavigationMessage {}
         val testHandler = mockNavigationMessageHandler { true }
-        val dispatcher = createDispatcher(testHandler)
+        val testOnError = mock<Function1<NavigationError, Unit>>()
+        val dispatcher = createDispatcher(testHandler, onError = testOnError)
 
         dispatcher.dispatch(testMessage, testHandler)
 
-        verifyZeroInteractions(testHandler)
-    }
-
-    @Test
-    fun `doesn't handles navigation messages when is not resumed`() {
-        val testMessage = object : NavigationMessage {}
-        val testHandler = mockNavigationMessageHandler { true }
-        val dispatcher = createDispatcher(testHandler)
-        val lifecycleOwner = TestLifecycleOwner()
-        dispatcher.attach(lifecycleOwner)
-
-        lifecycleOwner.moveToState(Lifecycle.State.STARTED)
-        dispatcher.dispatch(testMessage, testHandler)
-
+        verify(testOnError).invoke(NavigationError.DispatcherCantHandleMessages(testMessage))
         verifyZeroInteractions(testHandler)
     }
 
     @Test
     fun `handles navigation messages when is resumed`() {
         val testMessage = object : NavigationMessage {}
+        val testOnError = mock<Function1<NavigationError, Unit>>()
         val testHandler = mockNavigationMessageHandler { true }
-        val dispatcher = createDispatcher(testHandler)
-        val lifecycleOwner = TestLifecycleOwner()
-        dispatcher.attach(lifecycleOwner)
+        val dispatcher = createDispatcher(testOnError, testHandler)
 
-        lifecycleOwner.moveToState(Lifecycle.State.RESUMED)
+        dispatcher.resume()
         dispatcher.dispatch(testMessage, testHandler)
 
+        verifyZeroInteractions(testOnError)
         verify(testHandler).handleNavigationMessage(testMessage)
     }
-
-    @Test
-    fun `buffers navigation messages`() {
-        val testMessage = object : NavigationMessage {}
-        val testHandler = mockNavigationMessageHandler { true }
-        val dispatcher = createDispatcher(testHandler)
-        val lifecycleOwner = TestLifecycleOwner()
-        dispatcher.attach(lifecycleOwner)
-
-        lifecycleOwner.moveToState(Lifecycle.State.STARTED)
-        dispatcher.dispatch(testMessage, testHandler)
-        dispatcher.dispatch(testMessage, testHandler)
-        lifecycleOwner.moveToState(Lifecycle.State.RESUMED)
-        dispatcher.dispatch(testMessage, testHandler)
-
-        verify(testHandler, times(3)).handleNavigationMessage(testMessage)
-    }
-
 
     @Test
     fun `handles navigation messages by a chain of handlers`() {
@@ -77,10 +44,8 @@ class NavigationMessageDispatcherTest {
         val workingHandler = mockNavigationMessageHandler { true }
         val unreachableHandler = mockNavigationMessageHandler { true }
         val dispatcher = createDispatcher(ignoringHandler, workingHandler, unreachableHandler)
-        val lifecycleOwner = TestLifecycleOwner()
-        dispatcher.attach(lifecycleOwner)
-        lifecycleOwner.moveToState(Lifecycle.State.RESUMED)
 
+        dispatcher.resume()
         dispatcher.dispatch(testMessage, ignoringHandler)
 
         verify(ignoringHandler).handleNavigationMessage(testMessage)
@@ -89,62 +54,39 @@ class NavigationMessageDispatcherTest {
     }
 
     @Test
-    fun `doesn't overlap message handling`() {      // Prevents "FragmentManager is already executing transactions" exception
-        val testMessage1 = object : NavigationMessage {}
-        val testMessage2 = object : NavigationMessage {}
+    fun `returns error when other message handling is in progress`() {
+        val testMessage = object : NavigationMessage {}
 
         lateinit var dispatcher: NavigationMessageDispatcher
-        var log = ""
 
-        val testHandler1 = mockNavigationMessageHandler { message ->
-            if (message == testMessage1) {
-                log += "m1_begin "
-                dispatcher.dispatch(testMessage2, this)
-                log += "m1_end "
-                true
-            } else {
-                false
-            }
+        val testHandler = mockNavigationMessageHandler { message ->
+            dispatcher.dispatch(message, this)
+            true
         }
+        val testOnError = mock<Function1<NavigationError, Unit>>()
+        dispatcher = createDispatcher(testHandler, onError = testOnError)
 
-        val testHandler2 = mockNavigationMessageHandler { message ->
-            if (message == testMessage2) {
-                log += "m2"
-                true
-            } else {
-                false
-            }
-        }
+        dispatcher.resume()
+        dispatcher.dispatch(testMessage, testHandler)
 
-        dispatcher = createDispatcher(testHandler1, testHandler2)
-        val lifecycleOwner = TestLifecycleOwner()
-        dispatcher.attach(lifecycleOwner)
-        lifecycleOwner.moveToState(Lifecycle.State.RESUMED)
-
-        dispatcher.dispatch(testMessage1, testHandler1)
-
-        assertEquals("m1_begin m1_end m2", log)
+        verify(testOnError).invoke(NavigationError.DispatcherCantHandleMessages(testMessage))
+        verify(testHandler, times(1)).handleNavigationMessage(testMessage)
     }
 
     @Test
-    fun `drops unhandled messages after reattach`() {
+    fun `returns error when message handler missing`() {
         val testMessage = object : NavigationMessage {}
-        val testHandler = mockNavigationMessageHandler { true }
-        val dispatcher = createDispatcher(testHandler)
-        val lifecycleOwner1 = TestLifecycleOwner()
-        val lifecycleOwner2 = TestLifecycleOwner()
 
-        dispatcher.attach(lifecycleOwner1)
-        lifecycleOwner1.moveToState(Lifecycle.State.STARTED)
-        dispatcher.dispatch(testMessage, testHandler)
+        val testHandler = mockNavigationMessageHandler { message ->
+            false
+        }
+        val testOnError = mock<Function1<NavigationError, Unit>>()
+        val dispatcher = createDispatcher(testHandler, onError = testOnError)
+
+        dispatcher.resume()
         dispatcher.dispatch(testMessage, testHandler)
 
-        lifecycleOwner2.moveToState(Lifecycle.State.STARTED)
-        dispatcher.attach(lifecycleOwner2)
-        dispatcher.dispatch(testMessage, testHandler)
-        lifecycleOwner2.moveToState(Lifecycle.State.RESUMED)
-
-        verify(testHandler, times(1)).handleNavigationMessage(testMessage)
+        verify(testOnError).invoke(NavigationError.MessageHandlerMissing(testMessage))
     }
 
     private fun mockNavigationMessageHandler(handle: (NavigationMessage) -> Boolean): NavigationMessageHandler {
@@ -153,12 +95,15 @@ class NavigationMessageDispatcherTest {
         }
     }
 
-    private fun createDispatcher(vararg handlers: Any): NavigationMessageDispatcher {
+    private fun createDispatcher(
+        vararg handlers: Any,
+        onError: ((NavigationError) -> Unit)? = null
+    ): NavigationMessageDispatcher {
         val nodeWalker = object : NodeWalker {
             override fun getNextNode(node: Any): Any? {
                 return handlers.getOrNull(handlers.indexOf(node) + 1)
             }
         }
-        return NavigationMessageDispatcher(nodeWalker)
+        return NavigationMessageDispatcher(nodeWalker, onError)
     }
 }

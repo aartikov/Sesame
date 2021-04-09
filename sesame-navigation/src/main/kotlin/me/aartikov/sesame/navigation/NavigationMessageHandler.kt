@@ -1,7 +1,7 @@
 package me.aartikov.sesame.navigation
 
 /**
- * Should be implemented by a navigation node to handle []navigation messages][NavigationMessage].
+ * Should be implemented by a navigation node to handle [navigation messages][NavigationMessage].
  * See more about message dispatching: [NavigationMessageDispatcher.dispatch].
  */
 interface NavigationMessageHandler {
