@@ -1,8 +1,17 @@
 package me.aartikov.sesame.form.validation.control
 
 import me.aartikov.sesame.form.control.CheckControl
+import me.aartikov.sesame.form.validation.form.FormValidatorBuilder
+import me.aartikov.sesame.form.validation.form.checked
 import me.aartikov.sesame.localizedstring.LocalizedString
 
+/**
+ * Validator for [CheckControl].
+ * @param validation implements validation logic.
+ * @param showError a callback that is called to show one-time error such as a toast. For permanent errors use [CheckControl.error] state.
+ *
+ * Use [FormValidatorBuilder.checked] to create it with a handy DSL.
+ */
 class CheckValidator constructor(
     override val control: CheckControl,
     private val validation: (Boolean) -> ValidationResult,

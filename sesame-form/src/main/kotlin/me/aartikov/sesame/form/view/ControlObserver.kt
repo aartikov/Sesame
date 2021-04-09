@@ -7,13 +7,18 @@ import android.view.View
 import android.widget.CompoundButton
 import android.widget.EditText
 import com.google.android.material.textfield.TextInputLayout
-import me.aartikov.sesame.form.applyOptions
 import me.aartikov.sesame.form.control.CheckControl
 import me.aartikov.sesame.form.control.InputControl
 import me.aartikov.sesame.property.PropertyObserver
 
+/**
+ * Gives access to binding methods for controls.
+ */
 interface ControlObserver : PropertyObserver {
 
+    /**
+     * Connects [InputControl] and [TextInputLayout] with two-way binding.
+     */
     infix fun InputControl.bind(textInputLayout: TextInputLayout) {
         val editText = textInputLayout.editText!!
         editText.applyOptions(singleLine, maxLength, filter, formatter, keyboardOptions)
@@ -25,11 +30,14 @@ interface ControlObserver : PropertyObserver {
         scrollToIt bind { scrollToView(textInputLayout) }
     }
 
-    infix fun CheckControl.bind(checkBox: CompoundButton) {
-        bindChecked(this, checkBox)
-        ::visible bind { checkBox.visibility = if (it) View.VISIBLE else View.GONE }
-        ::enabled bind { checkBox.isEnabled = it }
-        scrollToIt bind { scrollToView(checkBox) }
+    /**
+     * Connects [CheckControl] and a [checkableView] with two-way binding.
+     */
+    infix fun CheckControl.bind(checkableView: CompoundButton) {
+        bindChecked(this, checkableView)
+        ::visible bind { checkableView.visibility = if (it) View.VISIBLE else View.GONE }
+        ::enabled bind { checkableView.isEnabled = it }
+        scrollToIt bind { scrollToView(checkableView) }
     }
 
     private fun bindText(inputControl: InputControl, editText: EditText) {
@@ -88,18 +96,18 @@ interface ControlObserver : PropertyObserver {
         }
     }
 
-    private fun bindChecked(checkControl: CheckControl, checkBox: CompoundButton) {
+    private fun bindChecked(checkControl: CheckControl, checkableView: CompoundButton) {
         var updating = false
 
         checkControl::checked bind { checked ->
-            if (checked != checkBox.isChecked) {
+            if (checked != checkableView.isChecked) {
                 updating = true
-                checkBox.isChecked = checked
+                checkableView.isChecked = checked
                 updating = false
             }
         }
 
-        checkBox.setOnCheckedChangeListener { _, isChecked ->
+        checkableView.setOnCheckedChangeListener { _, isChecked ->
             if (!updating) {
                 checkControl.onCheckedChanged(isChecked)
             }

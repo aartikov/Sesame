@@ -11,11 +11,17 @@ import me.aartikov.sesame.form.validation.control.InputValidator
 import me.aartikov.sesame.form.validation.control.ValidationResult
 import me.aartikov.sesame.property.flow
 
+/**
+ * High level feature for [FormValidator].
+ */
 interface FormValidationFeature {
 
     fun install(coroutineScope: CoroutineScope, formValidator: FormValidator)
 }
 
+/**
+ * Hides an error on a control whenever some value is entered to it.
+ */
 object HideErrorOnValueChanged : FormValidationFeature {
 
     override fun install(coroutineScope: CoroutineScope, formValidator: FormValidator) {
@@ -34,6 +40,9 @@ object HideErrorOnValueChanged : FormValidationFeature {
     }
 }
 
+/**
+ * Validates control again whenever its value is changed and it already displays an error.
+ */
 object RevalidateOnValueChanged : FormValidationFeature {
 
     override fun install(coroutineScope: CoroutineScope, formValidator: FormValidator) {
@@ -55,6 +64,9 @@ object RevalidateOnValueChanged : FormValidationFeature {
     }
 }
 
+/**
+ * Validates a control whenever it loses a focus.
+ */
 object ValidateOnFocusLost : FormValidationFeature {
 
     override fun install(coroutineScope: CoroutineScope, formValidator: FormValidator) {
@@ -77,7 +89,10 @@ object ValidateOnFocusLost : FormValidationFeature {
     }
 }
 
-object FocusOnFirstInvalidControlAfterValidation : FormValidationFeature {
+/**
+ * Sets focus on a first invalid control after form validation has been processed.
+ */
+object SetFocusOnFirstInvalidControlAfterValidation : FormValidationFeature {
 
     override fun install(coroutineScope: CoroutineScope, formValidator: FormValidator) {
         formValidator.validatedEventFlow

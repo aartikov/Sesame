@@ -1,16 +1,15 @@
-package me.aartikov.sesame.form
+package me.aartikov.sesame.form.view
 
 import android.text.InputFilter
 import android.text.InputType
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import me.aartikov.sesame.form.control.*
-import me.aartikov.sesame.form.view.SymbolFilter
 
 fun EditText.applyOptions(
     singleLine: Boolean,
     maxLength: Int,
-    filter: ((Char) -> Boolean)?,
+    filter: SymbolFilter?,
     formatter: InputFormatter?,
     keyboardOptions: KeyboardOptions
 ) {
@@ -19,7 +18,7 @@ fun EditText.applyOptions(
     imeOptions = getImeOptions(keyboardOptions)
 
     if (filter != null) {
-        filters += SymbolFilter(filter)
+        filters += SymbolInputFilter(filter)
     }
 
     formatter?.install(this)

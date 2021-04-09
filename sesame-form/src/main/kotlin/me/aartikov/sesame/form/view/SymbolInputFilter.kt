@@ -2,9 +2,10 @@ package me.aartikov.sesame.form.view
 
 import android.text.InputFilter
 import android.text.Spanned
+import me.aartikov.sesame.form.control.SymbolFilter
 
-internal class SymbolFilter(
-    private val filter: (Char) -> Boolean
+internal class SymbolInputFilter(
+    private val filter: SymbolFilter
 ) : InputFilter {
 
     override fun filter(
@@ -20,7 +21,7 @@ internal class SymbolFilter(
 
         for (i in start until end) {
             val c = source[i]
-            if (filter(c)) {
+            if (filter.isSymbolAllowed(c)) {
                 sb.append(c)
             } else {
                 keepOriginal = false

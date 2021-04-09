@@ -7,6 +7,11 @@ import me.aartikov.sesame.form.control.ValidatableControl
 import me.aartikov.sesame.form.validation.control.ControlValidator
 import me.aartikov.sesame.form.validation.control.ValidationResult
 
+/**
+ * Validator for multiple controls.
+ *
+ * Use [formValidator] to create it with a handy DSL.
+ */
 class FormValidator(
     val validators: Map<ValidatableControl<*>, ControlValidator<*>>
 ) {
@@ -15,8 +20,16 @@ class FormValidator(
         extraBufferCapacity = 1,
         onBufferOverflow = BufferOverflow.DROP_OLDEST
     )
+
+    /**
+     * Emits [FormValidatedEvent] after each validation.
+     */
     val validatedEventFlow get() = mutableValidatedEventFlow.asSharedFlow()
 
+    /**
+     * Validates controls.
+     * @param displayResult specifies if a result will be displayed on UI.
+     */
     fun validate(displayResult: Boolean = true): FormValidationResult {
         val results = mutableMapOf<ValidatableControl<*>, ValidationResult>()
         validators.forEach { (control, validator) ->

@@ -22,7 +22,7 @@ class FormViewModel @Inject constructor() : BaseViewModel() {
 
     companion object {
         private const val NAME_MAX_LENGTH = 100
-        private const val PASSWORD_MIN_SYMBOLS = 6
+        private const val PASSWORD_MIN_LENGTH = 6
         private const val RUS_PHONE_DIGIT_COUNT = 11
     }
 
@@ -56,7 +56,7 @@ class FormViewModel @Inject constructor() : BaseViewModel() {
 
     private val formValidator = formValidator {
 
-        features = listOf(ValidateOnFocusLost, RevalidateOnValueChanged, FocusOnFirstInvalidControlAfterValidation)
+        features = listOf(ValidateOnFocusLost, RevalidateOnValueChanged, SetFocusOnFirstInvalidControlAfterValidation)
 
         input(nameInput) {
             isNotBlank(R.string.field_is_blank_error_message)
@@ -76,9 +76,9 @@ class FormViewModel @Inject constructor() : BaseViewModel() {
 
         input(passwordInput) {
             isNotBlank(R.string.field_is_blank_error_message)
-            minSymbols(
-                PASSWORD_MIN_SYMBOLS,
-                LocalizedString.resource(R.string.minimum_symbols_error_message, PASSWORD_MIN_SYMBOLS)
+            minLength(
+                PASSWORD_MIN_LENGTH,
+                LocalizedString.resource(R.string.min_length_error_message, PASSWORD_MIN_LENGTH)
             )
             validation(
                 { str -> str.any { it.isDigit() } },
