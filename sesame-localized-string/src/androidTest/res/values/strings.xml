@@ -1,0 +1,10 @@
+<resources>
+    <string name="sample">Sample</string>
+    <string name="sample_with_args">Sample %d %s</string>
+    <string name="two">two</string>
+
+    <plurals name="cat_quantity">
+        <item quantity="one">%s cat</item>
+        <item quantity="other">%s cats</item>
+    </plurals>
+</resources>

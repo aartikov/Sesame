@@ -9,17 +9,21 @@ android {
 
     defaultConfig {
         minSdkVersion libraryConfig.minSdkVersion
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
     sourceSets {
         main.java.srcDirs += "src/main/kotlin"
-        test.java.srcDirs += "src/test/kotlin"
+        androidTest.java.srcDirs += "src/androidTest/kotlin"
     }
 }
 
 dependencies {
     implementation androidx.annotation
-    testImplementation tests.junit
+    androidTestImplementation tests.junit
+    androidTestImplementation tests.androidxTestCore
+    androidTestImplementation tests.androidxTestRunner
+    androidTestImplementation tests.androidxJunitExt
 }
 
 apply from: "${rootDir}/publish.gradle"

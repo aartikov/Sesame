@@ -6,6 +6,8 @@ ext {
             lifecycle           : "2.2.0",
             desugaring          : "1.1.1",
             junit               : "4.13.1",
+            androidxTest        : "1.3.0",
+            androidxJunitExt    : "1.1.2",
             mockito             : "2.28.2",
             mockitoKotlin       : "2.2.0",
             fragment            : "1.2.5",
@@ -28,11 +30,14 @@ ext {
     desugaring = "com.android.tools:desugar_jdk_libs:${versions.desugaring}"
 
     tests = [
-            junit         : "junit:junit:${versions.junit}",
-            coroutinesTest: "org.jetbrains.kotlinx:kotlinx-coroutines-test:${versions.coroutines}",
-            mockitoCore   : "org.mockito:mockito-core:${versions.mockito}",
-            mockitoInline : "org.mockito:mockito-inline:${versions.mockito}",
-            mockitoKotlin : "com.nhaarman.mockitokotlin2:mockito-kotlin:${versions.mockitoKotlin}",
+            junit             : "junit:junit:${versions.junit}",
+            androidxTestCore: "androidx.test:core:${versions.androidxTest}",
+            androidxTestRunner: "androidx.test:runner:${versions.androidxTest}",
+            androidxJunitExt  : "androidx.test.ext:junit:${versions.androidxJunitExt}",
+            coroutinesTest    : "org.jetbrains.kotlinx:kotlinx-coroutines-test:${versions.coroutines}",
+            mockitoCore       : "org.mockito:mockito-core:${versions.mockito}",
+            mockitoInline     : "org.mockito:mockito-inline:${versions.mockito}",
+            mockitoKotlin     : "com.nhaarman.mockitokotlin2:mockito-kotlin:${versions.mockitoKotlin}",
     ]
 
     androidx = [
