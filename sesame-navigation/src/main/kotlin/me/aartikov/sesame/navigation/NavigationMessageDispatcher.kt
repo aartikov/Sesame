@@ -19,7 +19,7 @@ class NavigationMessageDispatcher(
      * NavigationMessageHandler can handle messages only when an activity is in resumed state and no other message handling is in progress.
      */
     val canHandleMessages = combine(resumed, messageHandlingInProgress) { resumed, messageHandlingInProgress ->
-        resumed && !messageHandlingInProgress
+        canHandleMessages(resumed, messageHandlingInProgress)
     }
 
     /**
@@ -44,13 +44,13 @@ class NavigationMessageDispatcher(
      * During the processing a message will be passed through a chain of nodes starting from the [firstNode]. [NodeWalker] helps to iterate nodes.
      * If a node implements [NavigationMessageHandler] a message will be passed to [NavigationMessageHandler.handleNavigationMessage].
      * If [NavigationMessageHandler.handleNavigationMessage] returns true (a message is handled) processing is stopped.
-     * If there is no [NavigationMessageHandler] that handled a message than [onError] with [NavigationError.MessageHandlerMissing] will be called.
+     * If there is no [NavigationMessageHandler] that handled a message than [onError] with [NavigationError.MessageIsNotHandled] will be called.
      *
      * This method can be called only when when value of [canHandleMessages] is true. Otherwise [NavigationError.DispatcherCantHandleMessages] will be called and a message will be dropped.
      * Use [NavigationMessageQueue.bind] to be sure that messages are dispatched correctly.
      */
     fun dispatch(message: NavigationMessage, firstNode: Any) {
-        val canHandle = resumed.value && !messageHandlingInProgress.value
+        val canHandle = canHandleMessages(resumed.value, messageHandlingInProgress.value)
         if (!canHandle) {
             onError?.invoke(NavigationError.DispatcherCantHandleMessages(message))
             return
@@ -60,7 +60,7 @@ class NavigationMessageDispatcher(
         try {
             val handled = handle(message, firstNode)
             if (!handled) {
-                onError?.invoke(NavigationError.MessageHandlerMissing(message))
+                onError?.invoke(NavigationError.MessageIsNotHandled(message))
             }
         } finally {
             messageHandlingInProgress.value = false
@@ -77,5 +77,9 @@ class NavigationMessageDispatcher(
         } while (node != null)
 
         return false
+    }
+
+    private fun canHandleMessages(dispatcherResumed: Boolean, messageHandlingInProgress: Boolean): Boolean {
+        return dispatcherResumed && !messageHandlingInProgress
     }
 }
