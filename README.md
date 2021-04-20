@@ -4,6 +4,8 @@
 
 Sesame is a set of architecture components for Android development. It is based on modern technologies including coroutines and Flow. Sesame is simple to learn and easy to use. It is ideally suited for MVVM and MVI architectures.
 
+Some Sesame features are inspired by [RxPM](https://github.com/dmdevgo/RxPM) library.
+
 ## Components
 [property](https://github.com/aartikov/Sesame/tree/master/sesame-property) - provides observable properties and one-time commands.  
 [dialog](https://github.com/aartikov/Sesame/tree/master/sesame-dialog) - allows to control dialogs from View Models.  
@@ -11,18 +13,20 @@ Sesame is a set of architecture components for Android development. It is based 
 [activable](https://github.com/aartikov/Sesame/tree/master/sesame-activable) - equips View Models with a very simple lifecycle.  
 [loading](https://github.com/aartikov/Sesame/tree/master/sesame-loading) - helps to manage state for data loading (including paged one).  
 [loop](https://github.com/aartikov/Sesame/tree/master/sesame-loop) - provides a simple MVI implementation.  
+[localized string](https://github.com/aartikov/Sesame/tree/master/sesame-localized-string) - helps to deal with string resources. 
+[form](https://github.com/aartikov/Sesame/tree/master/sesame-form) - validates forms with input fields. 
 
-Sesame components are independent. Use only that you like.
+Sesame components are separate modules. Use only that you like.
 
 ## Gradle Setup
 ```gradle
 dependencies {
-    implementation 'com.github.aartikov:sesame-property:1.0.0-alpha3'
-    implementation 'com.github.aartikov:sesame-dialog:1.0.0-alpha3'
-    implementation 'com.github.aartikov:sesame-navigation:1.0.0-alpha3'
-    implementation 'com.github.aartikov:sesame-activable:1.0.0-alpha3'
-    implementation 'com.github.aartikov:sesame-loading:1.0.0-alpha3'
-    implementation 'com.github.aartikov:sesame-loop:1.0.0-alpha3'
+    implementation 'com.github.aartikov:sesame-property:1.0.0-alpha4'
+    implementation 'com.github.aartikov:sesame-dialog:1.0.0-alpha4'
+    implementation 'com.github.aartikov:sesame-navigation:1.0.0-alpha4'
+    implementation 'com.github.aartikov:sesame-activable:1.0.0-alpha4'
+    implementation 'com.github.aartikov:sesame-loading:1.0.0-alpha4'
+    implementation 'com.github.aartikov:sesame-loop:1.0.0-alpha4'
 }
 ```
 
@@ -31,9 +35,10 @@ dependencies {
 
 COUNTER - shows how to use properties and commands from [property](https://github.com/aartikov/Sesame/tree/master/sesame-property).  
 PROFILE - loads ordinary data with [loading](https://github.com/aartikov/Sesame/tree/master/sesame-loading).  
-DIALOGS - shows how to use [dialog](https://github.com/aartikov/Sesame/tree/master/sesame-dialog).  
-MOVIES - loads paged data with [loading](https://github.com/aartikov/Sesame/tree/master/lsesame-oading).  
+DIALOGS - shows how to use [dialog](https://github.com/aartikov/Sesame/tree/master/sesame-dialog) and [localized string](https://github.com/aartikov/Sesame/tree/master/sesame-localized-string).  
+MOVIES - loads paged data with [loading](https://github.com/aartikov/Sesame/tree/master/sesame-loading).  
 CLOCK - shows how to use [activable](https://github.com/aartikov/Sesame/tree/master/sesame-activable).  
+FORM - validates input fields with [form](https://github.com/aartikov/Sesame/tree/master/sesame-form).
 The whole app - demonstrates [navigation](https://github.com/aartikov/Sesame/tree/master/sesame-navigation).  
 
 There is no sample for [loop](https://github.com/aartikov/Sesame/tree/master/sesame-loop). See [LoadingLoop](https://github.com/aartikov/Sesame/blob/master/sesame-loading/src/main/kotlin/me/aartikov/sesame/loading/simple/internal/LoadingLoop.kt) and [PagedLoadingLoop](https://github.com/aartikov/Sesame/blob/master/sesame-loading/src/main/kotlin/me/aartikov/sesame/loading/paged/internal/PagedLoadingLoop.kt) as good examples how to use it.
@@ -45,7 +50,7 @@ Artur Artikov <a href="mailto:a.artikov@gmail.com">a.artikov@gmail.com</a>
 ```
 The MIT License (MIT)
 
-Copyright (c) 2021 Artur Artikov
+Copyright (c) 2021 Artur Artikov, Alexander Rovnov, Pavel Aleksandrov
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
