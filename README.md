@@ -13,8 +13,8 @@ Some Sesame features are inspired by [RxPM](https://github.com/dmdevgo/RxPM) lib
 [activable](https://github.com/aartikov/Sesame/tree/master/sesame-activable) - equips View Models with a very simple lifecycle.  
 [loading](https://github.com/aartikov/Sesame/tree/master/sesame-loading) - helps to manage state for data loading (including paged one).  
 [loop](https://github.com/aartikov/Sesame/tree/master/sesame-loop) - provides a simple MVI implementation.  
-[localized string](https://github.com/aartikov/Sesame/tree/master/sesame-localized-string) - helps to deal with string resources. 
-[form](https://github.com/aartikov/Sesame/tree/master/sesame-form) - validates forms with input fields. 
+[localized string](https://github.com/aartikov/Sesame/tree/master/sesame-localized-string) - helps to deal with string resources.  
+[form](https://github.com/aartikov/Sesame/tree/master/sesame-form) - provides input field validation.  
 
 Sesame components are separate modules. Use only that you like.
 
@@ -27,6 +27,8 @@ dependencies {
     implementation 'com.github.aartikov:sesame-activable:1.0.0-alpha4'
     implementation 'com.github.aartikov:sesame-loading:1.0.0-alpha4'
     implementation 'com.github.aartikov:sesame-loop:1.0.0-alpha4'
+    implementation 'com.github.aartikov:sesame-localized-string:1.0.0-alpha4'
+    implementation 'com.github.aartikov:sesame-form:1.0.0-alpha4'
 }
 ```
 
@@ -38,7 +40,7 @@ PROFILE - loads ordinary data with [loading](https://github.com/aartikov/Sesame/
 DIALOGS - shows how to use [dialog](https://github.com/aartikov/Sesame/tree/master/sesame-dialog) and [localized string](https://github.com/aartikov/Sesame/tree/master/sesame-localized-string).  
 MOVIES - loads paged data with [loading](https://github.com/aartikov/Sesame/tree/master/sesame-loading).  
 CLOCK - shows how to use [activable](https://github.com/aartikov/Sesame/tree/master/sesame-activable).  
-FORM - validates input fields with [form](https://github.com/aartikov/Sesame/tree/master/sesame-form).
+FORM - validates input fields with [form](https://github.com/aartikov/Sesame/tree/master/sesame-form).  
 The whole app - demonstrates [navigation](https://github.com/aartikov/Sesame/tree/master/sesame-navigation).  
 
 There is no sample for [loop](https://github.com/aartikov/Sesame/tree/master/sesame-loop). See [LoadingLoop](https://github.com/aartikov/Sesame/blob/master/sesame-loading/src/main/kotlin/me/aartikov/sesame/loading/simple/internal/LoadingLoop.kt) and [PagedLoadingLoop](https://github.com/aartikov/Sesame/blob/master/sesame-loading/src/main/kotlin/me/aartikov/sesame/loading/paged/internal/PagedLoadingLoop.kt) as good examples how to use it.

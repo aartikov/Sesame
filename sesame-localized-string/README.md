@@ -30,10 +30,14 @@ Sesame provides several implementations of `LocalizedString` and methods to crea
 
 ## Resolve localized string
 Use `resolve` method:
-`val value = someLocalizedString.resolve(context)`
+```kotlin
+val value = someLocalizedString.resolve(context)
+```
 
 Or `TextView` extension property:
-`textView.localizedText = someLocalizedString`
+```kotlin
+textView.localizedText = someLocalizedString
+```
 
 ## Best practice
 Created in ViewModel `LocalizedString` should be resolved on a View side. Unlike ViewModel, View is recreated during configuration change. So when system language setting is changed all displayed strings will be resolved again with a new locale.
