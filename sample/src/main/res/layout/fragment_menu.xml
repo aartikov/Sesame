@@ -15,35 +15,42 @@
             android:id="@+id/counter_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/counter_button" />
+            android:text="@string/counter_title" />
 
         <Button
             android:id="@+id/profile_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="@string/profile_button" />
+            android:text="@string/profile_title" />
 
         <Button
             android:id="@+id/dialogs_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="@string/dialogs_button" />
+            android:text="@string/dialogs_title" />
 
         <Button
             android:id="@+id/movies_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="@string/movies_button" />
+            android:text="@string/movies_title" />
 
         <Button
             android:id="@+id/clock_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="@string/clock_button" />
+            android:text="@string/clock_title" />
+
+        <Button
+            android:id="@+id/form_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/form_title" />
     </LinearLayout>
 
 </FrameLayout>

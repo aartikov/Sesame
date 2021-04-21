@@ -4,6 +4,7 @@ apply from: "androidLibraryConfig.gradle"
 buildscript {
     ext.kotlin_version = "1.4.31"
     repositories {
+        mavenCentral()
         google()
         jcenter()
     }
@@ -17,6 +18,7 @@ buildscript {
 
 allprojects {
     repositories {
+        mavenCentral()
         google()
         jcenter()
         maven { url "https://kotlin.bintray.com/kotlinx/" }

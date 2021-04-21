@@ -7,9 +7,9 @@ internal fun <T> State<T>.toPublicState(): PagedLoading.State<T> = when (this) {
     State.Loading -> PagedLoading.State.Loading
     is State.Error -> PagedLoading.State.Error(this.throwable)
     is State.Data -> PagedLoading.State.Data(pageCount, this.data)
-    is State.Refresh -> PagedLoading.State.Data(pageCount, this.data, PagedLoading.DataStatus.REFRESHING)
-    is State.LoadingMore -> PagedLoading.State.Data(pageCount, this.data, PagedLoading.DataStatus.LOADING_MORE)
-    is State.FullData -> PagedLoading.State.Data(pageCount, this.data, PagedLoading.DataStatus.FULL_DATA)
+    is State.Refresh -> PagedLoading.State.Data(pageCount, this.data, PagedLoading.DataStatus.Refreshing)
+    is State.LoadingMore -> PagedLoading.State.Data(pageCount, this.data, PagedLoading.DataStatus.LoadingMore)
+    is State.FullData -> PagedLoading.State.Data(pageCount, this.data, PagedLoading.DataStatus.FullData)
 }
 
 internal fun <T> PagedLoading.State<T>.toInternalState() = when (this) {
@@ -17,9 +17,9 @@ internal fun <T> PagedLoading.State<T>.toInternalState() = when (this) {
     PagedLoading.State.Loading -> State.Loading
     is PagedLoading.State.Error -> State.Error(this.throwable)
     is PagedLoading.State.Data -> when (this.status) {
-        PagedLoading.DataStatus.NORMAL -> State.Data(pageCount, this.data)
-        PagedLoading.DataStatus.REFRESHING -> State.Refresh(pageCount, this.data)
-        PagedLoading.DataStatus.LOADING_MORE -> State.LoadingMore(pageCount, this.data)
-        PagedLoading.DataStatus.FULL_DATA -> State.FullData(pageCount, this.data)
+        PagedLoading.DataStatus.Normal -> State.Data(pageCount, this.data)
+        PagedLoading.DataStatus.Refreshing -> State.Refresh(pageCount, this.data)
+        PagedLoading.DataStatus.LoadingMore -> State.LoadingMore(pageCount, this.data)
+        PagedLoading.DataStatus.FullData -> State.FullData(pageCount, this.data)
     }
 }

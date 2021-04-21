@@ -57,12 +57,12 @@ interface PagedLoading<T : Any> {
         data class Data<T>(
             val pageCount: Int,
             val data: List<T>,
-            val status: DataStatus = DataStatus.NORMAL
+            val status: DataStatus = DataStatus.Normal
         ) : State<T>() {
-            val loadMoreEnabled: Boolean get() = status == DataStatus.NORMAL
-            val refreshing: Boolean get() = status == DataStatus.REFRESHING
-            val loadingMore: Boolean get() = status == DataStatus.LOADING_MORE
-            val fullData: Boolean get() = status == DataStatus.FULL_DATA
+            val loadMoreEnabled: Boolean get() = status == DataStatus.Normal
+            val refreshing: Boolean get() = status == DataStatus.Refreshing
+            val loadingMore: Boolean get() = status == DataStatus.LoadingMore
+            val fullData: Boolean get() = status == DataStatus.FullData
         }
     }
 
@@ -70,22 +70,22 @@ interface PagedLoading<T : Any> {
         /**
          * Just a data, there is no in progress loading, the end of a list is not reached.
          */
-        NORMAL,
+        Normal,
 
         /**
          * First page reloading is in progress.
          */
-        REFRESHING,
+        Refreshing,
 
         /**
          * Loading of a next page is in progress.
          */
-        LOADING_MORE,
+        LoadingMore,
 
         /**
          * The end of a list is reached.
          */
-        FULL_DATA
+        FullData
     }
 
     /**

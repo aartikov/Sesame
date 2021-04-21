@@ -112,7 +112,7 @@ class PagedLoadingTest {
         val job = loading.attach(this)
         loading.refresh()
 
-        assertEquals(State.Data(1, listOf("Previous value1", "Previous value2"), DataStatus.REFRESHING), loading.state)
+        assertEquals(State.Data(1, listOf("Previous value1", "Previous value2"), DataStatus.Refreshing), loading.state)
         job.cancel()
     }
 
@@ -147,7 +147,7 @@ class PagedLoadingTest {
 
         assertEquals(State.Data(1, listOf("Previous value1", "Previous value2")), loading.state)
         val expectedStateDuringLoading =
-            State.Data(1, listOf("Previous value1", "Previous value2"), status = DataStatus.REFRESHING)
+            State.Data(1, listOf("Previous value1", "Previous value2"), status = DataStatus.Refreshing)
         assertEquals(listOf(Event.Error(LoadingFailedException(), expectedStateDuringLoading)), events)
         job.cancel()
         eventsJob.cancel()
@@ -189,7 +189,7 @@ class PagedLoadingTest {
         loading.loadMore()
         delay(TestLoader.LOAD_DELAY / 2)
 
-        assertEquals(State.Data(1, listOf("Value1", "Value2"), DataStatus.LOADING_MORE), loading.state)
+        assertEquals(State.Data(1, listOf("Value1", "Value2"), DataStatus.LoadingMore), loading.state)
         job.cancel()
     }
 
@@ -231,7 +231,7 @@ class PagedLoadingTest {
         delay(TestLoader.LOAD_DELAY * 2)
 
         assertEquals(State.Data(1, listOf("Value1", "Value2")), loading.state)
-        val expectedStateDuringLoading = State.Data(1, listOf("Value1", "Value2"), status = DataStatus.LOADING_MORE)
+        val expectedStateDuringLoading = State.Data(1, listOf("Value1", "Value2"), status = DataStatus.LoadingMore)
         assertEquals(listOf(Event.Error(LoadingFailedException(), expectedStateDuringLoading)), events)
         job.cancel()
         eventsJob.cancel()
@@ -249,7 +249,7 @@ class PagedLoadingTest {
         loading.loadMore()
         delay(TestLoader.LOAD_DELAY * 2)
 
-        assertEquals(State.Data(2, listOf("Value1", "Value2", "Value3"), DataStatus.FULL_DATA), loading.state)
+        assertEquals(State.Data(2, listOf("Value1", "Value2", "Value3"), DataStatus.FullData), loading.state)
         job.cancel()
     }
 

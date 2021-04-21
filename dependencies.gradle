@@ -6,11 +6,14 @@ ext {
             lifecycle           : "2.2.0",
             desugaring          : "1.1.1",
             junit               : "4.13.1",
+            androidxTest        : "1.3.0",
+            androidxJunitExt    : "1.1.2",
             mockito             : "2.28.2",
             mockitoKotlin       : "2.2.0",
             fragment            : "1.2.5",
             coreKtx             : "1.3.2",
             appCompat           : "1.2.0",
+            androidxAnnotation  : "1.1.0",
             constraintLayout    : "2.0.4",
             swiperefreshlayout  : "1.1.0",
             cardView            : "1.0.0",
@@ -19,17 +22,22 @@ ext {
             glide               : "4.11.0",
             hilt                : "2.33-beta",
             viewBindingDelegates: "1.4.1",
-            dateTime            : "0.1.1"
+            dateTime            : "0.1.1",
+            decoro              : "1.5.0",
+            konfetti            : "1.3.2"
     ]
 
     desugaring = "com.android.tools:desugar_jdk_libs:${versions.desugaring}"
 
     tests = [
-            junit         : "junit:junit:${versions.junit}",
-            coroutinesTest: "org.jetbrains.kotlinx:kotlinx-coroutines-test:${versions.coroutines}",
-            mockitoCore   : "org.mockito:mockito-core:${versions.mockito}",
-            mockitoInline : "org.mockito:mockito-inline:${versions.mockito}",
-            mockitoKotlin : "com.nhaarman.mockitokotlin2:mockito-kotlin:${versions.mockitoKotlin}",
+            junit             : "junit:junit:${versions.junit}",
+            androidxTestCore: "androidx.test:core:${versions.androidxTest}",
+            androidxTestRunner: "androidx.test:runner:${versions.androidxTest}",
+            androidxJunitExt  : "androidx.test.ext:junit:${versions.androidxJunitExt}",
+            coroutinesTest    : "org.jetbrains.kotlinx:kotlinx-coroutines-test:${versions.coroutines}",
+            mockitoCore       : "org.mockito:mockito-core:${versions.mockito}",
+            mockitoInline     : "org.mockito:mockito-inline:${versions.mockito}",
+            mockitoKotlin     : "com.nhaarman.mockitokotlin2:mockito-kotlin:${versions.mockitoKotlin}",
     ]
 
     androidx = [
@@ -37,6 +45,7 @@ ext {
             fragment        : "androidx.fragment:fragment-ktx:${versions.fragment}",
             coreKtx         : "androidx.core:core-ktx:${versions.coreKtx}",
             appCompat       : "androidx.appcompat:appcompat:${versions.appCompat}",
+            annotation      : "androidx.annotation:annotation:${versions.androidxAnnotation}",
             constraintLayout: "androidx.constraintlayout:constraintlayout:${versions.constraintLayout}",
             swipeRefresh    : "androidx.swiperefreshlayout:swiperefreshlayout:${versions.swiperefreshlayout}",
             cardView        : "androidx.cardview:cardview:${versions.cardView}"
@@ -65,4 +74,7 @@ ext {
 
     viewBindingDelegates = "com.kirich1409.viewbindingpropertydelegate:vbpd-noreflection:${versions.viewBindingDelegates}"
 
+    decoro = "ru.tinkoff.decoro:decoro:${versions.decoro}"
+
+    konfetti = "nl.dionsegijn:konfetti:${versions.konfetti}"
 }

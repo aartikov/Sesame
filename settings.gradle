@@ -1,7 +1,9 @@
 rootProject.name = "Sesame"
 include ':sesame-activable'
 include ':sesame-dialog'
+include ':sesame-form'
 include ':sesame-loading'
+include ':sesame-localized-string'
 include ':sesame-loop'
 include ':sesame-navigation'
 include ':sesame-property'

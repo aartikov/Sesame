@@ -11,6 +11,8 @@ import me.aartikov.sesamesample.databinding.FragmentClockBinding
 @AndroidEntryPoint
 class ClockFragment : BaseFragment<ClockViewModel>(R.layout.fragment_clock, ClockViewModel::class) {
 
+    override val titleRes: Int = R.string.clock_title
+
     private val binding by viewBinding(FragmentClockBinding::bind)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

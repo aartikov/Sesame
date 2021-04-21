@@ -23,7 +23,7 @@ Instead of calling navigation methods directly Sesame provides navigation messag
 
 1. `NavigationMessage`s and `NavigationMessageQueue` allow to call navigation from View Models.
 
-2. It is guaranteed that fragment transactions are commited when it is legal. `NavigationMessageQueue` passes messages only when the corresponding Activity/Fragment is in resumed state. `NavigationMessageDispatcher` has an internal queue to handle messages sequentially.
+2. It is guaranteed that fragment transactions are commited when it is legal. `NavigationMessageQueue` passes messages only when the corresponding Activity/Fragment is in resumed state. `NavigationMessageDispatcher` controls that messages are handled sequentially.
 
 3. Nested navigation is solved by several `NavigationMessageHandler`s. The typical Android hierarchy is [Fragment] -> [parent Fragment] -> [Activity]. The parent Fragment and Activity implement `NavigationMessageHandler`, so different messages are handled on the different levels.
 
@@ -51,21 +51,26 @@ class MenuViewModel : ViewModel() {
 }
 ```
 
-3. Setup `NavigationMessageDispatcher` in an activity and fragments. This has to be the same instance.
+3. Setup `NavigationMessageDispatcher` in an activity.
 ```kotlin
 class MainActivity : AppCompatActivity() {
 
     @Inject
     internal lateinit var navigationMessageDispatcher: NavigationMessageDispatcher
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        
-        navigationMessageDispatcher.attach(this)
-        ...
+    override fun onResumeFragments() {
+        super.onResumeFragments()
+        navigationMessageDispatcher.resume()
+    }
+
+    override fun onPause() {
+        navigationMessageDispatcher.pause()
+        super.onPause()
     }
 }
 ```
+
+4. Bind `NavigationMessageQueue` to this `NavigationMessageDispatcher`.
 
 ```kotlin
 class MenuFragment: Fragment() {
@@ -82,7 +87,7 @@ class MenuFragment: Fragment() {
 }
 ```
 
-4. Implement `NavigationMessageHandler`. Returned `true` from `handleNavigationMessage` indicates that a message was handled. If there is only one `NavigationMessageHandler` all the messages should be handled there. The example uses [FragmentNavigator](https://github.com/aartikov/Sesame/blob/master/sample/src/main/kotlin/me/aartikov/sesamesample/FragmentNavigator.kt) - a wrapper on top of FragmentManager, but `NavController` from Android Architecture Components can be used as well.
+5. Implement `NavigationMessageHandler`. Returned `true` from `handleNavigationMessage` indicates that a message was handled. If there is only one `NavigationMessageHandler` all the messages should be handled there. The example uses [FragmentNavigator](https://github.com/aartikov/Sesame/blob/master/sample/src/main/kotlin/me/aartikov/sesamesample/FragmentNavigator.kt) - a wrapper on top of FragmentManager, but `NavController` from Android Architecture Components can be used as well.
 ```kotlin
 class MainActivity : AppCompatActivity(), NavigationMessageHandler {
     

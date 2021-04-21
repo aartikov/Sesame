@@ -29,18 +29,18 @@ fun <T : Any> OrdinaryLoading(
  * Creates an implementation of [Loading] that uses a single suspend method to load data.
  */
 fun <T : Any> OrdinaryLoading(
-    loader: suspend (fresh: Boolean) -> T?,
+    load: suspend (fresh: Boolean) -> T?,
     initialState: Loading.State<T> = Loading.State.Empty
 ): Loading<T> {
-    return LoadingImpl(LoadingEffectHandler(loader), null, initialState)
+    return LoadingImpl(LoadingEffectHandler(load), null, initialState)
 }
 
 /**
  * Creates an implementation of [Loading] that uses a single suspend method to load data.
  */
 fun <T : Any> OrdinaryLoading(
-    loader: suspend () -> T?,
+    load: suspend () -> T?,
     initialState: Loading.State<T> = Loading.State.Empty
 ): Loading<T> {
-    return OrdinaryLoading({ _ -> loader() }, initialState)
+    return OrdinaryLoading({ _ -> load() }, initialState)
 }
