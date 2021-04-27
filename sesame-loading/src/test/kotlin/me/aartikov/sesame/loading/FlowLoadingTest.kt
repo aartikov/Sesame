@@ -1,5 +1,7 @@
 package me.aartikov.sesame.loading
 
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -11,28 +13,15 @@ import org.junit.Test
 class FlowLoadingTest {
 
     @Test
-    fun `is empty when not attached`() {
+    fun `shows cached value after initialization`() = runBlockingTest {
         val loader = TestLoader(
             TestLoader.Result.Success("Anything"),
             cachedValue = "Cached value"
         )
-        val loading = FlowLoading(loader)
-
-        assertEquals(Loading.State.Empty, loading.state)
-    }
-
-    @Test
-    fun `shows cached value after attach`() = runBlockingTest {
-        val loader = TestLoader(
-            TestLoader.Result.Success("Anything"),
-            cachedValue = "Cached value"
-        )
-        val loading = FlowLoading(loader)
-
-        val job = loading.attach(this)
+        val loading = FlowLoading(this, loader)
 
         assertEquals(Loading.State.Data("Cached value"), loading.state)
-        job.cancel()
+        cancelJobs()
     }
 
     @Test
@@ -41,13 +30,12 @@ class FlowLoadingTest {
             TestLoader.Result.Success("Anything"),
             cachedValue = "Cached value"
         )
-        val loading = FlowLoading(loader)
+        val loading = FlowLoading(this, loader)
 
-        val job = loading.attach(this)
         loading.refresh()
 
         assertEquals(Loading.State.Data("Cached value", refreshing = true), loading.state)
-        job.cancel()
+        cancelJobs()
     }
 
     @Test
@@ -56,14 +44,13 @@ class FlowLoadingTest {
             TestLoader.Result.Success("Fresh value"),
             cachedValue = "Cached value"
         )
-        val loading = FlowLoading(loader)
+        val loading = FlowLoading(this, loader)
 
-        val job = loading.attach(this)
         loading.refresh()
         delay(TestLoader.LOAD_DELAY)
 
         assertEquals(Loading.State.Data("Fresh value"), loading.state)
-        job.cancel()
+        cancelJobs()
     }
 
     @Test
@@ -72,13 +59,12 @@ class FlowLoadingTest {
             TestLoader.Result.Success("Fresh value"),
             cachedValue = "Cached value"
         )
-        val loading = FlowLoading(loader)
+        val loading = FlowLoading(this, loader)
 
-        val job = loading.attach(this)
         loading.load(fresh = false)
 
         assertEquals(Loading.State.Data("Cached value"), loading.state)
-        job.cancel()
+        cancelJobs()
     }
 
     @Test
@@ -87,13 +73,12 @@ class FlowLoadingTest {
             TestLoader.Result.Success("Anything"),
             cachedValue = "Cached value"
         )
-        val loading = FlowLoading(loader)
+        val loading = FlowLoading(this, loader)
 
-        val job = loading.attach(this)
         loader.updateCache("Modified value")
 
         assertEquals(Loading.State.Data("Modified value"), loading.state)
-        job.cancel()
+        cancelJobs()
     }
 
     private class TestLoader(private val result: Result, cachedValue: String) : FlowLoader<String> {
@@ -127,5 +112,11 @@ class FlowLoadingTest {
         }
 
         override fun observe(): Flow<String> = cache
+    }
+
+    private fun CoroutineScope.cancelJobs() {
+        val job = coroutineContext[Job]!!
+        job.children.drop(1)    // drop DeferredCoroutine from internals of runBlockingTest
+            .forEach { it.cancel() }
     }
 }

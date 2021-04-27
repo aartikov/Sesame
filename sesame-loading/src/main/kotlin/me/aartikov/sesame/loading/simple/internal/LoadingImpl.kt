@@ -1,7 +1,6 @@
 package me.aartikov.sesame.loading.simple.internal
 
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.*
@@ -13,6 +12,7 @@ import me.aartikov.sesame.loop.ActionSource
 import me.aartikov.sesame.loop.EffectHandler
 
 internal class LoadingImpl<T : Any>(
+    scope: CoroutineScope,
     loadingEffectHandler: EffectHandler<Effect<T>, Action<T>>,
     loadingActionSource: ActionSource<Action<T>>?,
     initialState: State<T>
@@ -42,16 +42,18 @@ internal class LoadingImpl<T : Any>(
     override val eventFlow: Flow<Event<T>>
         get() = mutableEventFlow
 
-    override fun attach(scope: CoroutineScope): Job = scope.launch {
-        coroutineScope {
-            launch {
-                loop.stateFlow.collect {
-                    mutableStateFlow.value = it.toPublicState()
+    init {
+        scope.launch {
+            coroutineScope {
+                launch {
+                    loop.stateFlow.collect {
+                        mutableStateFlow.value = it.toPublicState()
+                    }
                 }
-            }
 
-            launch {
-                loop.start()
+                launch {
+                    loop.start()
+                }
             }
         }
     }
