@@ -1,7 +1,6 @@
 package me.aartikov.sesame.loading.paged.internal
 
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.*
@@ -12,6 +11,7 @@ import me.aartikov.sesame.loading.paged.PagedLoading.Event
 import me.aartikov.sesame.loading.paged.PagedLoading.State
 
 internal class PagedLoadingImpl<T : Any>(
+    scope: CoroutineScope,
     loader: PagedLoader<T>,
     initialState: State<T>
 ) : PagedLoading<T> {
@@ -37,16 +37,18 @@ internal class PagedLoadingImpl<T : Any>(
     override val eventFlow: Flow<Event<T>>
         get() = mutableEventFlow
 
-    override fun attach(scope: CoroutineScope): Job = scope.launch {
-        coroutineScope {
-            launch {
-                loop.stateFlow.collect {
-                    mutableStateFlow.value = it.toPublicState()
+    init {
+        scope.launch {
+            coroutineScope {
+                launch {
+                    loop.stateFlow.collect {
+                        mutableStateFlow.value = it.toPublicState()
+                    }
                 }
-            }
 
-            launch {
-                loop.start()
+                launch {
+                    loop.start()
+                }
             }
         }
     }

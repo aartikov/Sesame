@@ -15,12 +15,11 @@ class ProfileViewModel @Inject constructor(
     private val profileGateway: ProfileGateway
 ) : BaseViewModel() {
 
-    private val profileLoading = OrdinaryLoading(profileGateway::loadProfile)
+    private val profileLoading = OrdinaryLoading(viewModelScope, profileGateway::loadProfile)
 
     val profileState by stateFromFlow(profileLoading.stateFlow)
 
     init {
-        profileLoading.attach(viewModelScope)
         profileLoading.handleErrors(viewModelScope) { error ->
             if (error.hasData) {
                 showError(error.throwable)

@@ -1,5 +1,6 @@
 package me.aartikov.sesame.loading.simple
 
+import kotlinx.coroutines.CoroutineScope
 import me.aartikov.sesame.loading.simple.internal.LoadingEffectHandler
 import me.aartikov.sesame.loading.simple.internal.LoadingImpl
 
@@ -19,28 +20,31 @@ interface OrdinaryLoader<T : Any> {
  * Creates an implementation of [Loading] that uses a single suspend method to load data.
  */
 fun <T : Any> OrdinaryLoading(
+    scope: CoroutineScope,
     loader: OrdinaryLoader<T>,
     initialState: Loading.State<T> = Loading.State.Empty
 ): Loading<T> {
-    return OrdinaryLoading(loader::load, initialState)
+    return OrdinaryLoading(scope, loader::load, initialState)
 }
 
 /**
  * Creates an implementation of [Loading] that uses a single suspend method to load data.
  */
 fun <T : Any> OrdinaryLoading(
+    scope: CoroutineScope,
     load: suspend (fresh: Boolean) -> T?,
     initialState: Loading.State<T> = Loading.State.Empty
 ): Loading<T> {
-    return LoadingImpl(LoadingEffectHandler(load), null, initialState)
+    return LoadingImpl(scope, LoadingEffectHandler(load), null, initialState)
 }
 
 /**
  * Creates an implementation of [Loading] that uses a single suspend method to load data.
  */
 fun <T : Any> OrdinaryLoading(
+    scope: CoroutineScope,
     load: suspend () -> T?,
     initialState: Loading.State<T> = Loading.State.Empty
 ): Loading<T> {
-    return OrdinaryLoading({ _ -> load() }, initialState)
+    return OrdinaryLoading(scope, { _ -> load() }, initialState)
 }

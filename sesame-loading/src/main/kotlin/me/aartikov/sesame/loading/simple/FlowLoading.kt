@@ -1,5 +1,6 @@
 package me.aartikov.sesame.loading.simple
 
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import me.aartikov.sesame.loading.simple.internal.LoadingActionSource
 import me.aartikov.sesame.loading.simple.internal.LoadingEffectHandler
@@ -27,18 +28,23 @@ interface FlowLoader<T : Any> {
 /**
  * Creates an implementation of [Loading] that uses one method to load new data and another one to get data from a cache.
  */
-fun <T : Any> FlowLoading(loader: FlowLoader<T>): Loading<T> {
-    return FlowLoading(loader::load, loader::observe)
+fun <T : Any> FlowLoading(
+    scope: CoroutineScope,
+    loader: FlowLoader<T>
+): Loading<T> {
+    return FlowLoading(scope, loader::load, loader::observe)
 }
 
 /**
  * Creates an implementation of [Loading] that uses one method to load new data and another one to get data from a cache.
  */
 fun <T : Any> FlowLoading(
+    scope: CoroutineScope,
     load: suspend (fresh: Boolean) -> T?,
     observe: () -> Flow<T?>
 ): Loading<T> {
     return LoadingImpl(
+        scope,
         LoadingEffectHandler(load),
         LoadingActionSource(observe()),
         Loading.State.Empty
@@ -49,8 +55,9 @@ fun <T : Any> FlowLoading(
  * Creates an implementation of [Loading] that uses one method to load new data and another one to get data from a cache.
  */
 fun <T : Any> FlowLoading(
+    scope: CoroutineScope,
     load: suspend () -> T?,
     observe: () -> Flow<T?>
 ): Loading<T> {
-    return FlowLoading({ _ -> load() }, observe)
+    return FlowLoading(scope, { _ -> load() }, observe)
 }

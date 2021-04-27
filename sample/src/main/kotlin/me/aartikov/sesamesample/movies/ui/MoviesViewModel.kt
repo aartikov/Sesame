@@ -17,13 +17,13 @@ class MoviesViewModel @Inject constructor(
 ) : BaseViewModel() {
 
     private val moviesLoading = PagedLoading<Movie>(
+        viewModelScope,
         loadPage = { moviesGateway.loadMovies(it.loadedPageCount) }
     )
 
     val moviesState by stateFromFlow(moviesLoading.stateFlow)
 
     init {
-        moviesLoading.attach(viewModelScope)
         moviesLoading.handleErrors(viewModelScope) { error ->
             if (error.hasData)
                 showError(error.throwable)

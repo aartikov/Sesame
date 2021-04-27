@@ -27,12 +27,11 @@ interface ProfileRepository {
 ```kotlin
 class ProfileViewModel(private val profileRepository: ProfileRepository) : ViewModel() {
 
-    private val profileLoading = OrdinaryLoading(profileRepository::loadProfile)
+    private val profileLoading = OrdinaryLoading(viewModelScope, profileRepository::loadProfile)
     
     val profileState = profileLoading.stateFlow
 
     init {
-        profileLoading.attach(viewModelScope)
         profileLoading.refresh()
     }
 
@@ -58,6 +57,7 @@ interface ProfileRepository {
 class ProfileViewModel(private val profileRepository: ProfileRepository) : ViewModel() {
 
     private val profileLoading = FlowLoading(
+        viewModelScope,
         profileRepository::loadProfile,
         profileRepository::observeProfile
     )
@@ -65,7 +65,6 @@ class ProfileViewModel(private val profileRepository: ProfileRepository) : ViewM
     val profileState = profileLoading.stateFlow
     
     init {
-        profileLoading.attach(viewModelScope)
         profileLoading.refresh()
     }
 
@@ -104,13 +103,13 @@ interface MoviesRepository {
 class MoviesViewModel(private val moviesRepository: MoviesRepository) : ViewModel() {
 
     private val moviesLoading = PagedLoading<Movie>(
+        viewModelScope,
         loadPage = { moviesRepository.loadMovies(it.loadedPageCount) }
     )
 
     val moviesState = moviesLoading.stateFlow
 
     init {
-        moviesLoading.attach(viewModelScope)
         moviesLoading.refresh()
     }
 
@@ -129,8 +128,6 @@ Loading shows an error as `State.Error` if there is no previously loaded data. I
 
 ```kotlin
     init {
-        profileLoading.attach(viewModelScope)
-        
         profileLoading.handleErrors(viewModelScope) { error ->
             if (error.hasData) {
                 showErrorDialog(error.throwable)

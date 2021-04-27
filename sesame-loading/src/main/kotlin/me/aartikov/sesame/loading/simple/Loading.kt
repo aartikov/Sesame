@@ -61,11 +61,6 @@ interface Loading<T : Any> {
     val eventFlow: Flow<Event<T>>
 
     /**
-     * Initializes a [Loading] object by providing a [CoroutineScope] to work in. Should be called once.
-     */
-    fun attach(scope: CoroutineScope): Job
-
-    /**
      * Requests to load data.
      * @param fresh indicates that fresh data is required. See [OrdinaryLoader.load] and [FlowLoader.load]
      * @param reset if true than previously loaded data will be instantly dropped and in progress loading will be canceled.

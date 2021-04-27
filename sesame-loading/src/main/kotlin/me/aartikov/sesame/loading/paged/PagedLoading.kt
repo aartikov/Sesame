@@ -115,11 +115,6 @@ interface PagedLoading<T : Any> {
     val eventFlow: Flow<Event<T>>
 
     /**
-     * Initializes a [PagedLoading] object by providing a [CoroutineScope] to work in. Should be called once.
-     */
-    fun attach(scope: CoroutineScope): Job
-
-    /**
      * Requests to load a first page.
      * @param fresh indicates that fresh data is required. See [PagedLoader.loadFirstPage].
      * @param reset if true than previously loaded data will be instantly dropped and in progress loading will be canceled.
@@ -200,16 +195,18 @@ fun <T : Any> PagedLoading<T>.handleErrors(
  * Creates an implementation of [PagedLoading].
  */
 fun <T : Any> PagedLoading(
+    scope: CoroutineScope,
     loader: PagedLoader<T>,
     initialState: PagedLoading.State<T> = PagedLoading.State.Empty
 ): PagedLoading<T> {
-    return PagedLoadingImpl(loader, initialState)
+    return PagedLoadingImpl(scope, loader, initialState)
 }
 
 /**
  * Creates an implementation of [PagedLoading].
  */
 fun <T : Any> PagedLoading(
+    scope: CoroutineScope,
     loadFirstPage: suspend (fresh: Boolean) -> List<T>,
     loadNextPage: suspend (pagingInfo: PagingInfo<T>) -> List<T>,
     initialState: PagedLoading.State<T> = PagedLoading.State.Empty
@@ -219,13 +216,14 @@ fun <T : Any> PagedLoading(
 
         override suspend fun loadNextPage(pagingInfo: PagingInfo<T>): List<T> = loadNextPage(pagingInfo)
     }
-    return PagedLoading(loader, initialState)
+    return PagedLoading(scope, loader, initialState)
 }
 
 /**
  * Creates an implementation of [PagedLoading].
  */
 fun <T : Any> PagedLoading(
+    scope: CoroutineScope,
     loadFirstPage: suspend () -> List<T>,
     loadNextPage: suspend (pagingInfo: PagingInfo<T>) -> List<T>,
     initialState: PagedLoading.State<T> = PagedLoading.State.Empty
@@ -235,13 +233,14 @@ fun <T : Any> PagedLoading(
 
         override suspend fun loadNextPage(pagingInfo: PagingInfo<T>): List<T> = loadNextPage(pagingInfo)
     }
-    return PagedLoading(loader, initialState)
+    return PagedLoading(scope, loader, initialState)
 }
 
 /**
  * Creates an implementation of [PagedLoading].
  */
 fun <T : Any> PagedLoading(
+    scope: CoroutineScope,
     loadPage: suspend (pagingInfo: PagingInfo<T>) -> List<T>,
     initialState: PagedLoading.State<T> = PagedLoading.State.Empty
 ): PagedLoading<T> {
@@ -250,5 +249,5 @@ fun <T : Any> PagedLoading(
 
         override suspend fun loadNextPage(pagingInfo: PagingInfo<T>): List<T> = loadPage(pagingInfo)
     }
-    return PagedLoading(loader, initialState)
+    return PagedLoading(scope, loader, initialState)
 }
