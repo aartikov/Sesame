@@ -82,7 +82,7 @@ class FormViewModel @Inject constructor() : BaseViewModel() {
             )
             validation(
                 { str -> str.any { it.isDigit() } },
-                LocalizedString.resource(R.string.must_contain_digit_error_message)
+                { LocalizedString.resource(R.string.must_contain_digit_error_message) }
             )
         }
 
