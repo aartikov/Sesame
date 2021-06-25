@@ -75,9 +75,19 @@ enum class KeyboardType {
     Number,
 
     /**
+     * A keyboard type used to request an that is capable of inputting number with positive or negative sign at the start.
+     */
+    SignedNumber,
+
+    /**
      * A keyboard type used to request an that is capable of inputting decimal number, allowing a decimal point.
      */
     DecimalNumber,
+
+    /**
+     * A keyboard type used to request an that is capable of inputting decimal number, allowing a decimal point with positive or negative sign at the start.
+     */
+    DecimalSignedNumber,
 
     /**
      * A keyboard type used to request an IME that is capable of inputting number password.
