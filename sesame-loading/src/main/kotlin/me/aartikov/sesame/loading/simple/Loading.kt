@@ -129,3 +129,15 @@ fun <T : Any> Loading<T>.handleErrors(
         }
         .launchIn(scope)
 }
+
+/**
+ * Returns new [Loading.State] of applying the given [transform] function to original [Loading.State].
+ */
+fun <T, R> Loading.State<T>.map(transform: (T) -> R): Loading.State<R> {
+    return when (this) {
+        Loading.State.Empty -> Loading.State.Empty
+        Loading.State.Loading -> Loading.State.Loading
+        is Loading.State.Error -> Loading.State.Error(throwable)
+        is Loading.State.Data -> Loading.State.Data(transform(data))
+    }
+}
