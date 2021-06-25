@@ -253,7 +253,7 @@ fun <T : Any> PagedLoading(
 }
 
 /**
- * Returns new [PagedLoading.State] of applying the given [transform] function to original [PagedLoading.State].
+ * Returns new [PagedLoading.State] of applying the given [transform] function to original [PagedLoading.State.Data.data].
  */
 fun <T, R> PagedLoading.State<T>.map(transform: (List<T>) -> List<R>): PagedLoading.State<R> {
     return when (this) {
