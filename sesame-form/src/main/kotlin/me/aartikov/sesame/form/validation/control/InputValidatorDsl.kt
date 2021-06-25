@@ -47,7 +47,13 @@ fun InputValidatorBuilder.validation(isValid: (String) -> Boolean, @StringRes er
  * Adds an arbitrary validation. Validations are processed sequentially until first error.
  */
 fun InputValidatorBuilder.validation(isValid: (String) -> Boolean, errorMessage: () -> LocalizedString) {
-    validation(isValid, errorMessage.invoke())
+    validation {
+        if (isValid(it)) {
+            ValidationResult.Valid
+        } else {
+            ValidationResult.Invalid(errorMessage.invoke())
+        }
+    }
 }
 
 /**
