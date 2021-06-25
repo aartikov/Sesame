@@ -34,6 +34,9 @@ private fun getInputType(singleLine: Boolean, keyboardOptions: KeyboardOptions):
         KeyboardType.Ascii -> InputType.TYPE_CLASS_TEXT    // is set as imeOptions
         KeyboardType.Email -> InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
         KeyboardType.Number -> InputType.TYPE_CLASS_NUMBER
+        KeyboardType.SignedNumber -> InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_SIGNED
+        KeyboardType.DecimalNumber -> InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL
+        KeyboardType.DecimalSignedNumber -> InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL or InputType.TYPE_NUMBER_FLAG_SIGNED
         KeyboardType.NumberPassword -> InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_VARIATION_PASSWORD
         KeyboardType.Password -> InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
         KeyboardType.VisiblePassword -> InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD

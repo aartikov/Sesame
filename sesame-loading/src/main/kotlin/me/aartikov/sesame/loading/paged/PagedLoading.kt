@@ -251,3 +251,15 @@ fun <T : Any> PagedLoading(
     }
     return PagedLoading(scope, loader, initialState)
 }
+
+/**
+ * Returns new [PagedLoading.State] of applying the given [transform] function to original [PagedLoading.State.Data.data].
+ */
+fun <T, R> PagedLoading.State<T>.map(transform: (List<T>) -> List<R>): PagedLoading.State<R> {
+    return when (this) {
+        PagedLoading.State.Empty -> PagedLoading.State.Empty
+        PagedLoading.State.Loading -> PagedLoading.State.Loading
+        is PagedLoading.State.Error -> PagedLoading.State.Error(throwable)
+        is PagedLoading.State.Data -> PagedLoading.State.Data(pageCount, transform(data), status)
+    }
+}
