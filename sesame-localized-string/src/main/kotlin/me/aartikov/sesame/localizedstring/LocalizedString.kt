@@ -3,6 +3,7 @@ package me.aartikov.sesame.localizedstring
 import android.content.Context
 import androidx.annotation.PluralsRes
 import androidx.annotation.StringRes
+import java.io.Serializable
 
 /**
  * String with locale-dependent value.
@@ -54,13 +55,13 @@ operator fun LocalizedString.plus(other: LocalizedString): LocalizedString {
     }
 }
 
-object EmptyString : LocalizedString {
+object EmptyString : LocalizedString, Serializable {
     override fun resolve(context: Context): CharSequence {
         return ""
     }
 }
 
-data class RawString(val value: CharSequence) : LocalizedString {
+data class RawString(val value: CharSequence) : LocalizedString, Serializable {
     override fun resolve(context: Context): CharSequence {
         return value
     }
@@ -69,7 +70,7 @@ data class RawString(val value: CharSequence) : LocalizedString {
 data class ResourceString(
     @StringRes val resourceId: Int,
     val args: List<Any>
-) : LocalizedString {
+) : LocalizedString, Serializable {
     override fun resolve(context: Context): CharSequence {
         return context.getString(resourceId, *getArgValues(context, args))
     }
@@ -79,13 +80,13 @@ data class QuantityResourceString(
     @PluralsRes val resourceId: Int,
     val quantity: Int,
     val args: List<Any>
-) : LocalizedString {
+) : LocalizedString, Serializable {
     override fun resolve(context: Context): CharSequence {
         return context.resources.getQuantityString(resourceId, quantity, *getArgValues(context, args))
     }
 }
 
-data class CompoundString(val parts: List<LocalizedString>) : LocalizedString {
+data class CompoundString(val parts: List<LocalizedString>) : LocalizedString, Serializable {
 
     override fun resolve(context: Context): CharSequence {
         return parts.joinToString(separator = "") { it.resolve(context) }
