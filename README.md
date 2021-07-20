@@ -21,14 +21,14 @@ Sesame components are separate modules. Use only that you like.
 ## Gradle Setup
 ```gradle
 dependencies {
-    implementation 'com.github.aartikov:sesame-property:1.0.0-beta2'
-    implementation 'com.github.aartikov:sesame-dialog:1.0.0-beta2'
-    implementation 'com.github.aartikov:sesame-navigation:1.0.0-beta2'
-    implementation 'com.github.aartikov:sesame-activable:1.0.0-beta2'
-    implementation 'com.github.aartikov:sesame-loading:1.0.0-beta2'
-    implementation 'com.github.aartikov:sesame-loop:1.0.0-beta2'
-    implementation 'com.github.aartikov:sesame-localized-string:1.0.0-beta2'
-    implementation 'com.github.aartikov:sesame-form:1.0.0-beta2'
+    implementation 'com.github.aartikov:sesame-property:1.0.0-beta3'
+    implementation 'com.github.aartikov:sesame-dialog:1.0.0-beta3'
+    implementation 'com.github.aartikov:sesame-navigation:1.0.0-beta3'
+    implementation 'com.github.aartikov:sesame-activable:1.0.0-beta3'
+    implementation 'com.github.aartikov:sesame-loading:1.0.0-beta3'
+    implementation 'com.github.aartikov:sesame-loop:1.0.0-beta3'
+    implementation 'com.github.aartikov:sesame-localized-string:1.0.0-beta3'
+    implementation 'com.github.aartikov:sesame-form:1.0.0-beta3'
 }
 ```
 
