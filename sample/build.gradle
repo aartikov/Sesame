@@ -66,4 +66,5 @@ dependencies {
     implementation viewBindingDelegates
     implementation decoro
     implementation konfetti
+    implementation "com.dropbox.mobile.store:store4:4.0.1"
 }

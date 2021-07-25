@@ -7,13 +7,24 @@ import me.aartikov.sesamesample.profile.domain.Profile
 import javax.inject.Inject
 import javax.inject.Singleton
 
-
 @Singleton
 class ProfileGateway @Inject constructor() {
 
+    companion object {
+        private const val DEFAULT_CACHE_EXPIRATION_TIME = 5 * 60   // seconds
+    }
+
+    private val cache = SingleItemCache<Profile>(DEFAULT_CACHE_EXPIRATION_TIME)
+
     private var counter = 0
 
-    suspend fun loadProfile(): Profile = withContext(Dispatchers.IO) {
+    suspend fun loadProfile(fresh: Boolean): Profile {
+        return cache.request(fresh) {
+            loadProfileInternal()
+        }
+    }
+
+    private suspend fun loadProfileInternal(): Profile = withContext(Dispatchers.IO) {
         delay(1000)
         val success = counter % 2 == 1
         counter++
@@ -26,5 +37,9 @@ class ProfileGateway @Inject constructor() {
         } else {
             throw RuntimeException("Emulated failure. Please, try again.")
         }
+    }
+
+    suspend fun clearCache() {
+        cache.clear()
     }
 }

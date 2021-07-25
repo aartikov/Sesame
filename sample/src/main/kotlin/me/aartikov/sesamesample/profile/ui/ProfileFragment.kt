@@ -24,6 +24,7 @@ class ProfileFragment : BaseFragment<ProfileViewModel>(R.layout.fragment_profile
         with(binding) {
             swipeRefresh.setOnRefreshListener { vm.onPullToRefresh() }
             errorView.retryButton.setOnClickListener { vm.onRetryClicked() }
+            avatar.setOnClickListener { vm.onAvatarClicked() }
 
             vm::profileState bind { state ->
                 swipeRefresh.isVisible = state is Loading.State.Data
