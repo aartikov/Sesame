@@ -2,7 +2,7 @@ package me.aartikov.sesame.property
 
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.drop
+import kotlinx.coroutines.flow.dropWhile
 import kotlinx.coroutines.launch
 import kotlin.reflect.KProperty0
 
@@ -14,10 +14,13 @@ fun <T, R> PropertyHost.computed(
     transform: (T) -> R
 ): StateDelegate<R> {
     val flow = property.flow
-    val resultFlow = MutableStateFlow(transform(flow.value))
+    val initialValue = flow.value
+    val resultFlow = MutableStateFlow(transform(initialValue))
     propertyHostScope.launch {
         flow
-            .drop(1)
+            .dropWhile {
+                it == initialValue
+            }
             .collect {
                 resultFlow.value = transform(it)
             }
@@ -118,7 +121,9 @@ private inline fun <T, R> PropertyHost.computedImpl(
     flows.forEachIndexed { index, flow ->
         propertyHostScope.launch {
             flow
-                .drop(1)
+                .dropWhile {
+                    it == initialValues[index]
+                }
                 .collect {
                     elementsFlow.value = elementsFlow.value.toMutableList().apply { this[index] = it }
                 }
@@ -127,7 +132,9 @@ private inline fun <T, R> PropertyHost.computedImpl(
 
     propertyHostScope.launch {
         elementsFlow
-            .drop(1)
+            .dropWhile {
+                it == initialValues
+            }
             .collect {
                 resultFlow.value = transform(it)
             }
