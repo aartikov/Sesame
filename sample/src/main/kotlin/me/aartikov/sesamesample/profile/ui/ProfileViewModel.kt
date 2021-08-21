@@ -15,7 +15,10 @@ class ProfileViewModel @Inject constructor(
     private val profileGateway: ProfileGateway
 ) : BaseViewModel() {
 
-    private val profileLoading = OrdinaryLoading(viewModelScope, profileGateway::loadProfile)
+    private val profileLoading = OrdinaryLoading(
+        viewModelScope,
+        load = { profileGateway.loadProfile() }
+    )
 
     val profileState by stateFromFlow(profileLoading.stateFlow)
 

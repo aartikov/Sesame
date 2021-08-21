@@ -37,14 +37,3 @@ fun <T : Any> OrdinaryLoading(
 ): Loading<T> {
     return LoadingImpl(scope, LoadingEffectHandler(load), null, initialState)
 }
-
-/**
- * Creates an implementation of [Loading] that uses a single suspend method to load data.
- */
-fun <T : Any> OrdinaryLoading(
-    scope: CoroutineScope,
-    load: suspend () -> T?,
-    initialState: Loading.State<T> = Loading.State.Empty
-): Loading<T> {
-    return OrdinaryLoading(scope, { _ -> load() }, initialState)
-}
