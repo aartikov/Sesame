@@ -27,7 +27,10 @@ interface ProfileRepository {
 ```kotlin
 class ProfileViewModel(private val profileRepository: ProfileRepository) : ViewModel() {
 
-    private val profileLoading = OrdinaryLoading(viewModelScope, profileRepository::loadProfile)
+    private val profileLoading = OrdinaryLoading(
+        viewModelScope,
+        load = { profileGateway.loadProfile() }
+    )
     
     val profileState = profileLoading.stateFlow
 
@@ -58,8 +61,8 @@ class ProfileViewModel(private val profileRepository: ProfileRepository) : ViewM
 
     private val profileLoading = FlowLoading(
         viewModelScope,
-        profileRepository::loadProfile,
-        profileRepository::observeProfile
+        load = { profileGateway.loadProfile() },
+        observe = { profileGateway.observeProfile() },
     )
 
     val profileState = profileLoading.stateFlow

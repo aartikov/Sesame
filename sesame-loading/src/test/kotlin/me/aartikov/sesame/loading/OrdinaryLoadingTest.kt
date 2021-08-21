@@ -38,8 +38,7 @@ class OrdinaryLoadingTest {
 
     @Test
     fun `is empty when loaded data is empty`() = runBlockingTest {
-        val loader = suspend { emptyList<String>() }
-        val loading = OrdinaryLoading(this, loader)
+        val loading = OrdinaryLoading(this, { emptyList<String>() })
 
         loading.refresh()
         delay(TestLoader.LOAD_DELAY * 2)
@@ -50,8 +49,7 @@ class OrdinaryLoadingTest {
 
     @Test
     fun `treat null as empty`() = runBlockingTest {
-        val loader = suspend { null }
-        val loading = OrdinaryLoading(this, loader)
+        val loading = OrdinaryLoading(this, { null })
 
         loading.refresh()
         delay(TestLoader.LOAD_DELAY * 2)
