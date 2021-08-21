@@ -2,7 +2,6 @@ package me.aartikov.sesame.loading.simple.internal
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.BufferOverflow
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import me.aartikov.sesame.loading.simple.Loading
@@ -18,14 +17,12 @@ internal class LoadingImpl<T : Any>(
     initialState: State<T>
 ) : Loading<T> {
 
-    private val mutableStateFlow = MutableStateFlow(initialState)
-
     private val mutableEventFlow = MutableSharedFlow<Event<T>>(
         extraBufferCapacity = 100, onBufferOverflow = BufferOverflow.DROP_OLDEST
     )
 
     private val loop: LoadingLoop<T> = LoadingLoop(
-        initialState = initialState.toInternalState(),
+        initialState = initialState,
         reducer = LoadingReducer(),
         effectHandlers = listOf(
             loadingEffectHandler,
@@ -37,24 +34,14 @@ internal class LoadingImpl<T : Any>(
     )
 
     override val stateFlow: StateFlow<State<T>>
-        get() = mutableStateFlow
+        get() = loop.stateFlow
 
     override val eventFlow: Flow<Event<T>>
         get() = mutableEventFlow
 
     init {
         scope.launch {
-            coroutineScope {
-                launch {
-                    loop.stateFlow.collect {
-                        mutableStateFlow.value = it.toPublicState()
-                    }
-                }
-
-                launch {
-                    loop.start()
-                }
-            }
+            loop.start()
         }
     }
 

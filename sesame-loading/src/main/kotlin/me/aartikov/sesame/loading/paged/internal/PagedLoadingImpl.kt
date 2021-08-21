@@ -16,14 +16,12 @@ internal class PagedLoadingImpl<T : Any>(
     initialState: State<T>
 ) : PagedLoading<T> {
 
-    private val mutableStateFlow = MutableStateFlow(initialState)
-
     private val mutableEventFlow = MutableSharedFlow<Event<T>>(
         extraBufferCapacity = 100, onBufferOverflow = BufferOverflow.DROP_OLDEST
     )
 
     private val loop: PagedLoadingLoop<T> = PagedLoadingLoop(
-        initialState = initialState.toInternalState(),
+        initialState = initialState,
         reducer = PagedLoadingReducer(),
         effectHandlers = listOf(
             PagedLoadingEffectHandler(loader),
@@ -32,24 +30,14 @@ internal class PagedLoadingImpl<T : Any>(
     )
 
     override val stateFlow: StateFlow<State<T>>
-        get() = mutableStateFlow
+        get() = loop.stateFlow
 
     override val eventFlow: Flow<Event<T>>
         get() = mutableEventFlow
 
     init {
         scope.launch {
-            coroutineScope {
-                launch {
-                    loop.stateFlow.collect {
-                        mutableStateFlow.value = it.toPublicState()
-                    }
-                }
-
-                launch {
-                    loop.start()
-                }
-            }
+            loop.start()
         }
     }
 
