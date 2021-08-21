@@ -1,15 +1,8 @@
 package me.aartikov.sesame.loading.simple.internal
 
 import me.aartikov.sesame.loading.simple.Loading.Event
+import me.aartikov.sesame.loading.simple.Loading.State
 import me.aartikov.sesame.loop.*
-
-internal sealed class State<out T> {
-    object Empty : State<Nothing>()
-    object Loading : State<Nothing>()
-    data class Error(val throwable: Throwable) : State<Nothing>()
-    data class Data<T>(val data: T) : State<T>()
-    data class Refresh<T>(val data: T) : State<T>()
-}
 
 internal sealed class Action<out T> {
     data class Load(val fresh: Boolean, val reset: Boolean) : Action<Nothing>()
@@ -47,12 +40,15 @@ internal class LoadingReducer<T> : Reducer<State<T>, Action<T>, Effect<T>> {
                         State.Loading,
                         Effect.Load(action.fresh)
                     )
+                    is State.Data -> when (state.refreshing) {
+                        false -> next(
+                            State.Data(data = state.data, refreshing = true),
+                            Effect.Load(action.fresh)
+                        )
+                        true -> nothing()
+                    }
                     is State.Error -> next(
                         State.Loading,
-                        Effect.Load(action.fresh)
-                    )
-                    is State.Data -> next(
-                        State.Refresh(data = state.data),
                         Effect.Load(action.fresh)
                     )
                     else -> nothing()
@@ -72,10 +68,13 @@ internal class LoadingReducer<T> : Reducer<State<T>, Action<T>, Effect<T>> {
                         State.Empty,
                         Effect.CancelLoading
                     )
-                    is State.Refresh -> next(
-                        State.Data(state.data),
-                        Effect.CancelLoading
-                    )
+                    is State.Data -> when (state.refreshing) {
+                        false -> nothing()
+                        true -> next(
+                            State.Data(state.data),
+                            Effect.CancelLoading
+                        )
+                    }
                     else -> nothing()
                 }
             }
@@ -84,7 +83,10 @@ internal class LoadingReducer<T> : Reducer<State<T>, Action<T>, Effect<T>> {
         is Action.DataLoaded -> {
             when (state) {
                 is State.Loading -> next(State.Data(action.data))
-                is State.Refresh -> next(State.Data(action.data))
+                is State.Data -> when (state.refreshing) {
+                    false -> nothing()
+                    true -> next(State.Data(action.data))
+                }
                 else -> nothing()
             }
         }
@@ -92,7 +94,10 @@ internal class LoadingReducer<T> : Reducer<State<T>, Action<T>, Effect<T>> {
         is Action.EmptyDataLoaded -> {
             when (state) {
                 is State.Loading -> next(State.Empty)
-                is State.Refresh -> next(State.Empty)
+                is State.Data -> when (state.refreshing) {
+                    false -> nothing()
+                    true -> next(State.Empty)
+                }
                 else -> nothing()
             }
         }
@@ -101,12 +106,15 @@ internal class LoadingReducer<T> : Reducer<State<T>, Action<T>, Effect<T>> {
             when (state) {
                 is State.Loading -> next(
                     State.Error(action.throwable),
-                    Effect.EmitEvent(Event.Error(action.throwable, state.toPublicState()))
+                    Effect.EmitEvent(Event.Error(action.throwable, state))
                 )
-                is State.Refresh -> next(
-                    State.Data(state.data),
-                    Effect.EmitEvent(Event.Error(action.throwable, state.toPublicState()))
-                )
+                is State.Data -> when (state.refreshing) {
+                    false -> nothing()
+                    true -> next(
+                        State.Data(state.data),
+                        Effect.EmitEvent(Event.Error(action.throwable, state))
+                    )
+                }
                 else -> nothing()
             }
         }
@@ -114,17 +122,18 @@ internal class LoadingReducer<T> : Reducer<State<T>, Action<T>, Effect<T>> {
         is Action.DataObserved -> {
             when (state) {
                 is State.Empty -> next(State.Data(action.data))
-                is State.Loading -> next(State.Refresh(action.data))
+                is State.Loading -> next(State.Data(action.data, refreshing = true))
+                is State.Data -> next(State.Data(action.data, refreshing = state.refreshing))
                 is State.Error -> next(State.Data(action.data))
-                is State.Refresh -> next(State.Refresh(action.data))
-                is State.Data -> next(State.Data(action.data))
             }
         }
 
         is Action.EmptyDataObserved -> {
             when (state) {
-                is State.Refresh -> next(State.Loading)
-                is State.Data -> next(State.Empty)
+                is State.Data -> when (state.refreshing) {
+                    false -> next(State.Empty)
+                    true -> next(State.Loading)
+                }
                 else -> nothing()
             }
         }
