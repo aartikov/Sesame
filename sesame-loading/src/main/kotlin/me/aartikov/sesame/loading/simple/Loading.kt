@@ -133,7 +133,7 @@ fun <T : Any> Loading<T>.handleErrors(
 /**
  * Returns new [Loading.State] of applying the given [transform] function to original [Loading.State.Data.data].
  */
-fun <T, R> Loading.State<T>.map(transform: (T) -> R): Loading.State<R> {
+fun <T, R> Loading.State<T>.mapData(transform: (T) -> R): Loading.State<R> {
     return when (this) {
         Loading.State.Empty -> Loading.State.Empty
         Loading.State.Loading -> Loading.State.Loading
