@@ -2,29 +2,31 @@ package me.aartikov.sesame.loading.simple.internal
 
 import me.aartikov.sesame.loading.simple.Loading.Event
 import me.aartikov.sesame.loading.simple.Loading.State
+import me.aartikov.sesame.loading.simple.isEmpty
 import me.aartikov.sesame.loop.*
 
-internal sealed class Action<out T> {
+internal sealed class Action<out T : Any> {
     data class Load(val fresh: Boolean, val reset: Boolean) : Action<Nothing>()
     data class Cancel(val reset: Boolean) : Action<Nothing>()
+    data class MutateData<T : Any>(val transform: (T) -> T) : Action<T>()
 
-    data class DataLoaded<T>(val data: T) : Action<T>()
+    data class DataLoaded<T : Any>(val data: T) : Action<T>()
     object EmptyDataLoaded : Action<Nothing>()
     data class LoadingError(val throwable: Throwable) : Action<Nothing>()
 
-    data class DataObserved<T>(val data: T) : Action<T>()
+    data class DataObserved<T : Any>(val data: T) : Action<T>()
     object EmptyDataObserved : Action<Nothing>()
 }
 
-internal sealed class Effect<out T> {
+internal sealed class Effect<out T : Any> {
     data class Load(val fresh: Boolean) : Effect<Nothing>()
     object CancelLoading : Effect<Nothing>()
-    data class EmitEvent<T>(val event: Event<T>) : Effect<T>()
+    data class EmitEvent<T : Any>(val event: Event<T>) : Effect<T>()
 }
 
 internal typealias LoadingLoop<T> = Loop<State<T>, Action<T>, Effect<T>>
 
-internal class LoadingReducer<T> : Reducer<State<T>, Action<T>, Effect<T>> {
+internal class LoadingReducer<T : Any> : Reducer<State<T>, Action<T>, Effect<T>> {
 
     override fun reduce(state: State<T>, action: Action<T>): Next<State<T>, Effect<T>> = when (action) {
 
@@ -136,6 +138,18 @@ internal class LoadingReducer<T> : Reducer<State<T>, Action<T>, Effect<T>> {
                 }
                 else -> nothing()
             }
+        }
+
+        is Action.MutateData -> when (state) {
+            is State.Data -> {
+                val newData = action.transform(state.data)
+                when {
+                    !isEmpty(newData) -> next(state.copy(data = newData))
+                    state.refreshing -> next(State.Loading)
+                    else -> next(State.Empty)
+                }
+            }
+            else -> nothing()
         }
     }
 }

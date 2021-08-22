@@ -194,6 +194,17 @@ class OrdinaryLoadingTest {
     }
 
     @Test
+    fun `shows new data when it was mutated`() = runBlockingTest {
+        val loader = TestLoader(Result.Success("Anything"))
+        val loading = OrdinaryLoading(this, loader, initialState = State.Data("Value"))
+
+        loading.mutateData { "Mutated $it" }
+
+        assertEquals(State.Data("Mutated Value"), loading.state)
+        cancelJobs()
+    }
+
+    @Test
     fun `cancels loading and clears data after reset is called`() = runBlockingTest {
         val loader = TestLoader(Result.Success("Value"))
         val loading = OrdinaryLoading(this, loader, initialState = State.Data("Previous value"))

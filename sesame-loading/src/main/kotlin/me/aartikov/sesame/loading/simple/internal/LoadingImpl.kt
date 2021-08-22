@@ -2,7 +2,9 @@ package me.aartikov.sesame.loading.simple.internal
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.BufferOverflow
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import me.aartikov.sesame.loading.simple.Loading
 import me.aartikov.sesame.loading.simple.Loading.Event
@@ -51,5 +53,9 @@ internal class LoadingImpl<T : Any>(
 
     override fun cancel(reset: Boolean) {
         loop.dispatch(Action.Cancel(reset))
+    }
+
+    override fun mutateData(transform: (T) -> T) {
+        loop.dispatch(Action.MutateData(transform))
     }
 }
