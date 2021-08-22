@@ -73,6 +73,11 @@ interface Loading<T : Any> {
      * @param reset if true than state will be reset to [Loading.State.Empty].
      */
     fun cancel(reset: Boolean = false)
+
+    /**
+     * Mutates [Loading.State.Data.data] with a [transform] function.
+     */
+    fun mutateData(transform: (T) -> T)
 }
 
 /**

@@ -2,8 +2,9 @@ package me.aartikov.sesame.loading.paged.internal
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.BufferOverflow
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import me.aartikov.sesame.loading.paged.PagedLoader
 import me.aartikov.sesame.loading.paged.PagedLoading
@@ -51,5 +52,9 @@ internal class PagedLoadingImpl<T : Any>(
 
     override fun cancel(reset: Boolean) {
         loop.dispatch(Action.Cancel(reset))
+    }
+
+    override fun mutateData(transform: (List<T>) -> List<T>) {
+        loop.dispatch(Action.MutateData(transform))
     }
 }

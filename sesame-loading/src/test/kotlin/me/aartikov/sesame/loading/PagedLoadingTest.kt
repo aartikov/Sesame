@@ -302,6 +302,20 @@ class PagedLoadingTest {
         cancelJobs()
     }
 
+    @Test
+    fun `shows new data when it was mutated`() = runBlockingTest {
+        val loader = TestLoader(
+            firstPageResult = Result.Success(listOf("Anything"))
+        )
+        val loading =
+            PagedLoading(this, loader, initialState = State.Data(1, listOf("Value1", "Value2")))
+
+        loading.mutateData { list -> list.map { "Mutated $it" } }
+
+        assertEquals(State.Data(1, listOf("Mutated Value1", "Mutated Value2")), loading.state)
+        cancelJobs()
+    }
+
     private class TestLoader(
         private val firstPageResult: Result,
         private val nextPageResult: (PagingInfo<String>) -> Result = { Result.Success(emptyList()) }
