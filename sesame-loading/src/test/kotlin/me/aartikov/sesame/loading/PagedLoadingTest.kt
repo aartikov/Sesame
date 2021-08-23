@@ -335,14 +335,16 @@ class PagedLoadingTest {
         var loadNextPageCallCount = 0
             private set
 
-        override suspend fun loadFirstPage(fresh: Boolean): List<String> {
+        override suspend fun loadFirstPage(fresh: Boolean): Page<String> {
             loadFirstPageCallCount++
-            return load(firstPageResult, fresh)
+            val data = load(firstPageResult, fresh)
+            return Page(data, hasNextPage = data.isNotEmpty())
         }
 
-        override suspend fun loadNextPage(pagingInfo: PagingInfo<String>): List<String> {
+        override suspend fun loadNextPage(pagingInfo: PagingInfo<String>): Page<String> {
             loadNextPageCallCount++
-            return load(nextPageResult(pagingInfo), true)
+            val data = load(nextPageResult(pagingInfo), true)
+            return Page(data, hasNextPage = data.isNotEmpty())
         }
 
         private suspend fun load(result: Result, fresh: Boolean): List<String> {

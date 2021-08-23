@@ -1,5 +1,6 @@
 package me.aartikov.sesame.loading.paged.internal
 
+import me.aartikov.sesame.loading.paged.Page
 import me.aartikov.sesame.loading.paged.PagedLoading.*
 import me.aartikov.sesame.loading.paged.PagingInfo
 import me.aartikov.sesame.loop.*
@@ -10,7 +11,7 @@ internal sealed class Action<out T : Any> {
     data class Cancel(val reset: Boolean) : Action<Nothing>()
     data class MutateData<T : Any>(val transform: (List<T>) -> List<T>) : Action<T>()
 
-    data class NewPageLoaded<T : Any>(val data: List<T>) : Action<T>()
+    data class NewPageLoaded<T : Any>(val page: Page<T>) : Action<T>()
     object EmptyPageLoaded : Action<Nothing>()
     data class LoadingError(val throwable: Throwable) : Action<Nothing>()
 }
@@ -95,11 +96,24 @@ internal class PagedLoadingReducer<T : Any> : Reducer<State<T>, Action<T>, Effec
 
         is Action.NewPageLoaded -> {
             when (state) {
-                is State.Loading -> next(State.Data(action.data))
+                is State.Loading -> next(
+                    State.Data(
+                        action.page.data,
+                        status = if (action.page.hasNextPage) DataStatus.Normal else DataStatus.FullData
+                    )
+                )
                 is State.Data -> when (state.status) {
-                    DataStatus.Refreshing -> next(State.Data(action.data))
+                    DataStatus.Refreshing -> next(
+                        State.Data(
+                            action.page.data,
+                            status = if (action.page.hasNextPage) DataStatus.Normal else DataStatus.FullData
+                        )
+                    )
                     DataStatus.LoadingMore -> next(
-                        State.Data(state.data + action.data)
+                        State.Data(
+                            state.data + action.page.data,
+                            status = if (action.page.hasNextPage) DataStatus.Normal else DataStatus.FullData
+                        )
                     )
                     else -> nothing()
                 }

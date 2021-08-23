@@ -12,16 +12,16 @@ interface PagedLoader<T : Any> {
     /**
      * Loads a first page.
      * @param fresh indicates that fresh data is required.
-     * @return data for a first page. Empty list means missing/empty data.
+     * @return page with data.
      */
-    suspend fun loadFirstPage(fresh: Boolean): List<T>
+    suspend fun loadFirstPage(fresh: Boolean): Page<T>
 
     /**
      * Loads the next page.
      * @param pagingInfo information about the already loaded pages. See: [PagingInfo].
-     * @return data for the next page. Empty list means that the end of data is reached.
+     * @return page with data.
      */
-    suspend fun loadNextPage(pagingInfo: PagingInfo<T>): List<T>
+    suspend fun loadNextPage(pagingInfo: PagingInfo<T>): Page<T>
 }
 
 /**
@@ -210,14 +210,14 @@ fun <T : Any> PagedLoading(
  */
 fun <T : Any> PagedLoading(
     scope: CoroutineScope,
-    loadFirstPage: suspend (fresh: Boolean) -> List<T>,
-    loadNextPage: suspend (pagingInfo: PagingInfo<T>) -> List<T>,
+    loadFirstPage: suspend (fresh: Boolean) -> Page<T>,
+    loadNextPage: suspend (pagingInfo: PagingInfo<T>) -> Page<T>,
     initialState: PagedLoading.State<T> = PagedLoading.State.Empty
 ): PagedLoading<T> {
     val loader = object : PagedLoader<T> {
-        override suspend fun loadFirstPage(fresh: Boolean): List<T> = loadFirstPage(fresh)
+        override suspend fun loadFirstPage(fresh: Boolean): Page<T> = loadFirstPage(fresh)
 
-        override suspend fun loadNextPage(pagingInfo: PagingInfo<T>): List<T> = loadNextPage(pagingInfo)
+        override suspend fun loadNextPage(pagingInfo: PagingInfo<T>): Page<T> = loadNextPage(pagingInfo)
     }
     return PagedLoading(scope, loader, initialState)
 }
@@ -227,13 +227,13 @@ fun <T : Any> PagedLoading(
  */
 fun <T : Any> PagedLoading(
     scope: CoroutineScope,
-    loadPage: suspend (pagingInfo: PagingInfo<T>) -> List<T>,
+    loadPage: suspend (pagingInfo: PagingInfo<T>) -> Page<T>,
     initialState: PagedLoading.State<T> = PagedLoading.State.Empty
 ): PagedLoading<T> {
     val loader = object : PagedLoader<T> {
-        override suspend fun loadFirstPage(fresh: Boolean): List<T> = loadPage(PagingInfo(emptyList()))
+        override suspend fun loadFirstPage(fresh: Boolean): Page<T> = loadPage(PagingInfo(emptyList()))
 
-        override suspend fun loadNextPage(pagingInfo: PagingInfo<T>): List<T> = loadPage(pagingInfo)
+        override suspend fun loadNextPage(pagingInfo: PagingInfo<T>): Page<T> = loadPage(pagingInfo)
     }
     return PagedLoading(scope, loader, initialState)
 }
