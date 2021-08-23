@@ -1,5 +1,6 @@
 package me.aartikov.sesame.loading.paged.internal
 
+import me.aartikov.sesame.loading.paged.DataMerger
 import me.aartikov.sesame.loading.paged.Page
 import me.aartikov.sesame.loading.paged.PagedLoading.*
 import me.aartikov.sesame.loading.paged.PagingInfo
@@ -25,7 +26,9 @@ internal sealed class Effect<out T : Any> {
 
 internal typealias PagedLoadingLoop<T> = Loop<State<T>, Action<T>, Effect<T>>
 
-internal class PagedLoadingReducer<T : Any> : Reducer<State<T>, Action<T>, Effect<T>> {
+internal class PagedLoadingReducer<T : Any>(
+    private val dataMerger: DataMerger<T>
+) : Reducer<State<T>, Action<T>, Effect<T>> {
 
     override fun reduce(state: State<T>, action: Action<T>): Next<State<T>, Effect<T>> = when (action) {
 
@@ -111,7 +114,7 @@ internal class PagedLoadingReducer<T : Any> : Reducer<State<T>, Action<T>, Effec
                     )
                     DataStatus.LoadingMore -> next(
                         State.Data(
-                            state.data + action.page.data,
+                            dataMerger.merge(state.data, action.page.data),
                             status = if (action.page.hasNextPage) DataStatus.Normal else DataStatus.FullData
                         )
                     )

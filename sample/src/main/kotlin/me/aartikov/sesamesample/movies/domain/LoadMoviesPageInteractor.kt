@@ -14,9 +14,6 @@ class LoadMoviesPageInteractor @Inject constructor(
 
     suspend fun execute(offset: Int): Page<Movie> {
         val movies = moviesGateway.loadMovies(offset, PAGE_SIZE)
-        return Page(
-            data = movies,
-            hasNextPage = movies.size >= PAGE_SIZE
-        )
+        return Page(movies, hasNextPage = movies.size >= PAGE_SIZE)
     }
 }

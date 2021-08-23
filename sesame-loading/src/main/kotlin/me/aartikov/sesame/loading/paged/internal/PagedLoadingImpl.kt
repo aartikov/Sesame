@@ -6,6 +6,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import me.aartikov.sesame.loading.paged.DataMerger
 import me.aartikov.sesame.loading.paged.PagedLoader
 import me.aartikov.sesame.loading.paged.PagedLoading
 import me.aartikov.sesame.loading.paged.PagedLoading.Event
@@ -14,7 +15,8 @@ import me.aartikov.sesame.loading.paged.PagedLoading.State
 internal class PagedLoadingImpl<T : Any>(
     scope: CoroutineScope,
     loader: PagedLoader<T>,
-    initialState: State<T>
+    initialState: State<T>,
+    dataMerger: DataMerger<T>
 ) : PagedLoading<T> {
 
     private val mutableEventFlow = MutableSharedFlow<Event<T>>(
@@ -23,7 +25,7 @@ internal class PagedLoadingImpl<T : Any>(
 
     private val loop: PagedLoadingLoop<T> = PagedLoadingLoop(
         initialState = initialState,
-        reducer = PagedLoadingReducer(),
+        reducer = PagedLoadingReducer(dataMerger),
         effectHandlers = listOf(
             PagedLoadingEffectHandler(loader),
             EventEffectHandler { event -> mutableEventFlow.tryEmit(event) }

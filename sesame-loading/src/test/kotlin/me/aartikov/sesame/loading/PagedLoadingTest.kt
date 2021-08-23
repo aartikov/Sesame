@@ -315,6 +315,28 @@ class PagedLoadingTest {
         cancelJobs()
     }
 
+    @Test
+    fun `loads data without duplicates with DuplicateRemovingDataMerger`() = runBlockingTest {
+        val loader = TestLoader(
+            firstPageResult = Result.Success(listOf("Anything")),
+            nextPageResult = {
+                Result.Success(listOf("Value2", "Value3", "Value4", "Value5"))
+            }
+        )
+        val loading = PagedLoading(
+            this,
+            loader,
+            initialState = State.Data(listOf("Value1", "Value2", "Value3")),
+            dataMerger = DuplicateRemovingDataMerger(keySelector = { it })
+        )
+
+        loading.loadMore()
+        delay(TestLoader.LOAD_DELAY * 2)
+
+        assertEquals(State.Data(listOf("Value1", "Value2", "Value3", "Value4", "Value5")), loading.state)
+        cancelJobs()
+    }
+
     private class TestLoader(
         private val firstPageResult: Result,
         private val nextPageResult: (PagingInfo<String>) -> Result = { Result.Success(emptyList()) }
