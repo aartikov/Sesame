@@ -200,9 +200,10 @@ fun <T : Any> PagedLoading<T>.handleErrors(
 fun <T : Any> PagedLoading(
     scope: CoroutineScope,
     loader: PagedLoader<T>,
-    initialState: PagedLoading.State<T> = PagedLoading.State.Empty
+    initialState: PagedLoading.State<T> = PagedLoading.State.Empty,
+    dataMerger: DataMerger<T> = SimpleDataMerger()
 ): PagedLoading<T> {
-    return PagedLoadingImpl(scope, loader, initialState)
+    return PagedLoadingImpl(scope, loader, initialState, dataMerger)
 }
 
 /**
@@ -212,14 +213,15 @@ fun <T : Any> PagedLoading(
     scope: CoroutineScope,
     loadFirstPage: suspend (fresh: Boolean) -> Page<T>,
     loadNextPage: suspend (pagingInfo: PagingInfo<T>) -> Page<T>,
-    initialState: PagedLoading.State<T> = PagedLoading.State.Empty
+    initialState: PagedLoading.State<T> = PagedLoading.State.Empty,
+    dataMerger: DataMerger<T> = SimpleDataMerger()
 ): PagedLoading<T> {
     val loader = object : PagedLoader<T> {
         override suspend fun loadFirstPage(fresh: Boolean): Page<T> = loadFirstPage(fresh)
 
         override suspend fun loadNextPage(pagingInfo: PagingInfo<T>): Page<T> = loadNextPage(pagingInfo)
     }
-    return PagedLoading(scope, loader, initialState)
+    return PagedLoading(scope, loader, initialState, dataMerger)
 }
 
 /**
@@ -228,14 +230,15 @@ fun <T : Any> PagedLoading(
 fun <T : Any> PagedLoading(
     scope: CoroutineScope,
     loadPage: suspend (pagingInfo: PagingInfo<T>) -> Page<T>,
-    initialState: PagedLoading.State<T> = PagedLoading.State.Empty
+    initialState: PagedLoading.State<T> = PagedLoading.State.Empty,
+    dataMerger: DataMerger<T> = SimpleDataMerger()
 ): PagedLoading<T> {
     val loader = object : PagedLoader<T> {
         override suspend fun loadFirstPage(fresh: Boolean): Page<T> = loadPage(PagingInfo(emptyList()))
 
         override suspend fun loadNextPage(pagingInfo: PagingInfo<T>): Page<T> = loadPage(pagingInfo)
     }
-    return PagedLoading(scope, loader, initialState)
+    return PagedLoading(scope, loader, initialState, dataMerger)
 }
 
 /**
