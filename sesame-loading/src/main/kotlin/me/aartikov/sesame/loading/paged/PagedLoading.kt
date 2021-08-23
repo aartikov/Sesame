@@ -134,6 +134,11 @@ interface PagedLoading<T : Any> {
      * @param reset if true than state will be reset to [PagedLoading.State.Empty].
      */
     fun cancel(reset: Boolean = false)
+
+    /**
+     * Mutates [PagedLoading.State.Data.data] with a [transform] function.
+     */
+    fun mutateData(transform: (List<T>) -> List<T>)
 }
 
 /**

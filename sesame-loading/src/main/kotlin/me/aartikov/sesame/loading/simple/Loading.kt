@@ -75,7 +75,7 @@ interface Loading<T : Any> {
     fun cancel(reset: Boolean = false)
 
     /**
-     *
+     * Mutates [Loading.State.Data.data] with a [transform] function.
      */
     fun mutateData(transform: (T) -> T)
 }
