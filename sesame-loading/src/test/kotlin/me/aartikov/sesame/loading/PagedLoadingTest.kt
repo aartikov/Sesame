@@ -57,7 +57,7 @@ class PagedLoadingTest {
         loading.refresh()
         delay(TestLoader.LOAD_DELAY * 2)
 
-        assertEquals(State.Data(1, listOf("Value1", "Value2")), loading.state)
+        assertEquals(State.Data(listOf("Value1", "Value2")), loading.state)
         cancelJobs()
     }
 
@@ -84,12 +84,12 @@ class PagedLoadingTest {
         val loading = PagedLoading(
             this,
             loader,
-            initialState = State.Data(1, listOf("Previous value1", "Previous value2"))
+            initialState = State.Data(listOf("Previous value1", "Previous value2"))
         )
 
         loading.refresh()
 
-        assertEquals(State.Data(1, listOf("Previous value1", "Previous value2"), DataStatus.Refreshing), loading.state)
+        assertEquals(State.Data(listOf("Previous value1", "Previous value2"), DataStatus.Refreshing), loading.state)
         cancelJobs()
     }
 
@@ -99,13 +99,13 @@ class PagedLoadingTest {
         val loading = PagedLoading(
             this,
             loader,
-            initialState = State.Data(2, listOf("Previous value1", "Previous value2", "Previous value3"))
+            initialState = State.Data(listOf("Previous value1", "Previous value2", "Previous value3"))
         )
 
         loading.refresh()
         delay(TestLoader.LOAD_DELAY * 2)
 
-        assertEquals(State.Data(1, listOf("Value1", "Value2")), loading.state)
+        assertEquals(State.Data(listOf("Value1", "Value2")), loading.state)
         cancelJobs()
     }
 
@@ -113,7 +113,7 @@ class PagedLoadingTest {
     fun `leaves previous data and shows error when refresh failed`() = runBlockingTest {
         val loader = TestLoader(Result.Error(LoadingFailedException()))
         val loading =
-            PagedLoading(this, loader, initialState = State.Data(1, listOf("Previous value1", "Previous value2")))
+            PagedLoading(this, loader, initialState = State.Data(listOf("Previous value1", "Previous value2")))
         val events = mutableListOf<Event<String>>()
 
         launch {
@@ -122,9 +122,9 @@ class PagedLoadingTest {
         loading.refresh()
         delay(TestLoader.LOAD_DELAY * 2)
 
-        assertEquals(State.Data(1, listOf("Previous value1", "Previous value2")), loading.state)
+        assertEquals(State.Data(listOf("Previous value1", "Previous value2")), loading.state)
         val expectedStateDuringLoading =
-            State.Data(1, listOf("Previous value1", "Previous value2"), status = DataStatus.Refreshing)
+            State.Data(listOf("Previous value1", "Previous value2"), status = DataStatus.Refreshing)
         assertEquals(listOf(Event.Error(LoadingFailedException(), expectedStateDuringLoading)), events)
         cancelJobs()
     }
@@ -150,19 +150,19 @@ class PagedLoadingTest {
         loading.loadFirstPage(fresh = false)
         delay(TestLoader.LOAD_DELAY * 2)
 
-        assertEquals(State.Data(1, listOf("Value1 (cached)", "Value2 (cached)")), loading.state)
+        assertEquals(State.Data(listOf("Value1 (cached)", "Value2 (cached)")), loading.state)
         cancelJobs()
     }
 
     @Test
     fun `shows loading more progress`() = runBlockingTest {
         val loader = TestLoader(Result.Success(listOf("Value3", "Value4")))
-        val loading = PagedLoading(this, loader, initialState = State.Data(1, listOf("Value1", "Value2")))
+        val loading = PagedLoading(this, loader, initialState = State.Data(listOf("Value1", "Value2")))
 
         loading.loadMore()
         delay(TestLoader.LOAD_DELAY / 2)
 
-        assertEquals(State.Data(1, listOf("Value1", "Value2"), DataStatus.LoadingMore), loading.state)
+        assertEquals(State.Data(listOf("Value1", "Value2"), DataStatus.LoadingMore), loading.state)
         cancelJobs()
     }
 
@@ -171,18 +171,17 @@ class PagedLoadingTest {
         val loader = TestLoader(
             firstPageResult = Result.Success(listOf("Anything")),
             nextPageResult = { pagingInfo ->
-                val pageSize = 2
-                val itemIndex1 = pageSize * pagingInfo.loadedPageCount + 1
+                val itemIndex1 = pagingInfo.loadedData.size + 1
                 val itemIndex2 = itemIndex1 + 1
                 Result.Success(listOf("Value$itemIndex1", "Value$itemIndex2"))
             }
         )
-        val loading = PagedLoading(this, loader, initialState = State.Data(1, listOf("Value1", "Value2")))
+        val loading = PagedLoading(this, loader, initialState = State.Data(listOf("Value1", "Value2")))
 
         loading.loadMore()
         delay(TestLoader.LOAD_DELAY * 2)
 
-        assertEquals(State.Data(2, listOf("Value1", "Value2", "Value3", "Value4")), loading.state)
+        assertEquals(State.Data(listOf("Value1", "Value2", "Value3", "Value4")), loading.state)
         cancelJobs()
     }
 
@@ -192,7 +191,7 @@ class PagedLoadingTest {
             firstPageResult = Result.Success(listOf("Anything")),
             nextPageResult = { Result.Error(LoadingFailedException()) }
         )
-        val loading = PagedLoading(this, loader, initialState = State.Data(1, listOf("Value1", "Value2")))
+        val loading = PagedLoading(this, loader, initialState = State.Data(listOf("Value1", "Value2")))
         val events = mutableListOf<Event<String>>()
 
         launch {
@@ -201,8 +200,8 @@ class PagedLoadingTest {
         loading.loadMore()
         delay(TestLoader.LOAD_DELAY * 2)
 
-        assertEquals(State.Data(1, listOf("Value1", "Value2")), loading.state)
-        val expectedStateDuringLoading = State.Data(1, listOf("Value1", "Value2"), status = DataStatus.LoadingMore)
+        assertEquals(State.Data(listOf("Value1", "Value2")), loading.state)
+        val expectedStateDuringLoading = State.Data(listOf("Value1", "Value2"), status = DataStatus.LoadingMore)
         assertEquals(listOf(Event.Error(LoadingFailedException(), expectedStateDuringLoading)), events)
         cancelJobs()
     }
@@ -213,12 +212,12 @@ class PagedLoadingTest {
             firstPageResult = Result.Success(listOf("Anything")),
             nextPageResult = { Result.Success(emptyList()) }
         )
-        val loading = PagedLoading(this, loader, initialState = State.Data(2, listOf("Value1", "Value2", "Value3")))
+        val loading = PagedLoading(this, loader, initialState = State.Data(listOf("Value1", "Value2", "Value3")))
 
         loading.loadMore()
         delay(TestLoader.LOAD_DELAY * 2)
 
-        assertEquals(State.Data(2, listOf("Value1", "Value2", "Value3"), DataStatus.FullData), loading.state)
+        assertEquals(State.Data(listOf("Value1", "Value2", "Value3"), DataStatus.FullData), loading.state)
         cancelJobs()
     }
 
@@ -230,14 +229,14 @@ class PagedLoadingTest {
             nextPageResult = { Result.Success(listOf("Value3", "Value4")) }
         )
         val loading =
-            PagedLoading(this, loader, initialState = State.Data(1, listOf("Previous value1", "Previous value2")))
+            PagedLoading(this, loader, initialState = State.Data(listOf("Previous value1", "Previous value2")))
 
         loading.loadMore()
         delay(TestLoader.LOAD_DELAY / 2)
         loading.refresh()
         delay(TestLoader.LOAD_DELAY * 2)
 
-        assertEquals(State.Data(1, listOf("Value1", "Value2")), loading.state)
+        assertEquals(State.Data(listOf("Value1", "Value2")), loading.state)
         cancelJobs()
     }
 
@@ -246,7 +245,7 @@ class PagedLoadingTest {
         val loader = TestLoader(
             firstPageResult = Result.Success(listOf("Anything"))
         )
-        val loading = PagedLoading(this, loader, initialState = State.Data(1, listOf("Value1", "Value2")))
+        val loading = PagedLoading(this, loader, initialState = State.Data(listOf("Value1", "Value2")))
 
         loading.restart()
 
@@ -261,14 +260,14 @@ class PagedLoadingTest {
             nextPageResult = { Result.Success(listOf("Value3", "Value4")) }
         )
         val loading =
-            PagedLoading(this, loader, initialState = State.Data(1, listOf("Previous value1", "Previous value2")))
+            PagedLoading(this, loader, initialState = State.Data(listOf("Previous value1", "Previous value2")))
 
         loading.loadMore()
         delay(TestLoader.LOAD_DELAY / 2)
         loading.restart()
         delay(TestLoader.LOAD_DELAY * 2)
 
-        assertEquals(State.Data(1, listOf("Value1", "Value2")), loading.state)
+        assertEquals(State.Data(listOf("Value1", "Value2")), loading.state)
         cancelJobs()
     }
 
@@ -276,14 +275,14 @@ class PagedLoadingTest {
     fun `cancels loading and leaves previous data after cancel is called`() = runBlockingTest {
         val loader = TestLoader(Result.Success(listOf("Value1", "Value2")))
         val loading =
-            PagedLoading(this, loader, initialState = State.Data(1, listOf("Previous value1", "Previous value2")))
+            PagedLoading(this, loader, initialState = State.Data(listOf("Previous value1", "Previous value2")))
 
         loading.refresh()
         delay(TestLoader.LOAD_DELAY / 2)
         loading.cancel()
         delay(TestLoader.LOAD_DELAY * 2)
 
-        assertEquals(State.Data(1, listOf("Previous value1", "Previous value2")), loading.state)
+        assertEquals(State.Data(listOf("Previous value1", "Previous value2")), loading.state)
         cancelJobs()
     }
 
@@ -291,7 +290,7 @@ class PagedLoadingTest {
     fun `cancels loading and clears data after reset is called`() = runBlockingTest {
         val loader = TestLoader(Result.Success(listOf("Value1", "Value2")))
         val loading =
-            PagedLoading(this, loader, initialState = State.Data(1, listOf("Previous value1", "Previous value2")))
+            PagedLoading(this, loader, initialState = State.Data(listOf("Previous value1", "Previous value2")))
 
         loading.refresh()
         delay(TestLoader.LOAD_DELAY / 2)
@@ -308,11 +307,11 @@ class PagedLoadingTest {
             firstPageResult = Result.Success(listOf("Anything"))
         )
         val loading =
-            PagedLoading(this, loader, initialState = State.Data(1, listOf("Value1", "Value2")))
+            PagedLoading(this, loader, initialState = State.Data(listOf("Value1", "Value2")))
 
         loading.mutateData { list -> list.map { "Mutated $it" } }
 
-        assertEquals(State.Data(1, listOf("Mutated Value1", "Mutated Value2")), loading.state)
+        assertEquals(State.Data(listOf("Mutated Value1", "Mutated Value2")), loading.state)
         cancelJobs()
     }
 

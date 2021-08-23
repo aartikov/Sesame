@@ -4,6 +4,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 import me.aartikov.sesamesample.movies.domain.Movie
+import java.lang.Integer.min
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -12,22 +13,24 @@ import javax.inject.Singleton
 class MoviesGateway @Inject constructor() {
 
     companion object {
-        private const val PAGE_VOLUME = 20
+        private const val TOTAL_COUNT = 95
     }
 
     private var counter = 0
 
-    suspend fun loadMovies(page: Int): List<Movie> = withContext(Dispatchers.IO) {
+    suspend fun loadMovies(offset: Int, limit: Int): List<Movie> = withContext(Dispatchers.IO) {
         delay(1000)
         val success = counter % 4 != 0
         counter++
 
         if (success)
-            generateMovies(page)
+            generateMovies(offset, limit)
         else
             throw RuntimeException("Emulated failure. Please, try again.")
     }
 
-    private fun generateMovies(page: Int): List<Movie> =
-        (page * PAGE_VOLUME until (page + 1) * PAGE_VOLUME).map { Movie(id = it) }
+    private fun generateMovies(offset: Int, limit: Int): List<Movie> {
+        return (offset until min(offset + limit, TOTAL_COUNT))
+            .map { Movie(id = it) }
+    }
 }

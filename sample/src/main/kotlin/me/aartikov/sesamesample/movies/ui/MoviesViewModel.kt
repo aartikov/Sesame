@@ -7,18 +7,18 @@ import me.aartikov.sesame.loading.paged.handleErrors
 import me.aartikov.sesame.loading.paged.refresh
 import me.aartikov.sesame.property.stateFromFlow
 import me.aartikov.sesamesample.base.BaseViewModel
-import me.aartikov.sesamesample.movies.data.MoviesGateway
+import me.aartikov.sesamesample.movies.domain.LoadMoviesPageInteractor
 import me.aartikov.sesamesample.movies.domain.Movie
 import javax.inject.Inject
 
 @HiltViewModel
 class MoviesViewModel @Inject constructor(
-    private val moviesGateway: MoviesGateway
+    private val loadMoviesPageInteractor: LoadMoviesPageInteractor
 ) : BaseViewModel() {
 
     private val moviesLoading = PagedLoading<Movie>(
         viewModelScope,
-        loadPage = { moviesGateway.loadMovies(it.loadedPageCount) }
+        loadPage = { loadMoviesPageInteractor.execute(it.loadedData.size) }
     )
 
     val moviesState by stateFromFlow(moviesLoading.stateFlow)

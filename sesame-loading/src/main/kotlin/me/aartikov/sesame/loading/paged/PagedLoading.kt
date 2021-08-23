@@ -55,7 +55,6 @@ interface PagedLoading<T : Any> {
          * @property status see: [DataStatus].
          */
         data class Data<T>(
-            val pageCount: Int,
             val data: List<T>,
             val status: DataStatus = DataStatus.Normal
         ) : State<T>() {
@@ -233,7 +232,7 @@ fun <T : Any> PagedLoading(
     initialState: PagedLoading.State<T> = PagedLoading.State.Empty
 ): PagedLoading<T> {
     val loader = object : PagedLoader<T> {
-        override suspend fun loadFirstPage(fresh: Boolean): List<T> = loadPage(PagingInfo(0, emptyList<T>()))
+        override suspend fun loadFirstPage(fresh: Boolean): List<T> = loadPage(PagingInfo(emptyList()))
 
         override suspend fun loadNextPage(pagingInfo: PagingInfo<T>): List<T> = loadPage(pagingInfo)
     }
@@ -248,6 +247,6 @@ fun <T, R> PagedLoading.State<T>.mapData(transform: (List<T>) -> List<R>): Paged
         PagedLoading.State.Empty -> PagedLoading.State.Empty
         PagedLoading.State.Loading -> PagedLoading.State.Loading
         is PagedLoading.State.Error -> PagedLoading.State.Error(throwable)
-        is PagedLoading.State.Data -> PagedLoading.State.Data(pageCount, transform(data), status)
+        is PagedLoading.State.Data -> PagedLoading.State.Data(transform(data), status)
     }
 }

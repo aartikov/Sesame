@@ -46,7 +46,7 @@ internal class PagedLoadingReducer<T : Any> : Reducer<State<T>, Action<T>, Effec
                     )
                     is State.Data -> when (state.status) {
                         DataStatus.Normal, DataStatus.LoadingMore, DataStatus.FullData -> next(
-                            State.Data(state.pageCount, state.data, status = DataStatus.Refreshing),
+                            State.Data(state.data, status = DataStatus.Refreshing),
                             Effect.LoadFirstPage(action.fresh)
                         )
                         else -> nothing()
@@ -60,8 +60,8 @@ internal class PagedLoadingReducer<T : Any> : Reducer<State<T>, Action<T>, Effec
             when (state) {
                 is State.Data -> when (state.status) {
                     DataStatus.Normal -> next(
-                        State.Data(state.pageCount, state.data, status = DataStatus.LoadingMore),
-                        Effect.LoadNextPage(PagingInfo(state.pageCount, state.data))
+                        State.Data(state.data, status = DataStatus.LoadingMore),
+                        Effect.LoadNextPage(PagingInfo(state.data))
                     )
                     else -> nothing()
                 }
@@ -83,7 +83,7 @@ internal class PagedLoadingReducer<T : Any> : Reducer<State<T>, Action<T>, Effec
                     )
                     is State.Data -> when (state.status) {
                         DataStatus.Refreshing, DataStatus.LoadingMore -> next(
-                            State.Data(state.pageCount, state.data),
+                            State.Data(state.data),
                             Effect.CancelLoading
                         )
                         else -> nothing()
@@ -95,14 +95,11 @@ internal class PagedLoadingReducer<T : Any> : Reducer<State<T>, Action<T>, Effec
 
         is Action.NewPageLoaded -> {
             when (state) {
-                is State.Loading -> next(State.Data(1, action.data))
+                is State.Loading -> next(State.Data(action.data))
                 is State.Data -> when (state.status) {
-                    DataStatus.Refreshing -> next(State.Data(1, action.data))
+                    DataStatus.Refreshing -> next(State.Data(action.data))
                     DataStatus.LoadingMore -> next(
-                        State.Data(
-                            state.pageCount + 1,
-                            state.data + action.data
-                        )
+                        State.Data(state.data + action.data)
                     )
                     else -> nothing()
                 }
@@ -117,7 +114,6 @@ internal class PagedLoadingReducer<T : Any> : Reducer<State<T>, Action<T>, Effec
                     DataStatus.Refreshing -> next(State.Empty)
                     DataStatus.LoadingMore -> next(
                         State.Data(
-                            state.pageCount,
                             state.data,
                             DataStatus.FullData
                         )
@@ -136,7 +132,7 @@ internal class PagedLoadingReducer<T : Any> : Reducer<State<T>, Action<T>, Effec
                 )
                 is State.Data -> when (state.status) {
                     DataStatus.Refreshing, DataStatus.LoadingMore -> next(
-                        State.Data(state.pageCount, state.data),
+                        State.Data(state.data),
                         Effect.EmitEvent(Event.Error(action.throwable, state))
                     )
                     else -> nothing()
