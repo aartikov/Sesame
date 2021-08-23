@@ -29,12 +29,12 @@ internal class PagedLoadingEffectHandler<T : Any>(private val loader: PagedLoade
         job?.cancel()
         job = launch {
             try {
-                val data = loader.loadFirstPage(fresh)
+                val page = loader.loadFirstPage(fresh)
                 if (isActive) {
-                    if (data.isEmpty()) {
+                    if (page.data.isEmpty()) {
                         actionConsumer(Action.EmptyPageLoaded)
                     } else {
-                        actionConsumer(Action.NewPageLoaded(data))
+                        actionConsumer(Action.NewPageLoaded(page))
                     }
                 }
             } catch (e: CancellationException) {
@@ -54,12 +54,12 @@ internal class PagedLoadingEffectHandler<T : Any>(private val loader: PagedLoade
         job?.cancel()
         job = launch {
             try {
-                val data = loader.loadNextPage(pagingInfo)
+                val page = loader.loadNextPage(pagingInfo)
                 if (isActive) {
-                    if (data.isEmpty()) {
+                    if (page.data.isEmpty()) {
                         actionConsumer(Action.EmptyPageLoaded)
                     } else {
-                        actionConsumer(Action.NewPageLoaded(data))
+                        actionConsumer(Action.NewPageLoaded(page))
                     }
                 }
             } catch (e: CancellationException) {
