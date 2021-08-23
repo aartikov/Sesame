@@ -50,7 +50,6 @@ interface PagedLoading<T : Any> {
 
         /**
          * Non-empty list has been loaded.
-         * @property pageCount count of loaded pages.
          * @property data not empty list, sequentially merged data of the all loaded pages.
          * @property status see: [DataStatus].
          */
