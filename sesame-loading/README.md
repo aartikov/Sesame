@@ -27,7 +27,10 @@ interface ProfileRepository {
 ```kotlin
 class ProfileViewModel(private val profileRepository: ProfileRepository) : ViewModel() {
 
-    private val profileLoading = OrdinaryLoading(viewModelScope, profileRepository::loadProfile)
+    private val profileLoading = OrdinaryLoading(
+        viewModelScope,
+        load = { profileGateway.loadProfile() }
+    )
     
     val profileState = profileLoading.stateFlow
 
@@ -58,8 +61,8 @@ class ProfileViewModel(private val profileRepository: ProfileRepository) : ViewM
 
     private val profileLoading = FlowLoading(
         viewModelScope,
-        profileRepository::loadProfile,
-        profileRepository::observeProfile
+        load = { profileGateway.loadProfile() },
+        observe = { profileGateway.observeProfile() },
     )
 
     val profileState = profileLoading.stateFlow
@@ -81,7 +84,7 @@ sealed class State<out T> {
     object Empty : State<Nothing>()
     object Loading : State<Nothing>()
     data class Error(val throwable: Throwable) : State<Nothing>()
-    data class Data<T>(val pageCount: Int, val data: List<T>, val status: DataStatus) : State<T>()
+    data class Data<T>(val data: List<T>, val status: DataStatus) : State<T>()
 }
 
 enum class DataStatus {
@@ -97,14 +100,21 @@ To create `PagedLoading` specify how to load pages. Use it in View Model:
 ```kotlin
 interface MoviesRepository {
 
-    suspend fun loadMovies(page: Int): List<Movie>
+    suspend fun loadMovies(offset: Int, limit: Int): List<Movie>
 }
 
 class MoviesViewModel(private val moviesRepository: MoviesRepository) : ViewModel() {
-
+    
+    companion object {
+        private const val PAGE_SIZE = 30
+    }
+    
     private val moviesLoading = PagedLoading<Movie>(
         viewModelScope,
-        loadPage = { moviesRepository.loadMovies(it.loadedPageCount) }
+        loadPage = { 
+            val movies = moviesRepository.loadMovies(it.loadedData.size, PAGE_SIZE)
+            Page(movies, hasNextPage = movies.size >= PAGE_SIZE)
+        }
     )
 
     val moviesState = moviesLoading.stateFlow

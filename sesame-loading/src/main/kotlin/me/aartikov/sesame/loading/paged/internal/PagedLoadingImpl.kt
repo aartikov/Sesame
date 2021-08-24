@@ -2,9 +2,11 @@ package me.aartikov.sesame.loading.paged.internal
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.BufferOverflow
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import me.aartikov.sesame.loading.paged.DataMerger
 import me.aartikov.sesame.loading.paged.PagedLoader
 import me.aartikov.sesame.loading.paged.PagedLoading
 import me.aartikov.sesame.loading.paged.PagedLoading.Event
@@ -13,18 +15,17 @@ import me.aartikov.sesame.loading.paged.PagedLoading.State
 internal class PagedLoadingImpl<T : Any>(
     scope: CoroutineScope,
     loader: PagedLoader<T>,
-    initialState: State<T>
+    initialState: State<T>,
+    dataMerger: DataMerger<T>
 ) : PagedLoading<T> {
-
-    private val mutableStateFlow = MutableStateFlow(initialState)
 
     private val mutableEventFlow = MutableSharedFlow<Event<T>>(
         extraBufferCapacity = 100, onBufferOverflow = BufferOverflow.DROP_OLDEST
     )
 
     private val loop: PagedLoadingLoop<T> = PagedLoadingLoop(
-        initialState = initialState.toInternalState(),
-        reducer = PagedLoadingReducer(),
+        initialState = initialState,
+        reducer = PagedLoadingReducer(dataMerger),
         effectHandlers = listOf(
             PagedLoadingEffectHandler(loader),
             EventEffectHandler { event -> mutableEventFlow.tryEmit(event) }
@@ -32,24 +33,14 @@ internal class PagedLoadingImpl<T : Any>(
     )
 
     override val stateFlow: StateFlow<State<T>>
-        get() = mutableStateFlow
+        get() = loop.stateFlow
 
     override val eventFlow: Flow<Event<T>>
         get() = mutableEventFlow
 
     init {
         scope.launch {
-            coroutineScope {
-                launch {
-                    loop.stateFlow.collect {
-                        mutableStateFlow.value = it.toPublicState()
-                    }
-                }
-
-                launch {
-                    loop.start()
-                }
-            }
+            loop.start()
         }
     }
 
@@ -63,5 +54,9 @@ internal class PagedLoadingImpl<T : Any>(
 
     override fun cancel(reset: Boolean) {
         loop.dispatch(Action.Cancel(reset))
+    }
+
+    override fun mutateData(transform: (List<T>) -> List<T>) {
+        loop.dispatch(Action.MutateData(transform))
     }
 }
