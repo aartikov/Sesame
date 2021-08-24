@@ -50,14 +50,3 @@ fun <T : Any> FlowLoading(
         Loading.State.Empty
     )
 }
-
-/**
- * Creates an implementation of [Loading] that uses one method to load new data and another one to get data from a cache.
- */
-fun <T : Any> FlowLoading(
-    scope: CoroutineScope,
-    load: suspend () -> T?,
-    observe: () -> Flow<T?>
-): Loading<T> {
-    return FlowLoading(scope, { _ -> load() }, observe)
-}

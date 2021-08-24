@@ -12,16 +12,16 @@ interface PagedLoader<T : Any> {
     /**
      * Loads a first page.
      * @param fresh indicates that fresh data is required.
-     * @return data for a first page. Empty list means missing/empty data.
+     * @return page with data.
      */
-    suspend fun loadFirstPage(fresh: Boolean): List<T>
+    suspend fun loadFirstPage(fresh: Boolean): Page<T>
 
     /**
      * Loads the next page.
      * @param pagingInfo information about the already loaded pages. See: [PagingInfo].
-     * @return data for the next page. Empty list means that the end of data is reached.
+     * @return page with data.
      */
-    suspend fun loadNextPage(pagingInfo: PagingInfo<T>): List<T>
+    suspend fun loadNextPage(pagingInfo: PagingInfo<T>): Page<T>
 }
 
 /**
@@ -50,12 +50,10 @@ interface PagedLoading<T : Any> {
 
         /**
          * Non-empty list has been loaded.
-         * @property pageCount count of loaded pages.
          * @property data not empty list, sequentially merged data of the all loaded pages.
          * @property status see: [DataStatus].
          */
         data class Data<T>(
-            val pageCount: Int,
             val data: List<T>,
             val status: DataStatus = DataStatus.Normal
         ) : State<T>() {
@@ -134,6 +132,11 @@ interface PagedLoading<T : Any> {
      * @param reset if true than state will be reset to [PagedLoading.State.Empty].
      */
     fun cancel(reset: Boolean = false)
+
+    /**
+     * Mutates [PagedLoading.State.Data.data] with a [transform] function.
+     */
+    fun mutateData(transform: (List<T>) -> List<T>)
 }
 
 /**
@@ -197,9 +200,10 @@ fun <T : Any> PagedLoading<T>.handleErrors(
 fun <T : Any> PagedLoading(
     scope: CoroutineScope,
     loader: PagedLoader<T>,
-    initialState: PagedLoading.State<T> = PagedLoading.State.Empty
+    initialState: PagedLoading.State<T> = PagedLoading.State.Empty,
+    dataMerger: DataMerger<T> = SimpleDataMerger()
 ): PagedLoading<T> {
-    return PagedLoadingImpl(scope, loader, initialState)
+    return PagedLoadingImpl(scope, loader, initialState, dataMerger)
 }
 
 /**
@@ -207,16 +211,17 @@ fun <T : Any> PagedLoading(
  */
 fun <T : Any> PagedLoading(
     scope: CoroutineScope,
-    loadFirstPage: suspend (fresh: Boolean) -> List<T>,
-    loadNextPage: suspend (pagingInfo: PagingInfo<T>) -> List<T>,
-    initialState: PagedLoading.State<T> = PagedLoading.State.Empty
+    loadFirstPage: suspend (fresh: Boolean) -> Page<T>,
+    loadNextPage: suspend (pagingInfo: PagingInfo<T>) -> Page<T>,
+    initialState: PagedLoading.State<T> = PagedLoading.State.Empty,
+    dataMerger: DataMerger<T> = SimpleDataMerger()
 ): PagedLoading<T> {
     val loader = object : PagedLoader<T> {
-        override suspend fun loadFirstPage(fresh: Boolean): List<T> = loadFirstPage(fresh)
+        override suspend fun loadFirstPage(fresh: Boolean): Page<T> = loadFirstPage(fresh)
 
-        override suspend fun loadNextPage(pagingInfo: PagingInfo<T>): List<T> = loadNextPage(pagingInfo)
+        override suspend fun loadNextPage(pagingInfo: PagingInfo<T>): Page<T> = loadNextPage(pagingInfo)
     }
-    return PagedLoading(scope, loader, initialState)
+    return PagedLoading(scope, loader, initialState, dataMerger)
 }
 
 /**
@@ -224,42 +229,26 @@ fun <T : Any> PagedLoading(
  */
 fun <T : Any> PagedLoading(
     scope: CoroutineScope,
-    loadFirstPage: suspend () -> List<T>,
-    loadNextPage: suspend (pagingInfo: PagingInfo<T>) -> List<T>,
-    initialState: PagedLoading.State<T> = PagedLoading.State.Empty
+    loadPage: suspend (pagingInfo: PagingInfo<T>) -> Page<T>,
+    initialState: PagedLoading.State<T> = PagedLoading.State.Empty,
+    dataMerger: DataMerger<T> = SimpleDataMerger()
 ): PagedLoading<T> {
     val loader = object : PagedLoader<T> {
-        override suspend fun loadFirstPage(fresh: Boolean): List<T> = loadFirstPage()
+        override suspend fun loadFirstPage(fresh: Boolean): Page<T> = loadPage(PagingInfo(emptyList()))
 
-        override suspend fun loadNextPage(pagingInfo: PagingInfo<T>): List<T> = loadNextPage(pagingInfo)
+        override suspend fun loadNextPage(pagingInfo: PagingInfo<T>): Page<T> = loadPage(pagingInfo)
     }
-    return PagedLoading(scope, loader, initialState)
-}
-
-/**
- * Creates an implementation of [PagedLoading].
- */
-fun <T : Any> PagedLoading(
-    scope: CoroutineScope,
-    loadPage: suspend (pagingInfo: PagingInfo<T>) -> List<T>,
-    initialState: PagedLoading.State<T> = PagedLoading.State.Empty
-): PagedLoading<T> {
-    val loader = object : PagedLoader<T> {
-        override suspend fun loadFirstPage(fresh: Boolean): List<T> = loadPage(PagingInfo(0, emptyList<T>()))
-
-        override suspend fun loadNextPage(pagingInfo: PagingInfo<T>): List<T> = loadPage(pagingInfo)
-    }
-    return PagedLoading(scope, loader, initialState)
+    return PagedLoading(scope, loader, initialState, dataMerger)
 }
 
 /**
  * Returns new [PagedLoading.State] of applying the given [transform] function to original [PagedLoading.State.Data.data].
  */
-fun <T, R> PagedLoading.State<T>.map(transform: (List<T>) -> List<R>): PagedLoading.State<R> {
+fun <T, R> PagedLoading.State<T>.mapData(transform: (List<T>) -> List<R>): PagedLoading.State<R> {
     return when (this) {
         PagedLoading.State.Empty -> PagedLoading.State.Empty
         PagedLoading.State.Loading -> PagedLoading.State.Loading
         is PagedLoading.State.Error -> PagedLoading.State.Error(throwable)
-        is PagedLoading.State.Data -> PagedLoading.State.Data(pageCount, transform(data), status)
+        is PagedLoading.State.Data -> PagedLoading.State.Data(transform(data), status)
     }
 }

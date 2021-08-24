@@ -38,8 +38,7 @@ class OrdinaryLoadingTest {
 
     @Test
     fun `is empty when loaded data is empty`() = runBlockingTest {
-        val loader = suspend { emptyList<String>() }
-        val loading = OrdinaryLoading(this, loader)
+        val loading = OrdinaryLoading(this, { emptyList<String>() })
 
         loading.refresh()
         delay(TestLoader.LOAD_DELAY * 2)
@@ -50,8 +49,7 @@ class OrdinaryLoadingTest {
 
     @Test
     fun `treat null as empty`() = runBlockingTest {
-        val loader = suspend { null }
-        val loading = OrdinaryLoading(this, loader)
+        val loading = OrdinaryLoading(this, { null })
 
         loading.refresh()
         delay(TestLoader.LOAD_DELAY * 2)
@@ -206,6 +204,17 @@ class OrdinaryLoadingTest {
         delay(TestLoader.LOAD_DELAY * 2)
 
         assertEquals(State.Empty, loading.state)
+        cancelJobs()
+    }
+
+    @Test
+    fun `shows new data when it was mutated`() = runBlockingTest {
+        val loader = TestLoader(Result.Success("Anything"))
+        val loading = OrdinaryLoading(this, loader, initialState = State.Data("Value"))
+
+        loading.mutateData { "Mutated $it" }
+
+        assertEquals(State.Data("Mutated Value"), loading.state)
         cancelJobs()
     }
 
