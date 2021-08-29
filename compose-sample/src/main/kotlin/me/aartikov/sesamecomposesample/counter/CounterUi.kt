@@ -29,7 +29,7 @@ fun CounterUi(
         ) {
             CounterButton(
                 icon = CounterIcon.Minus,
-                onClick = component::onMinusButtonClicked,
+                onClick = component::onMinusButtonClick,
                 enabled = component.minusButtonEnabled
             )
             Text(
@@ -38,7 +38,7 @@ fun CounterUi(
             )
             CounterButton(
                 icon = CounterIcon.Plus,
-                onClick = component::onPlusButtonClicked,
+                onClick = component::onPlusButtonClick,
                 enabled = component.plusButtonEnabled
             )
         }
@@ -58,6 +58,6 @@ class FakeCounterComponent : CounterComponent {
     override val minusButtonEnabled = true
     override val plusButtonEnabled = false
 
-    override fun onMinusButtonClicked() {}
-    override fun onPlusButtonClicked() {}
+    override fun onMinusButtonClick() {}
+    override fun onPlusButtonClick() {}
 }

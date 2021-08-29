@@ -4,6 +4,7 @@ import com.arkivanov.decompose.RouterState
 import com.arkivanov.decompose.value.Value
 import me.aartikov.sesame.localizedstring.LocalizedString
 import me.aartikov.sesamecomposesample.counter.CounterComponent
+import me.aartikov.sesamecomposesample.dialogs.DialogsComponent
 import me.aartikov.sesamecomposesample.menu.MenuComponent
 
 interface RootComponent {
@@ -15,5 +16,6 @@ interface RootComponent {
     sealed interface Child {
         class Menu(val component: MenuComponent) : Child
         class Counter(val component: CounterComponent) : Child
+        class Dialogs(val component: DialogsComponent) : Child
     }
 }

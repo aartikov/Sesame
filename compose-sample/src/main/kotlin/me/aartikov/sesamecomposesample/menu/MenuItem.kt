@@ -1,5 +1,6 @@
 package me.aartikov.sesamecomposesample.menu
 
 enum class MenuItem {
-    Counter
+    Counter,
+    Dialogs
 }

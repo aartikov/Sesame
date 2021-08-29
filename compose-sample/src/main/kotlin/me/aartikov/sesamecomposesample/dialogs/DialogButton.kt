@@ -1,27 +1,23 @@
-package me.aartikov.sesamecomposesample.menu
+package me.aartikov.sesamecomposesample.dialogs
 
-import androidx.compose.material.Button
 import androidx.compose.material.Text
+import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import me.aartikov.sesamecomposesample.theme.AppTheme
 
 @Composable
-fun MenuButton(
+fun DialogButton(
     text: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Button(
+    TextButton(
         onClick = onClick,
         modifier = modifier,
     ) {
-        Text(
-            text = text.uppercase(),
-            textAlign = TextAlign.Center
-        )
+        Text(text.uppercase())
     }
 }
 
@@ -29,6 +25,6 @@ fun MenuButton(
 @Composable
 fun CounterButtonsPreview() {
     AppTheme {
-        MenuButton("Menu item", onClick = {})
+        DialogButton("Cancel", onClick = {})
     }
 }

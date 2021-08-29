@@ -7,7 +7,7 @@ class RealMenuComponent(
     val output: (MenuComponent.Output) -> Unit
 ) : ComponentContext by componentContext, MenuComponent {
 
-    override fun onMenuItemClicked(item: MenuItem) {
+    override fun onMenuItemClick(item: MenuItem) {
         output(MenuComponent.Output.OpenScreen(item))
     }
 }

@@ -12,6 +12,7 @@ import com.arkivanov.decompose.extensions.compose.jetpack.Children
 import com.arkivanov.decompose.value.Value
 import me.aartikov.sesame.localizedstring.LocalizedString
 import me.aartikov.sesamecomposesample.counter.CounterUi
+import me.aartikov.sesamecomposesample.dialogs.DialogsUi
 import me.aartikov.sesamecomposesample.menu.FakeMenuComponent
 import me.aartikov.sesamecomposesample.menu.MenuUi
 import me.aartikov.sesamecomposesample.theme.AppTheme
@@ -48,6 +49,7 @@ private fun Content(routerState: Value<RouterState<*, RootComponent.Child>>) {
         when (val instance = child.instance) {
             is RootComponent.Child.Menu -> MenuUi(instance.component)
             is RootComponent.Child.Counter -> CounterUi(instance.component)
+            is RootComponent.Child.Dialogs -> DialogsUi(instance.component)
         }
     }
 }

@@ -8,7 +8,7 @@ interface CounterComponent {
 
     val plusButtonEnabled: Boolean
 
-    fun onMinusButtonClicked()
+    fun onMinusButtonClick()
 
-    fun onPlusButtonClicked()
+    fun onPlusButtonClick()
 }

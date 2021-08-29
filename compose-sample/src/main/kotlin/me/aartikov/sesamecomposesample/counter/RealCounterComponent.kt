@@ -21,13 +21,13 @@ class RealCounterComponent(
 
     override val plusButtonEnabled by derivedStateOf { count < MAX_COUNT - 1 }
 
-    override fun onMinusButtonClicked() {
+    override fun onMinusButtonClick() {
         if (minusButtonEnabled) {
             count--
         }
     }
 
-    override fun onPlusButtonClicked() {
+    override fun onPlusButtonClick() {
         if (plusButtonEnabled) {
             count++
         }
