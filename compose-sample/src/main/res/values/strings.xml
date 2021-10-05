@@ -5,6 +5,7 @@
     <string name="common_ok">OK</string>
     <string name="common_cancel">Cancel</string>
     <string name="common_retry">Retry</string>
+    <string name="common_some_error_description">An error has occurred</string>
 
     <!-- Counter -->
     <string name="counter_title">Counter</string>

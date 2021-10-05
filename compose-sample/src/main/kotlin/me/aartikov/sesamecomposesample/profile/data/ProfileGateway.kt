@@ -1,9 +1,9 @@
-package me.aartikov.sesamesample.profile.data
+package me.aartikov.sesamecomposesample.profile.data
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
-import me.aartikov.sesamesample.profile.domain.Profile
+import me.aartikov.sesamecomposesample.profile.domain.Profile
 
 class ProfileGateway {
 
@@ -13,7 +13,7 @@ class ProfileGateway {
         delay(1000)
         val success = counter % 2 == 1
         counter++
-
+        
         if (success) {
             Profile(
                 name = "John Smith",

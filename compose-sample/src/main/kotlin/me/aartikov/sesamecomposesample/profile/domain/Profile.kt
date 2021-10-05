@@ -1,4 +1,4 @@
-package me.aartikov.sesamesample.profile.domain
+package me.aartikov.sesamecomposesample.profile.domain
 
 data class Profile(
     val name: String,
