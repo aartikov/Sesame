@@ -92,7 +92,7 @@ fun ProfileContent(
                 modifier = Modifier
                     .size(200.dp)
                     .clip(CircleShape)
-                    .background(color = MaterialTheme.colors.onSecondary)
+                    .background(color = MaterialTheme.colors.surface)
             )
         }
     }

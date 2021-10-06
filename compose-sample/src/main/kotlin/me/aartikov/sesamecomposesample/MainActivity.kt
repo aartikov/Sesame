@@ -13,7 +13,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val rootComponent = RealRootComponent(defaultComponentContext(), this)
+        val rootComponent = RealRootComponent(defaultComponentContext())
         setContent {
             AppTheme {
                 RootUi(rootComponent)

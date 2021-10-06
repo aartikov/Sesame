@@ -4,7 +4,6 @@ import android.os.Parcelable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.lifecycle.ViewModelStoreOwner
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.RouterState
 import com.arkivanov.decompose.push
@@ -13,17 +12,15 @@ import com.arkivanov.decompose.value.Value
 import kotlinx.parcelize.Parcelize
 import me.aartikov.sesame.localizedstring.LocalizedString
 import me.aartikov.sesamecomposesample.R
-import me.aartikov.sesamecomposesample.counter.RealCounterComponent
-import me.aartikov.sesamecomposesample.dialogs.RealDialogsComponent
+import me.aartikov.sesamecomposesample.di.ComponentFactory
 import me.aartikov.sesamecomposesample.menu.MenuComponent
 import me.aartikov.sesamecomposesample.menu.MenuItem
-import me.aartikov.sesamecomposesample.menu.RealMenuComponent
-import me.aartikov.sesamecomposesample.profile.ui.RealProfileComponent
 
 class RealRootComponent(
-    componentContext: ComponentContext,
-    private val viewModelStoreOwner: ViewModelStoreOwner
+    componentContext: ComponentContext
 ) : ComponentContext by componentContext, RootComponent {
+
+    private val componentFactory = ComponentFactory()
 
     private val router = router<ChildConfig, RootComponent.Child>(
         initialConfiguration = ChildConfig.Menu,
@@ -41,25 +38,32 @@ class RealRootComponent(
         }
     }
 
-    private fun createChild(config: ChildConfig, componentContext: ComponentContext) = when (config) {
-        is ChildConfig.Menu -> {
-            RootComponent.Child.Menu(RealMenuComponent(componentContext, ::onMenuOutput))
-        }
+    private fun createChild(config: ChildConfig, componentContext: ComponentContext) =
+        when (config) {
+            is ChildConfig.Menu -> {
+                RootComponent.Child.Menu(
+                    componentFactory.createMenuComponent(componentContext, ::onMenuOutput)
+                )
+            }
 
-        is ChildConfig.Counter -> {
-            RootComponent.Child.Counter(RealCounterComponent(componentContext))
-        }
+            is ChildConfig.Counter -> {
+                RootComponent.Child.Counter(
+                    componentFactory.createCounterComponent(componentContext)
+                )
+            }
 
-        is ChildConfig.Dialogs -> {
-            RootComponent.Child.Dialogs(RealDialogsComponent(componentContext))
-        }
+            is ChildConfig.Dialogs -> {
+                RootComponent.Child.Dialogs(
+                    componentFactory.createDialogsComponent(componentContext)
+                )
+            }
 
-        is ChildConfig.Profile -> {
-            RootComponent.Child.Profile(
-                RealProfileComponent(componentContext, viewModelStoreOwner)
-            )
+            is ChildConfig.Profile -> {
+                RootComponent.Child.Profile(
+                    componentFactory.createProfileComponent(componentContext)
+                )
+            }
         }
-    }
 
     private fun onMenuOutput(output: MenuComponent.Output): Unit = when (output) {
         is MenuComponent.Output.OpenScreen -> when (output.menuItem) {
