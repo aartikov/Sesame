@@ -4,6 +4,7 @@ import android.os.Parcelable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.lifecycle.ViewModelStoreOwner
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.RouterState
 import com.arkivanov.decompose.push
@@ -20,7 +21,8 @@ import me.aartikov.sesamecomposesample.menu.RealMenuComponent
 import me.aartikov.sesamecomposesample.profile.ui.RealProfileComponent
 
 class RealRootComponent(
-    componentContext: ComponentContext
+    componentContext: ComponentContext,
+    private val viewModelStoreOwner: ViewModelStoreOwner
 ) : ComponentContext by componentContext, RootComponent {
 
     private val router = router<ChildConfig, RootComponent.Child>(
@@ -40,10 +42,23 @@ class RealRootComponent(
     }
 
     private fun createChild(config: ChildConfig, componentContext: ComponentContext) = when (config) {
-        is ChildConfig.Menu -> RootComponent.Child.Menu(RealMenuComponent(componentContext, ::onMenuOutput))
-        is ChildConfig.Counter -> RootComponent.Child.Counter(RealCounterComponent(componentContext))
-        is ChildConfig.Dialogs -> RootComponent.Child.Dialogs(RealDialogsComponent(componentContext))
-        is ChildConfig.Profile -> RootComponent.Child.Profile(RealProfileComponent(componentContext))
+        is ChildConfig.Menu -> {
+            RootComponent.Child.Menu(RealMenuComponent(componentContext, ::onMenuOutput))
+        }
+
+        is ChildConfig.Counter -> {
+            RootComponent.Child.Counter(RealCounterComponent(componentContext))
+        }
+
+        is ChildConfig.Dialogs -> {
+            RootComponent.Child.Dialogs(RealDialogsComponent(componentContext))
+        }
+
+        is ChildConfig.Profile -> {
+            RootComponent.Child.Profile(
+                RealProfileComponent(componentContext, viewModelStoreOwner)
+            )
+        }
     }
 
     private fun onMenuOutput(output: MenuComponent.Output): Unit = when (output) {

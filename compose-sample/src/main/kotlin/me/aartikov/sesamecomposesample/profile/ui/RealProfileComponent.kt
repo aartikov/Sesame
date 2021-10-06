@@ -1,23 +1,25 @@
 package me.aartikov.sesamecomposesample.profile.ui
 
+import androidx.lifecycle.ViewModelStoreOwner
 import com.arkivanov.decompose.ComponentContext
 import me.aartikov.sesame.loading.simple.OrdinaryLoading
 import me.aartikov.sesame.loading.simple.handleErrors
 import me.aartikov.sesame.loading.simple.refresh
 import me.aartikov.sesamecomposesample.utils.componentCoroutineScope
-import me.aartikov.sesamecomposesample.profile.data.ProfileGateway
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class RealProfileComponent(
-    componentContext: ComponentContext
+    componentContext: ComponentContext,
+    viewModelStoreOwner: ViewModelStoreOwner
 ) : ComponentContext by componentContext, ProfileComponent {
 
     private val coroutineScope = componentCoroutineScope()
 
-    private val profileGateway: ProfileGateway = ProfileGateway()
+    private val profileViewModel: ProfileViewModel by viewModelStoreOwner.viewModel()
 
     private val profileLoading = OrdinaryLoading(
         coroutineScope,
-        load = { profileGateway.loadProfile() }
+        load = { profileViewModel.loadProfile() }
     )
 
     override val profileState = profileLoading.stateFlow
