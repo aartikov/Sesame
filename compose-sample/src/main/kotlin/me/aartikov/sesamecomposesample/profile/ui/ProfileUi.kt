@@ -92,9 +92,7 @@ fun ProfileContent(
                 modifier = Modifier
                     .size(200.dp)
                     .clip(CircleShape)
-                    .background(
-                        color = MaterialTheme.colors.onSecondary
-                    )
+                    .background(color = MaterialTheme.colors.onSecondary)
             )
         }
     }
@@ -154,17 +152,11 @@ fun ProfileUiPreview() {
 
 
 class FakeProfileComponent : ProfileComponent {
-    private val _profileState =
-        MutableStateFlow(
-            Loading.State.Data(
-                Profile(
-                    name = "John Smith",
-                    avatarUrl = "https://www.biography.com/.image/ar_1:1%2Cc_fill%2Ccs_srgb%2Cg_face%2Cq_auto:good%2Cw_300/MTIwNjA4NjMzOTc0MTk1NzI0/john-smith-9486928-1-402.jpg"
-                )
-            )
-        )
+    private val _profileState = MutableStateFlow(Loading.State.Loading)
 
     override val profileState: StateFlow<Loading.State<Profile>> = _profileState.asStateFlow()
+
     override fun onPullToRefresh() {}
+
     override fun onRetryClicked() {}
 }
