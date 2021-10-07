@@ -13,6 +13,7 @@
 
     <!-- Profile -->
     <string name="profile_title">Profile</string>
+    <string name="empty_profile_info">No data to display</string>
 
     <!-- Dialogs -->
     <string name="dialogs_title">Dialogs</string>

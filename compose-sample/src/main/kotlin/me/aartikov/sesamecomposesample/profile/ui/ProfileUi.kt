@@ -31,33 +31,38 @@ fun ProfileUi(
     component: ProfileComponent,
     modifier: Modifier = Modifier
 ) {
+    val profileState = component.profileState.collectAsState(initial = Loading.State.Loading)
+
     Surface(
         modifier = modifier.fillMaxSize(),
         color = MaterialTheme.colors.background
     ) {
-        val profileState by component.profileState.collectAsState()
-
-        when (profileState) {
+        when (val currentState = profileState.value) {
             is Loading.State.Data -> {
-                val profileData = (profileState as Loading.State.Data<Profile>).data
-                val isRefreshing = (profileState as Loading.State.Data<Profile>).refreshing
                 ProfileContent(
-                    profile = profileData,
-                    isRefreshing = isRefreshing,
+                    profile = currentState.data,
+                    isRefreshing = currentState.refreshing,
                     onRefresh = { component.onPullToRefresh() }
                 )
             }
 
             is Loading.State.Error -> {
-                val message = (profileState as Loading.State.Error).throwable.message
-                ProfileError(
+                val message = currentState.throwable.message
+                ProfilePlaceholder(
                     component = component,
                     errorMessage = message ?: stringResource(R.string.common_some_error_description)
                 )
             }
 
-            else -> {
+            is Loading.State.Loading -> {
                 ProfileProgress()
+            }
+
+            is Loading.State.Empty -> {
+                ProfilePlaceholder(
+                    component = component,
+                    errorMessage = stringResource(R.string.empty_profile_info)
+                )
             }
         }
     }
@@ -112,7 +117,7 @@ fun ProfileProgress() {
 }
 
 @Composable
-fun ProfileError(
+fun ProfilePlaceholder(
     component: ProfileComponent,
     errorMessage: String
 ) {
@@ -152,6 +157,7 @@ fun ProfileUiPreview() {
 
 
 class FakeProfileComponent : ProfileComponent {
+
     private val _profileState = MutableStateFlow(Loading.State.Loading)
 
     override val profileState: StateFlow<Loading.State<Profile>> = _profileState.asStateFlow()
