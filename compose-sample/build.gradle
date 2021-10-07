@@ -60,10 +60,10 @@ dependencies {
     implementation coroutines.android
     implementation dateTime
 
-    implementation "io.coil-kt:coil-compose:1.3.2"
+    implementation coil
 
-    implementation "com.google.accompanist:accompanist-swiperefresh:0.19.0"
+    implementation koin
 
-    implementation "io.insert-koin:koin-android:3.1.2"
+    implementation accompanist.swiperefresh
 
 }

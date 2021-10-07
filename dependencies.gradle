@@ -27,7 +27,10 @@ ext {
             decoro              : "1.5.0",
             konfetti            : "1.3.2",
             compose             : "1.0.1",
-            decompose           : "0.3.1"
+            decompose           : "0.3.1",
+            coil                : "1.3.2",
+            koin                : "3.1.2",
+            accompanist         : "0.19.0"
     ]
 
     desugaring = "com.android.tools:desugar_jdk_libs:${versions.desugaring}"
@@ -80,6 +83,10 @@ ext {
             compose: "com.arkivanov.decompose:extensions-compose-jetpack:${versions.decompose}"
     ]
 
+    accompanist = [
+            swiperefresh: "com.google.accompanist:accompanist-swiperefresh:${versions.accompanist}"
+    ]
+
     dateTime = "org.jetbrains.kotlinx:kotlinx-datetime:${versions.dateTime}"
 
     material = "com.google.android.material:material:${versions.material}"
@@ -91,4 +98,9 @@ ext {
     decoro = "ru.tinkoff.decoro:decoro:${versions.decoro}"
 
     konfetti = "nl.dionsegijn:konfetti:${versions.konfetti}"
+
+    coil = "io.coil-kt:coil-compose:${versions.coil}"
+
+    koin = "io.insert-koin:koin-android:${versions.koin}"
+
 }
