@@ -12,15 +12,15 @@ import com.arkivanov.decompose.value.Value
 import kotlinx.parcelize.Parcelize
 import me.aartikov.sesame.localizedstring.LocalizedString
 import me.aartikov.sesamecomposesample.R
-import me.aartikov.sesamecomposesample.counter.RealCounterComponent
-import me.aartikov.sesamecomposesample.dialogs.RealDialogsComponent
+import me.aartikov.sesamecomposesample.di.ComponentFactory
 import me.aartikov.sesamecomposesample.menu.MenuComponent
 import me.aartikov.sesamecomposesample.menu.MenuItem
-import me.aartikov.sesamecomposesample.menu.RealMenuComponent
 
 class RealRootComponent(
     componentContext: ComponentContext
 ) : ComponentContext by componentContext, RootComponent {
+
+    private val componentFactory = ComponentFactory()
 
     private val router = router<ChildConfig, RootComponent.Child>(
         initialConfiguration = ChildConfig.Menu,
@@ -38,16 +38,38 @@ class RealRootComponent(
         }
     }
 
-    private fun createChild(config: ChildConfig, componentContext: ComponentContext) = when (config) {
-        is ChildConfig.Menu -> RootComponent.Child.Menu(RealMenuComponent(componentContext, ::onMenuOutput))
-        is ChildConfig.Counter -> RootComponent.Child.Counter(RealCounterComponent(componentContext))
-        is ChildConfig.Dialogs -> RootComponent.Child.Dialogs(RealDialogsComponent(componentContext))
-    }
+    private fun createChild(config: ChildConfig, componentContext: ComponentContext) =
+        when (config) {
+            is ChildConfig.Menu -> {
+                RootComponent.Child.Menu(
+                    componentFactory.createMenuComponent(componentContext, ::onMenuOutput)
+                )
+            }
+
+            is ChildConfig.Counter -> {
+                RootComponent.Child.Counter(
+                    componentFactory.createCounterComponent(componentContext)
+                )
+            }
+
+            is ChildConfig.Dialogs -> {
+                RootComponent.Child.Dialogs(
+                    componentFactory.createDialogsComponent(componentContext)
+                )
+            }
+
+            is ChildConfig.Profile -> {
+                RootComponent.Child.Profile(
+                    componentFactory.createProfileComponent(componentContext)
+                )
+            }
+        }
 
     private fun onMenuOutput(output: MenuComponent.Output): Unit = when (output) {
         is MenuComponent.Output.OpenScreen -> when (output.menuItem) {
             MenuItem.Counter -> router.push(ChildConfig.Counter)
             MenuItem.Dialogs -> router.push(ChildConfig.Dialogs)
+            MenuItem.Profile -> router.push(ChildConfig.Profile)
         }
     }
 
@@ -56,6 +78,7 @@ class RealRootComponent(
             is RootComponent.Child.Menu -> LocalizedString.resource(R.string.app_name)
             is RootComponent.Child.Counter -> LocalizedString.resource(R.string.counter_title)
             is RootComponent.Child.Dialogs -> LocalizedString.resource(R.string.dialogs_title)
+            is RootComponent.Child.Profile -> LocalizedString.resource(R.string.profile_title)
         }
 
     private sealed interface ChildConfig : Parcelable {
@@ -68,6 +91,9 @@ class RealRootComponent(
 
         @Parcelize
         object Dialogs : ChildConfig
+
+        @Parcelize
+        object Profile : ChildConfig
     }
 }
 

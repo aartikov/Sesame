@@ -60,4 +60,10 @@ dependencies {
     implementation coroutines.android
     implementation dateTime
 
+    implementation coil
+
+    implementation koin
+
+    implementation accompanist.swiperefresh
+
 }

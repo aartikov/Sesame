@@ -15,6 +15,7 @@ import me.aartikov.sesamecomposesample.counter.CounterUi
 import me.aartikov.sesamecomposesample.dialogs.DialogsUi
 import me.aartikov.sesamecomposesample.menu.FakeMenuComponent
 import me.aartikov.sesamecomposesample.menu.MenuUi
+import me.aartikov.sesamecomposesample.profile.ui.ProfileUi
 import me.aartikov.sesamecomposesample.theme.AppTheme
 import me.aartikov.sesamecomposesample.utils.createFakeRouterStateValue
 import me.aartikov.sesamecomposesample.utils.resolve
@@ -50,6 +51,7 @@ private fun Content(routerState: Value<RouterState<*, RootComponent.Child>>) {
             is RootComponent.Child.Menu -> MenuUi(instance.component)
             is RootComponent.Child.Counter -> CounterUi(instance.component)
             is RootComponent.Child.Dialogs -> DialogsUi(instance.component)
+            is RootComponent.Child.Profile -> ProfileUi(instance.component)
         }
     }
 }
