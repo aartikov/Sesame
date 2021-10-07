@@ -18,9 +18,6 @@ import androidx.compose.ui.unit.dp
 import coil.compose.rememberImagePainter
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import me.aartikov.sesame.loading.simple.Loading
 import me.aartikov.sesamecomposesample.R
 import me.aartikov.sesamecomposesample.theme.AppTheme
@@ -31,13 +28,11 @@ fun ProfileUi(
     component: ProfileComponent,
     modifier: Modifier = Modifier
 ) {
-    val profileState = component.profileState.collectAsState(initial = Loading.State.Loading)
-
     Surface(
         modifier = modifier.fillMaxSize(),
         color = MaterialTheme.colors.background
     ) {
-        when (val currentState = profileState.value) {
+        when (val currentState = component.profileState) {
             is Loading.State.Data -> {
                 ProfileContent(
                     profile = currentState.data,
@@ -158,9 +153,7 @@ fun ProfileUiPreview() {
 
 class FakeProfileComponent : ProfileComponent {
 
-    private val _profileState = MutableStateFlow(Loading.State.Loading)
-
-    override val profileState: StateFlow<Loading.State<Profile>> = _profileState.asStateFlow()
+    override val profileState: Loading.State<Profile> = Loading.State.Loading
 
     override fun onPullToRefresh() {}
 

@@ -1,11 +1,14 @@
 package me.aartikov.sesamecomposesample.profile.ui
 
+import androidx.compose.runtime.*
 import com.arkivanov.decompose.ComponentContext
+import me.aartikov.sesame.loading.simple.Loading
 import me.aartikov.sesame.loading.simple.OrdinaryLoading
 import me.aartikov.sesame.loading.simple.handleErrors
 import me.aartikov.sesame.loading.simple.refresh
 import me.aartikov.sesamecomposesample.profile.data.ProfileGateway
 import me.aartikov.sesamecomposesample.utils.componentCoroutineScope
+import me.aartikov.sesamecomposesample.utils.toComposeState
 
 class RealProfileComponent(
     componentContext: ComponentContext,
@@ -19,7 +22,10 @@ class RealProfileComponent(
         load = { profileGateway.loadProfile() }
     )
 
-    override val profileState = profileLoading.stateFlow
+    override val profileState by profileLoading.stateFlow.toComposeState(
+        coroutineScope,
+        Loading.State.Loading
+    )
 
     init {
         profileLoading.handleErrors(coroutineScope) { error ->
