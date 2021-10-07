@@ -54,10 +54,7 @@ fun ProfileUi(
             }
 
             is Loading.State.Empty -> {
-                ProfilePlaceholder(
-                    component = component,
-                    errorMessage = stringResource(R.string.empty_profile_info)
-                )
+                ProfileProgress()
             }
         }
     }
