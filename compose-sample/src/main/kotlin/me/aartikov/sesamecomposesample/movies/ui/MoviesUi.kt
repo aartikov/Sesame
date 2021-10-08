@@ -56,7 +56,10 @@ fun MoviesUi(
             }
 
             is PagedLoading.State.Empty -> {
-                ProgressWidget()
+                PlaceholderWidget(
+                    message = stringResource(R.string.empty_view_text),
+                    onRetry = component::onRetryClicked
+                )
             }
         }
     }
@@ -165,11 +168,22 @@ fun ProfileUiPreview() {
 
 class FakeMoviesComponent : MoviesComponent {
 
-    override val moviesState: PagedLoading.State<Movie> = PagedLoading.State.Loading
+    override val moviesState: PagedLoading.State<Movie> = PagedLoading.State.Data(
+        getMovies(),
+        PagedLoading.DataStatus.Normal
+    )
 
     override fun onPullToRefresh() {}
 
     override fun onRetryClicked() {}
 
     override fun onLoadMore() {}
+
+    private fun getMovies(): List<Movie> {
+        val list = arrayListOf<Movie>()
+        repeat(13) {
+            list.add(Movie(it))
+        }
+        return list.toList()
+    }
 }
