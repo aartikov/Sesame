@@ -63,6 +63,12 @@ class RealRootComponent(
                     componentFactory.createProfileComponent(componentContext)
                 )
             }
+
+            is ChildConfig.Movies -> {
+                RootComponent.Child.Movies(
+                    componentFactory.createMoviesComponent(componentContext)
+                )
+            }
         }
 
     private fun onMenuOutput(output: MenuComponent.Output): Unit = when (output) {
@@ -70,6 +76,7 @@ class RealRootComponent(
             MenuItem.Counter -> router.push(ChildConfig.Counter)
             MenuItem.Dialogs -> router.push(ChildConfig.Dialogs)
             MenuItem.Profile -> router.push(ChildConfig.Profile)
+            MenuItem.Movies -> router.push(ChildConfig.Movies)
         }
     }
 
@@ -79,6 +86,7 @@ class RealRootComponent(
             is RootComponent.Child.Counter -> LocalizedString.resource(R.string.counter_title)
             is RootComponent.Child.Dialogs -> LocalizedString.resource(R.string.dialogs_title)
             is RootComponent.Child.Profile -> LocalizedString.resource(R.string.profile_title)
+            is RootComponent.Child.Movies -> LocalizedString.resource(R.string.movies_title)
         }
 
     private sealed interface ChildConfig : Parcelable {
@@ -94,6 +102,9 @@ class RealRootComponent(
 
         @Parcelize
         object Profile : ChildConfig
+
+        @Parcelize
+        object Movies : ChildConfig
     }
 }
 
