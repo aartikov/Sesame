@@ -6,6 +6,7 @@ import me.aartikov.sesame.localizedstring.LocalizedString
 import me.aartikov.sesamecomposesample.counter.CounterComponent
 import me.aartikov.sesamecomposesample.dialogs.DialogsComponent
 import me.aartikov.sesamecomposesample.menu.MenuComponent
+import me.aartikov.sesamecomposesample.movies.ui.MoviesComponent
 import me.aartikov.sesamecomposesample.profile.ui.ProfileComponent
 
 interface RootComponent {
@@ -19,5 +20,6 @@ interface RootComponent {
         class Counter(val component: CounterComponent) : Child
         class Dialogs(val component: DialogsComponent) : Child
         class Profile(val component: ProfileComponent) : Child
+        class Movies(val component: MoviesComponent) : Child
     }
 }

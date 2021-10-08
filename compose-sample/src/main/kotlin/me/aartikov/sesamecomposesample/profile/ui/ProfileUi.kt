@@ -20,6 +20,8 @@ import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import me.aartikov.sesame.loading.simple.Loading
 import me.aartikov.sesamecomposesample.R
+import me.aartikov.sesamecomposesample.base.widget.PlaceholderWidget
+import me.aartikov.sesamecomposesample.base.widget.ProgressWidget
 import me.aartikov.sesamecomposesample.theme.AppTheme
 import me.aartikov.sesamecomposesample.profile.domain.Profile
 
@@ -43,18 +45,18 @@ fun ProfileUi(
 
             is Loading.State.Error -> {
                 val message = currentState.throwable.message
-                ProfilePlaceholder(
-                    component = component,
-                    errorMessage = message ?: stringResource(R.string.common_some_error_description)
+                PlaceholderWidget(
+                    message = message ?: stringResource(R.string.common_some_error_description),
+                    onRetry = component::onRetryClicked
                 )
             }
 
             is Loading.State.Loading -> {
-                ProfileProgress()
+                ProgressWidget()
             }
 
             is Loading.State.Empty -> {
-                ProfileProgress()
+                ProgressWidget()
             }
         }
     }
@@ -91,50 +93,6 @@ fun ProfileContent(
                     .clip(CircleShape)
                     .background(color = MaterialTheme.colors.surface)
             )
-        }
-    }
-}
-
-@Composable
-fun ProfileProgress() {
-    Row(
-        modifier = Modifier.fillMaxSize(),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.Center
-    ) {
-        CircularProgressIndicator(
-            color = MaterialTheme.colors.secondary
-        )
-    }
-}
-
-@Composable
-fun ProfilePlaceholder(
-    component: ProfileComponent,
-    errorMessage: String
-) {
-    Box {
-        Column(
-            verticalArrangement = Arrangement.spacedBy(18.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier
-                .padding(horizontal = 18.dp)
-                .align(Alignment.Center)
-                .fillMaxWidth()
-        ) {
-            Text(
-                text = errorMessage,
-                textAlign = TextAlign.Center,
-                modifier = Modifier.fillMaxWidth(),
-                style = MaterialTheme.typography.body2
-            )
-            TextButton(
-                onClick = component::onRetryClicked
-            ) {
-                Text(
-                    text = stringResource(R.string.common_retry).uppercase()
-                )
-            }
         }
     }
 }
