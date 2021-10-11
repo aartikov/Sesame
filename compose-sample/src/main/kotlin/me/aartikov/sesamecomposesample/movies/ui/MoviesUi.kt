@@ -160,7 +160,7 @@ fun ItemLoading() {
 
 @Preview
 @Composable
-fun ProfileUiPreview() {
+fun MoviesUiPreview() {
     AppTheme {
         MoviesUi(FakeMoviesComponent())
     }

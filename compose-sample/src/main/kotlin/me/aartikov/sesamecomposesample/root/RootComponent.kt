@@ -5,6 +5,7 @@ import com.arkivanov.decompose.value.Value
 import me.aartikov.sesame.localizedstring.LocalizedString
 import me.aartikov.sesamecomposesample.counter.CounterComponent
 import me.aartikov.sesamecomposesample.dialogs.DialogsComponent
+import me.aartikov.sesamecomposesample.form.FormComponent
 import me.aartikov.sesamecomposesample.menu.MenuComponent
 import me.aartikov.sesamecomposesample.movies.ui.MoviesComponent
 import me.aartikov.sesamecomposesample.profile.ui.ProfileComponent
@@ -21,5 +22,6 @@ interface RootComponent {
         class Dialogs(val component: DialogsComponent) : Child
         class Profile(val component: ProfileComponent) : Child
         class Movies(val component: MoviesComponent) : Child
+        class Form(val component: FormComponent) : Child
     }
 }

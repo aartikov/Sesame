@@ -3,6 +3,8 @@ package me.aartikov.sesamecomposesample.di
 import com.arkivanov.decompose.ComponentContext
 import me.aartikov.sesamecomposesample.counter.RealCounterComponent
 import me.aartikov.sesamecomposesample.dialogs.RealDialogsComponent
+import me.aartikov.sesamecomposesample.form.FormComponent
+import me.aartikov.sesamecomposesample.form.RealFormComponent
 import me.aartikov.sesamecomposesample.menu.MenuComponent
 import me.aartikov.sesamecomposesample.menu.RealMenuComponent
 import me.aartikov.sesamecomposesample.movies.ui.RealMoviesComponent
@@ -49,5 +51,9 @@ class ComponentFactory(private val localKoin: Koin) : KoinComponent {
     fun createRootComponent(componentContext: ComponentContext) = RealRootComponent(
         componentContext,
         get()
+    )
+
+    fun createFormComponent(componentContext: ComponentContext) = RealFormComponent(
+        componentContext
     )
 }

@@ -4,5 +4,6 @@ enum class MenuItem {
     Counter,
     Dialogs,
     Profile,
-    Movies
+    Movies,
+    Form
 }

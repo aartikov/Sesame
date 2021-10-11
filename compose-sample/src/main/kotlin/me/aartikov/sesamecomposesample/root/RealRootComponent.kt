@@ -68,6 +68,12 @@ class RealRootComponent(
                     componentFactory.createMoviesComponent(componentContext)
                 )
             }
+
+            is ChildConfig.Form -> {
+                RootComponent.Child.Form(
+                    componentFactory.createFormComponent(componentContext)
+                )
+            }
         }
 
     private fun onMenuOutput(output: MenuComponent.Output): Unit = when (output) {
@@ -76,6 +82,7 @@ class RealRootComponent(
             MenuItem.Dialogs -> router.push(ChildConfig.Dialogs)
             MenuItem.Profile -> router.push(ChildConfig.Profile)
             MenuItem.Movies -> router.push(ChildConfig.Movies)
+            MenuItem.Form -> router.push(ChildConfig.Form)
         }
     }
 
@@ -86,6 +93,7 @@ class RealRootComponent(
             is RootComponent.Child.Dialogs -> LocalizedString.resource(R.string.dialogs_title)
             is RootComponent.Child.Profile -> LocalizedString.resource(R.string.profile_title)
             is RootComponent.Child.Movies -> LocalizedString.resource(R.string.movies_title)
+            is RootComponent.Child.Form -> LocalizedString.resource(R.string.form_title)
         }
 
     private sealed interface ChildConfig : Parcelable {
@@ -104,6 +112,9 @@ class RealRootComponent(
 
         @Parcelize
         object Movies : ChildConfig
+
+        @Parcelize
+        object Form : ChildConfig
     }
 }
 
