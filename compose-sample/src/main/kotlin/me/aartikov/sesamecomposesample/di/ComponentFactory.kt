@@ -11,11 +11,10 @@ import me.aartikov.sesamecomposesample.root.RealRootComponent
 import org.koin.core.Koin
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.get
-import org.koin.dsl.module
 
-class ComponentFactory : KoinComponent {
+class ComponentFactory(private val localKoin: Koin) : KoinComponent {
 
-    override fun getKoin(): Koin = ComponentFactoryModule.koin ?: throw NullPointerException()
+    override fun getKoin(): Koin = localKoin
 
     fun createProfileComponent(componentContext: ComponentContext) = RealProfileComponent(
         componentContext,
@@ -51,14 +50,4 @@ class ComponentFactory : KoinComponent {
         componentContext,
         get()
     )
-}
-
-object ComponentFactoryModule {
-
-    var koin : Koin? = null
-
-    fun create() = module {
-
-         factory { ComponentFactory() }
-    }
 }

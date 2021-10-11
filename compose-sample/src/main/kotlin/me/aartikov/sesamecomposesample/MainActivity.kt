@@ -16,14 +16,14 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val koinApp = koinApplication {
+        val koin = koinApplication {
             androidContext(this@MainActivity)
             modules(getAllModules())
-        }
+        }.koin
 
-        ComponentFactoryModule.koin = koinApp.koin
+        koin.declare(ComponentFactory(koin))
 
-        val rootComponent = koinApp.koin.get<ComponentFactory>().createRootComponent(
+        val rootComponent = koin.get<ComponentFactory>().createRootComponent(
             defaultComponentContext()
         )
 
@@ -37,7 +37,6 @@ class MainActivity : AppCompatActivity() {
     private fun getAllModules(): List<Module> = listOf(
         GatewayModule.create(),
         InteractorModule.create(),
-        ServiceModule.create(),
-        ComponentFactoryModule.create()
+        ServiceModule.create()
     )
 }
