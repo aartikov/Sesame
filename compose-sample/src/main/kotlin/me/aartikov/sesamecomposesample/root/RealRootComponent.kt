@@ -17,10 +17,9 @@ import me.aartikov.sesamecomposesample.menu.MenuComponent
 import me.aartikov.sesamecomposesample.menu.MenuItem
 
 class RealRootComponent(
-    componentContext: ComponentContext
+    componentContext: ComponentContext,
+    private val componentFactory: ComponentFactory
 ) : ComponentContext by componentContext, RootComponent {
-
-    private val componentFactory = ComponentFactory()
 
     private val router = router<ChildConfig, RootComponent.Child>(
         initialConfiguration = ChildConfig.Menu,

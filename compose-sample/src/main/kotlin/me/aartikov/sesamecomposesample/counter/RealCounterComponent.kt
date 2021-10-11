@@ -5,9 +5,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import com.arkivanov.decompose.ComponentContext
+import me.aartikov.sesame.localizedstring.LocalizedString
+import me.aartikov.sesamecomposesample.services.message.MessageService
+import me.aartikov.sesamecomposesample.R
 
 class RealCounterComponent(
-    componentContext: ComponentContext
+    componentContext: ComponentContext,
+    private val messageService: MessageService
 ) : ComponentContext by componentContext, CounterComponent {
 
     companion object {
@@ -19,7 +23,7 @@ class RealCounterComponent(
 
     override val minusButtonEnabled by derivedStateOf { count > 0 }
 
-    override val plusButtonEnabled by derivedStateOf { count < MAX_COUNT - 1 }
+    override val plusButtonEnabled by derivedStateOf { count < MAX_COUNT }
 
     override fun onMinusButtonClick() {
         if (minusButtonEnabled) {
@@ -33,8 +37,7 @@ class RealCounterComponent(
         }
 
         if (count == MAX_COUNT) {
-            // TODO: how to show toasts?
-            // showMessage(LocalizedString.resource(R.string.overflow_message))
+            messageService.showMessage(LocalizedString.resource(R.string.overflow_message))
         }
     }
 }

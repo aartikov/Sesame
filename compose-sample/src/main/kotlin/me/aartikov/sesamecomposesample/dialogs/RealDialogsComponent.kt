@@ -4,11 +4,13 @@ import com.arkivanov.decompose.ComponentContext
 import kotlinx.coroutines.launch
 import me.aartikov.sesame.dialog.DialogControl
 import me.aartikov.sesame.localizedstring.LocalizedString
+import me.aartikov.sesamecomposesample.services.message.MessageService
 import me.aartikov.sesamecomposesample.R
 import me.aartikov.sesamecomposesample.utils.componentCoroutineScope
 
 class RealDialogsComponent(
-    componentContext: ComponentContext
+    componentContext: ComponentContext,
+    private val messageService: MessageService
 ) : ComponentContext by componentContext, DialogsComponent {
 
     private val coroutineScope = componentCoroutineScope()
@@ -25,11 +27,10 @@ class RealDialogsComponent(
             val result = dialogForResult.showForResult(LocalizedString.resource(R.string.dialog_message_for_result))
                 ?: DialogResult.Cancel
 
-            // TODO: how to show messages?
             if (result == DialogResult.Ok) {
-                //showMessage(LocalizedString.resource(R.string.common_ok))
+                messageService.showMessage(LocalizedString.resource(R.string.common_ok))
             } else {
-                //showMessage(LocalizedString.resource(R.string.common_cancel))
+                messageService.showMessage(LocalizedString.resource(R.string.common_cancel))
             }
         }
     }
