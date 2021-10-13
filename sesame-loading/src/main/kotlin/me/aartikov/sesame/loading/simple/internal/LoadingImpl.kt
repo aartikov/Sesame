@@ -5,12 +5,12 @@ import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.launch
 import me.aartikov.sesame.loading.simple.Loading
 import me.aartikov.sesame.loading.simple.Loading.Event
 import me.aartikov.sesame.loading.simple.Loading.State
 import me.aartikov.sesame.loop.ActionSource
 import me.aartikov.sesame.loop.EffectHandler
+import me.aartikov.sesame.loop.startIn
 
 internal class LoadingImpl<T : Any>(
     scope: CoroutineScope,
@@ -42,9 +42,7 @@ internal class LoadingImpl<T : Any>(
         get() = mutableEventFlow
 
     init {
-        scope.launch {
-            loop.start()
-        }
+        loop.startIn(scope)
     }
 
     override fun load(fresh: Boolean, reset: Boolean) {

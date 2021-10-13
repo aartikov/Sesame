@@ -1,6 +1,7 @@
 package me.aartikov.sesame.loop
 
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -107,8 +108,8 @@ open class Loop<StateT, ActionT, EffectT>(
 /**
  * A helper method to start [Loop] in a [scope].
  */
-fun <StateT, ActionT, EffectT> Loop<StateT, ActionT, EffectT>.startIn(scope: CoroutineScope) {
-    scope.launch {
+fun <StateT, ActionT, EffectT> Loop<StateT, ActionT, EffectT>.startIn(scope: CoroutineScope): Job {
+    return scope.launch {
         start()
     }
 }
