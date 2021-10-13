@@ -5,12 +5,12 @@ import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.launch
 import me.aartikov.sesame.loading.paged.DataMerger
 import me.aartikov.sesame.loading.paged.PagedLoader
 import me.aartikov.sesame.loading.paged.PagedLoading
 import me.aartikov.sesame.loading.paged.PagedLoading.Event
 import me.aartikov.sesame.loading.paged.PagedLoading.State
+import me.aartikov.sesame.loop.startIn
 
 internal class PagedLoadingImpl<T : Any>(
     scope: CoroutineScope,
@@ -39,9 +39,7 @@ internal class PagedLoadingImpl<T : Any>(
         get() = mutableEventFlow
 
     init {
-        scope.launch {
-            loop.start()
-        }
+        loop.startIn(scope)
     }
 
     override fun loadFirstPage(fresh: Boolean, reset: Boolean) {
