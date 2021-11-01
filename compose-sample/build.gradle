@@ -44,6 +44,7 @@ dependencies {
     implementation project(":sesame-form")
     implementation project(":sesame-loading")
     implementation project(":sesame-localized-string")
+    implementation project(":sesame-compose-form")
 
     implementation androidx.appCompat
     implementation androidx.activityCompose
@@ -66,4 +67,5 @@ dependencies {
 
     implementation accompanist.swiperefresh
 
+    implementation konfetti
 }
