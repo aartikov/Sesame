@@ -51,15 +51,11 @@ class InputControl(
      */
     fun onTextChanged(text: String) {
         if ((ignoreRegex == null || !text.contains(ignoreRegex)) && text.length < maxLength) {
-            this.text.value =  text
+            this.text.value = text
         }
     }
 
     fun onFocusChanged(hasFocus: Boolean) {
         this.hasFocus.value = hasFocus
-    }
-
-    override fun requestFocus() {
-        hasFocus.value = true
     }
 }

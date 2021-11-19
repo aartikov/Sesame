@@ -17,7 +17,5 @@ interface FormComponent {
 
     val termsCheckBox: CheckControl
 
-    val submitButtonState: SubmitButtonState
-
     fun onSubmitClicked()
 }

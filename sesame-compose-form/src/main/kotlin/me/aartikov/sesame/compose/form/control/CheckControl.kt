@@ -4,7 +4,6 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import me.aartikov.sesame.compose.form.validation.form.FormValidator
 import me.aartikov.sesame.localizedstring.LocalizedString
 
 class CheckControl(
@@ -12,29 +11,24 @@ class CheckControl(
 ) : ValidatableControl<Boolean> {
 
     /**
-     * Is control checked. Observable property.
+     * Is control checked.
      */
     var checked: MutableState<Boolean> = mutableStateOf(initialChecked)
 
     /**
-     * Is control visible. Observable property.
+     * Is control visible.
      */
     var visible: MutableState<Boolean> = mutableStateOf(true)
 
     /**
-     * Is control enabled. Observable property.
+     * Is control enabled.
      */
     var enabled: MutableState<Boolean> = mutableStateOf(true)
 
     /**
-     * Displayed error. Observable property.
+     * Displayed error.
      */
     override var error: MutableState<LocalizedString?> = mutableStateOf(null)
-
-    /**
-     * A command to scroll to this control.
-     */
-   /* val scrollToIt = command<Unit>()*/
 
     override val value by derivedStateOf { checked.value }
 
@@ -45,9 +39,5 @@ class CheckControl(
      */
     fun onCheckedChanged(checked: Boolean) {
         this.checked.value = checked
-    }
-
-    override fun requestFocus() {
-        //scrollToIt()
     }
 }

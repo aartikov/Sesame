@@ -13,22 +13,17 @@ import me.aartikov.sesame.localizedstring.LocalizedString
 interface ValidatableControl<ValueT> {
 
     /**
-     * Control value. Observable property.
+     * Control value.
      */
     val value: ValueT
 
     /**
-     * Displayed error. Observable property.
+     * Displayed error.
      */
     var error: MutableState<LocalizedString?>
 
     /**
-     * Is control should be skipped during validation. Observable property.
+     * Is control should be skipped during validation.
      */
     val skipInValidation: Boolean
-
-    /**
-     * Moves focus to a control.
-     */
-    fun requestFocus()
 }

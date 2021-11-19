@@ -13,7 +13,7 @@ object RussianPhoneNumberVisualTransformation : VisualTransformation {
     override fun filter(text: AnnotatedString): TransformedText {
         val trimmed = if (text.text.length >= 10) text.text.substring(0..9) else text.text
         var output = ""
-        if(text.text.isNotEmpty()) output += FIRST_HARDCODE_SLOT
+        if (text.text.isNotEmpty()) output += FIRST_HARDCODE_SLOT
         for (i in trimmed.indices) {
             output += trimmed[i]
             when (i) {

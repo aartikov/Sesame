@@ -32,11 +32,12 @@ class CheckValidator constructor(
         return validation(control.value)
     }
 
-    private fun displayValidationResult(validationResult: ValidationResult) = when (validationResult) {
-        ValidationResult.Valid, ValidationResult.Skipped -> control.error.value = null
-        is ValidationResult.Invalid -> {
-            control.error.value = validationResult.errorMessage
-            showError?.invoke(validationResult.errorMessage)
+    private fun displayValidationResult(validationResult: ValidationResult) =
+        when (validationResult) {
+            ValidationResult.Valid, ValidationResult.Skipped -> control.error.value = null
+            is ValidationResult.Invalid -> {
+                control.error.value = validationResult.errorMessage
+                showError?.invoke(validationResult.errorMessage)
+            }
         }
-    }
 }

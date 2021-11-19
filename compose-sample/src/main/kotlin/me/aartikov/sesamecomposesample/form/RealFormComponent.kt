@@ -1,10 +1,7 @@
 package me.aartikov.sesamecomposesample.form
 
-import android.util.Log
 import android.util.Patterns
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import com.arkivanov.decompose.ComponentContext
@@ -14,11 +11,6 @@ import me.aartikov.sesame.compose.form.validation.form.*
 import me.aartikov.sesame.localizedstring.LocalizedString
 import me.aartikov.sesamecomposesample.R
 import me.aartikov.sesamecomposesample.utils.componentCoroutineScope
-
-enum class SubmitButtonState {
-    Valid,
-    Invalid
-}
 
 class RealFormComponent(
     componentContext: ComponentContext
@@ -35,7 +27,7 @@ class RealFormComponent(
 
     override val nameInput = InputControl(
         maxLength = NAME_MAX_LENGTH,
-        ignoreRegex = Regex("[лина]"),
+        ignoreRegex = Regex("[1234567890+=]"),
         keyboardOptions = KeyboardOptions(
             capitalization = KeyboardCapitalization.Words
         )
@@ -69,17 +61,7 @@ class RealFormComponent(
 
     override val termsCheckBox = CheckControl()
 
-    override val submitButtonState by derivedStateOf {
-        if (validationResult.isValid) SubmitButtonState.Valid else SubmitButtonState.Invalid
-    }
-
     private val formValidator = coroutineScope.formValidator {
-
-        features = listOf(
-            ValidateOnFocusLost,
-            RevalidateOnValueChanged,
-            SetFocusOnFirstInvalidControlAfterValidation
-        )
 
         input(nameInput) {
             isNotBlank(R.string.field_is_blank_error_message)
@@ -116,16 +98,12 @@ class RealFormComponent(
         }
 
         checked(termsCheckBox, R.string.terms_are_accepted_error_message)
-
     }
-
-    private val validationResult = coroutineScope.dynamicValidationResult(formValidator)
 
     override fun onSubmitClicked() {
         val result = formValidator.validate()
-        Log.i("MY TAG", "result valid= $result")
         if (result.isValid) {
-
+            // TODO: Show konfetti
         }
     }
 }

@@ -3,6 +3,7 @@ package me.aartikov.sesamecomposesample.form
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -13,6 +14,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.KeyboardCapitalization
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
@@ -61,25 +64,6 @@ fun FormUi(
                     onClick = component::onSubmitClicked
                 )
             }
-
-            /*AndroidView(
-                modifier = Modifier.fillMaxSize(),
-                factory = { ctx ->
-                    val view: KonfettiView = KonfettiView(ctx)
-                    view.apply {
-                        build()
-                            .addColors(Color.YELLOW, Color.GREEN, Color.MAGENTA)
-                            .setDirection(0.0, 359.0)
-                            .setSpeed(1f, 5f)
-                            .setFadeOutEnabled(true)
-                            .setTimeToLive(2000L)
-                            .addShapes(Shape.Square, Shape.Circle)
-                            .addSizes(Size(12))
-                            .setPosition(-50f, this.width + 50f, -50f, -50f)
-                            .streamFor(300, 5000L)
-                    }
-                })*/
-
         }
     }
 }
@@ -92,6 +76,7 @@ fun CommonTextField(inputControl: InputControl, @StringRes label: Int) {
         val invalidInput by derivedStateOf {
             inputControl.error.value != null
         }
+        
         OutlinedTextField(
             modifier = Modifier
                 .fillMaxWidth()
@@ -139,9 +124,7 @@ fun PasswordField(inputControl: InputControl, @StringRes label: Int) {
                 }
             },
             isError = invalidInput,
-            onValueChange = {
-                inputControl.onTextChanged(it)
-            }
+            onValueChange = { inputControl.onTextChanged(it) }
         )
 
         Text(
@@ -181,18 +164,34 @@ fun CheckboxField(checkControl: CheckControl) {
 @Composable
 fun FormUiPreview() {
     AppTheme {
-// FormUi(FakeFormComponent())
+        FormUi(FakeFormComponent())
     }
 }
 
-/*
+
 class FakeFormComponent : FormComponent {
 
-override val nameInput: InputControl,
-override val emailInput: InputControl,
-override val phoneInput: InputControl,
-override val passwordInput: InputControl,
-override val confirmPasswordInput: InputControl
+    override val nameInput = InputControl(
+        keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Words)
+    )
 
-override fun onSubmitClicked() {}
-}*/
+    override val emailInput = InputControl(
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email)
+    )
+
+    override val phoneInput = InputControl(
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
+    )
+
+    override val passwordInput = InputControl(
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password)
+    )
+
+    override val confirmPasswordInput = InputControl(
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password)
+    )
+
+    override val termsCheckBox = CheckControl()
+
+    override fun onSubmitClicked() = Unit
+}
