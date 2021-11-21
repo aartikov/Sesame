@@ -27,7 +27,9 @@ class RealFormComponent(
 
     override val nameInput = InputControl(
         maxLength = NAME_MAX_LENGTH,
-        ignoreRegex = Regex("[1234567890+=]"),
+        textTransformation = {
+            it.replace(Regex("[1234567890+=]"), "")
+        },
         keyboardOptions = KeyboardOptions(
             capitalization = KeyboardCapitalization.Words
         )
@@ -44,7 +46,7 @@ class RealFormComponent(
         keyboardOptions = KeyboardOptions(
             keyboardType = KeyboardType.Phone
         ),
-        transformer = RussianPhoneNumberVisualTransformation
+        visualTransformation = RussianPhoneNumberVisualTransformation
     )
 
     override val passwordInput = InputControl(

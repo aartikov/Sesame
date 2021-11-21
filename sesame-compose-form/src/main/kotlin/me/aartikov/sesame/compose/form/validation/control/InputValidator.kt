@@ -43,7 +43,7 @@ class InputValidator constructor(
 
     private fun displayValidationResult(validationResult: ValidationResult) =
         when (validationResult) {
-            ValidationResult.Valid, ValidationResult.Skipped -> control.error.value = null
-            is ValidationResult.Invalid -> control.error.value = validationResult.errorMessage
+            ValidationResult.Valid, ValidationResult.Skipped -> control.error = null
+            is ValidationResult.Invalid -> control.error = validationResult.errorMessage
         }
 }

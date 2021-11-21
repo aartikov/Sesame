@@ -1,6 +1,5 @@
 package me.aartikov.sesame.compose.form.control
 
-import androidx.compose.runtime.MutableState
 import me.aartikov.sesame.localizedstring.LocalizedString
 
 /**
@@ -20,7 +19,7 @@ interface ValidatableControl<ValueT> {
     /**
      * Displayed error.
      */
-    var error: MutableState<LocalizedString?>
+    var error: LocalizedString?
 
     /**
      * Is control should be skipped during validation.

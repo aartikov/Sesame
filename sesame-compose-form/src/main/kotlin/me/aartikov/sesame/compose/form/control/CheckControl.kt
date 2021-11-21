@@ -1,9 +1,6 @@
 package me.aartikov.sesame.compose.form.control
 
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.*
 import me.aartikov.sesame.localizedstring.LocalizedString
 
 class CheckControl(
@@ -13,31 +10,31 @@ class CheckControl(
     /**
      * Is control checked.
      */
-    var checked: MutableState<Boolean> = mutableStateOf(initialChecked)
+    var checked: Boolean by mutableStateOf(initialChecked)
 
     /**
      * Is control visible.
      */
-    var visible: MutableState<Boolean> = mutableStateOf(true)
+    var visible: Boolean by mutableStateOf(true)
 
     /**
      * Is control enabled.
      */
-    var enabled: MutableState<Boolean> = mutableStateOf(true)
+    var enabled: Boolean by mutableStateOf(true)
 
     /**
      * Displayed error.
      */
-    override var error: MutableState<LocalizedString?> = mutableStateOf(null)
+    override var error: LocalizedString? by mutableStateOf(null)
 
-    override val value by derivedStateOf { checked.value }
+    override val value by ::checked
 
-    override val skipInValidation by derivedStateOf { !visible.value || !enabled.value }
+    override val skipInValidation by derivedStateOf { !visible || !enabled }
 
     /**
      * Called automatically when checked is changed on a view side.
      */
     fun onCheckedChanged(checked: Boolean) {
-        this.checked.value = checked
+        this.checked = checked
     }
 }

@@ -1,10 +1,7 @@
 package me.aartikov.sesame.compose.form.control
 
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.*
 import androidx.compose.ui.text.input.VisualTransformation
 import me.aartikov.sesame.localizedstring.LocalizedString
 
@@ -13,49 +10,57 @@ class InputControl(
     val singleLine: Boolean = true,
     val maxLength: Int = Int.MAX_VALUE,
     val keyboardOptions: KeyboardOptions,
-    val ignoreRegex: Regex? = null,
-    val transformer: VisualTransformation = VisualTransformation.None
+    val textTransformation: TextTransformation? = null,
+    val visualTransformation: VisualTransformation = VisualTransformation.None
 ) : ValidatableControl<String> {
 
     /**
      * Current text.
      */
-    var text: MutableState<String> = mutableStateOf(initialText)
+    var text: String by mutableStateOf("")
 
     /**
      * Is control visible.
      */
-    var visible: MutableState<Boolean> = mutableStateOf(true)
+    var visible: Boolean by mutableStateOf(true)
 
     /**
      * Is control enabled.
      */
-    var enabled: MutableState<Boolean> = mutableStateOf(true)
+    var enabled: Boolean by mutableStateOf(true)
 
     /**
      * Is control has focus.
      */
-    var hasFocus: MutableState<Boolean> = mutableStateOf(false)
+    var hasFocus: Boolean by mutableStateOf(false)
 
     /**
      * Displayed error.
      */
-    override var error: MutableState<LocalizedString?> = mutableStateOf(null)
+    override var error: LocalizedString? by mutableStateOf(null)
 
-    override val value by derivedStateOf { text.value }
+    override val value by ::text
 
-    override val skipInValidation by derivedStateOf { !visible.value || !enabled.value }
+    override val skipInValidation by derivedStateOf { !visible || !enabled }
+
+    init {
+        onTextChanged(initialText)
+    }
 
     /**
      * Called automatically when text is changed on a view side.
      */
     fun onTextChanged(text: String) {
-        if ((ignoreRegex == null || !text.contains(ignoreRegex)) && text.length < maxLength) {
-            this.text.value = text
+        if (text.length < maxLength) {
+            if (textTransformation != null) {
+                this.text = textTransformation.transform(text = text)
+            } else {
+                this.text = text
+            }
         }
     }
 
     fun onFocusChanged(hasFocus: Boolean) {
-        this.hasFocus.value = hasFocus
+        this.hasFocus = hasFocus
     }
 }

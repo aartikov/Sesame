@@ -1,6 +1,5 @@
 package me.aartikov.sesamecomposesample.form
 
-import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
@@ -17,12 +16,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import me.aartikov.sesame.compose.form.control.CheckControl
 import me.aartikov.sesame.compose.form.control.InputControl
-import me.aartikov.sesame.localizedstring.LocalizedString
 import me.aartikov.sesamecomposesample.R
 import me.aartikov.sesamecomposesample.menu.MenuButton
 import me.aartikov.sesamecomposesample.theme.AppTheme
@@ -37,7 +34,7 @@ fun FormUi(
         modifier = modifier.fillMaxSize(),
         color = MaterialTheme.colors.background
     ) {
-        Box(modifier = Modifier.fillMaxSize()) {
+        Box(modifier = modifier.fillMaxSize()) {
             val scrollState = rememberScrollState()
             Column(
                 verticalArrangement = Arrangement.spacedBy(8.dp),
@@ -47,17 +44,41 @@ fun FormUi(
                     .padding(20.dp)
             ) {
 
-                CommonTextField(component.nameInput, R.string.name_hint)
+                CommonTextField(
+                    modifier,
+                    component.nameInput,
+                    stringResource(id = R.string.name_hint)
+                )
 
-                CommonTextField(component.emailInput, R.string.email_hint)
+                CommonTextField(
+                    modifier,
+                    component.emailInput,
+                    stringResource(id = R.string.email_hint)
+                )
 
-                CommonTextField(component.phoneInput, R.string.phone_hint)
+                CommonTextField(
+                    modifier,
+                    component.phoneInput,
+                    stringResource(id = R.string.phone_hint)
+                )
 
-                PasswordField(component.passwordInput, R.string.password_hint)
+                PasswordField(
+                    modifier,
+                    component.passwordInput,
+                    stringResource(id = R.string.password_hint)
+                )
 
-                PasswordField(component.confirmPasswordInput, R.string.confirm_password_hint)
+                PasswordField(
+                    modifier,
+                    component.confirmPasswordInput,
+                    stringResource(id = R.string.confirm_password_hint)
+                )
 
-                CheckboxField(component.termsCheckBox)
+                CheckboxField(
+                    modifier,
+                    component.termsCheckBox,
+                    stringResource(id = R.string.terms_hint)
+                )
 
                 MenuButton(
                     text = stringResource(R.string.submit_button),
@@ -68,67 +89,68 @@ fun FormUi(
     }
 }
 
-
 @Composable
-fun CommonTextField(inputControl: InputControl, @StringRes label: Int) {
-    Column(modifier = Modifier.fillMaxWidth()) {
-        val textState by remember { inputControl.text }
-        val invalidInput by derivedStateOf {
-            inputControl.error.value != null
-        }
-        
+fun CommonTextField(
+    modifier: Modifier = Modifier,
+    inputControl: InputControl,
+    label: String
+) {
+    Column(modifier = modifier.fillMaxWidth()) {
         OutlinedTextField(
-            modifier = Modifier
+            value = inputControl.text,
+            keyboardOptions = inputControl.keyboardOptions,
+            singleLine = inputControl.singleLine,
+            label = { Text(text = label) },
+            onValueChange = inputControl::onTextChanged,
+            isError = inputControl.error != null,
+            visualTransformation = inputControl.visualTransformation,
+            modifier = modifier
                 .fillMaxWidth()
                 .onFocusChanged {
                     inputControl.onFocusChanged(it.isFocused)
-                },
-            value = textState,
-            keyboardOptions = inputControl.keyboardOptions,
-            singleLine = inputControl.singleLine,
-            label = { Text(stringResource(label)) },
-            onValueChange = { inputControl.onTextChanged(it) },
-            isError = invalidInput,
-            visualTransformation = inputControl.transformer,
+                }
         )
 
         Text(
-            text = inputControl.error.value?.resolve() ?: LocalizedString.empty().resolve(),
-            style = MaterialTheme.typography.caption.copy(color = MaterialTheme.colors.error),
+            text = inputControl.error?.resolve() ?: "",
+            style = MaterialTheme.typography.caption.copy(color = MaterialTheme.colors.error)
         )
     }
 }
 
 @Composable
-fun PasswordField(inputControl: InputControl, @StringRes label: Int) {
-    Column(modifier = Modifier.fillMaxWidth()) {
-        val textState by remember { inputControl.text }
-        val invalidInput by derivedStateOf { inputControl.error.value != null }
-        val passwordVisibility = remember { mutableStateOf(false) }
+fun PasswordField(modifier: Modifier = Modifier, inputControl: InputControl, label: String) {
+    Column(modifier = modifier.fillMaxWidth()) {
+        var passwordVisibility by remember { mutableStateOf(false) }
+
         OutlinedTextField(
-            modifier = Modifier.fillMaxWidth(),
-            value = textState,
+            modifier = modifier.fillMaxWidth(),
+            value = inputControl.text,
             keyboardOptions = inputControl.keyboardOptions,
             singleLine = inputControl.singleLine,
-            label = { Text(stringResource(label)) },
-            visualTransformation = if (passwordVisibility.value) VisualTransformation.None else PasswordVisualTransformation(),
+            label = { Text(text = label) },
+            isError = inputControl.error != null,
+            onValueChange = inputControl::onTextChanged,
+            visualTransformation = if (passwordVisibility) {
+                inputControl.visualTransformation
+            } else {
+                PasswordVisualTransformation()
+            },
             trailingIcon = {
-                val image = if (passwordVisibility.value)
+                val image = if (passwordVisibility) {
                     Icons.Filled.VisibilityOff
-                else Icons.Filled.Visibility
+                } else {
+                    Icons.Filled.Visibility
+                }
 
-                IconButton(onClick = {
-                    passwordVisibility.value = !passwordVisibility.value
-                }) {
+                IconButton(onClick = { passwordVisibility = !passwordVisibility }) {
                     Icon(imageVector = image, null)
                 }
-            },
-            isError = invalidInput,
-            onValueChange = { inputControl.onTextChanged(it) }
+            }
         )
 
         Text(
-            text = inputControl.error.value?.resolve() ?: LocalizedString.empty().resolve(),
+            text = inputControl.error?.resolve() ?: "",
             style = MaterialTheme.typography.caption.copy(color = MaterialTheme.colors.error),
         )
     }
@@ -136,25 +158,23 @@ fun PasswordField(inputControl: InputControl, @StringRes label: Int) {
 
 
 @Composable
-fun CheckboxField(checkControl: CheckControl) {
-    Column(modifier = Modifier.fillMaxWidth()) {
-        val isChecked by remember { checkControl.checked }
-        val isEnabled by remember { checkControl.enabled }
-
+fun CheckboxField(modifier: Modifier = Modifier, checkControl: CheckControl, label: String) {
+    Column(modifier = modifier.fillMaxWidth()) {
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
+            modifier = modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             Checkbox(
-                checked = isChecked,
+                checked = checkControl.checked,
                 onCheckedChange = { checkControl.onCheckedChanged(it) },
-                enabled = isEnabled
+                enabled = checkControl.enabled
             )
-            Text(text = stringResource(R.string.terms_hint))
+
+            Text(text = label)
         }
 
         Text(
-            text = checkControl.error.value?.resolve() ?: LocalizedString.empty().resolve(),
+            text = checkControl.error?.resolve() ?: "",
             style = MaterialTheme.typography.caption.copy(color = MaterialTheme.colors.error),
         )
     }

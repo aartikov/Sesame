@@ -34,9 +34,9 @@ class CheckValidator constructor(
 
     private fun displayValidationResult(validationResult: ValidationResult) =
         when (validationResult) {
-            ValidationResult.Valid, ValidationResult.Skipped -> control.error.value = null
+            ValidationResult.Valid, ValidationResult.Skipped -> control.error = null
             is ValidationResult.Invalid -> {
-                control.error.value = validationResult.errorMessage
+                control.error = validationResult.errorMessage
                 showError?.invoke(validationResult.errorMessage)
             }
         }
