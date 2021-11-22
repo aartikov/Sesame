@@ -3,8 +3,7 @@ package me.aartikov.sesamecomposesample.form
 import android.util.Patterns
 import androidx.annotation.ColorRes
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import com.arkivanov.decompose.ComponentContext
@@ -19,6 +18,11 @@ import me.aartikov.sesamecomposesample.utils.componentCoroutineScope
 enum class SubmitButtonState(@ColorRes val color: Int) {
     Valid(R.color.green),
     Invalid(R.color.red)
+}
+
+enum class KonfettiState {
+    Shown,
+    Hidden
 }
 
 class RealFormComponent(
@@ -69,6 +73,8 @@ class RealFormComponent(
             keyboardType = KeyboardType.Password
         )
     )
+
+    override var konfettiState by mutableStateOf(KonfettiState.Hidden)
 
     override val termsCheckBox = CheckControl()
 
@@ -121,8 +127,6 @@ class RealFormComponent(
 
     override fun onSubmitClicked() {
         val result = formValidator.validate()
-        if (result.isValid) {
-            // TODO: Show konfetti
-        }
+        konfettiState = if (result.isValid) KonfettiState.Shown else KonfettiState.Hidden
     }
 }

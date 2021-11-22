@@ -19,5 +19,7 @@ interface FormComponent {
 
     val submitButtonState: SubmitButtonState
 
+    val konfettiState: KonfettiState
+
     fun onSubmitClicked()
 }
