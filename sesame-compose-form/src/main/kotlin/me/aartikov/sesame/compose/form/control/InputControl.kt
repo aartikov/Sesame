@@ -1,9 +1,12 @@
 package me.aartikov.sesame.compose.form.control
 
+import android.util.Log
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.runtime.*
 import androidx.compose.ui.text.input.VisualTransformation
+import kotlinx.coroutines.flow.MutableStateFlow
 import me.aartikov.sesame.localizedstring.LocalizedString
+import kotlin.reflect.KProperty
 
 class InputControl(
     initialText: String = "",
@@ -32,7 +35,7 @@ class InputControl(
     /**
      * Is control has focus.
      */
-    var hasFocus: Boolean by mutableStateOf(false)
+    var hasFocus = MutableStateFlow(false)
 
     /**
      * Displayed error.
@@ -47,9 +50,6 @@ class InputControl(
         onTextChanged(initialText)
     }
 
-    /**
-     * Called automatically when text is changed on a view side.
-     */
     fun onTextChanged(text: String) {
         if (text.length < maxLength) {
             if (textTransformation != null) {
@@ -61,6 +61,6 @@ class InputControl(
     }
 
     fun onFocusChanged(hasFocus: Boolean) {
-        this.hasFocus = hasFocus
+        this.hasFocus.value = hasFocus
     }
 }

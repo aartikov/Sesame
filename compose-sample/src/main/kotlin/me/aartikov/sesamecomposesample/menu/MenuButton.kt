@@ -12,11 +12,13 @@ import me.aartikov.sesamecomposesample.theme.AppTheme
 fun MenuButton(
     text: String,
     onClick: () -> Unit,
+    enabled: Boolean = true,
     modifier: Modifier = Modifier
 ) {
     Button(
-        onClick = onClick,
         modifier = modifier,
+        onClick = onClick,
+        enabled = enabled
     ) {
         Text(
             text = text.uppercase(),

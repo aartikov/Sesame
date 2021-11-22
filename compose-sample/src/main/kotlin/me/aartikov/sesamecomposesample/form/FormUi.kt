@@ -11,6 +11,8 @@ import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardCapitalization
@@ -82,7 +84,8 @@ fun FormUi(
 
                 MenuButton(
                     text = stringResource(R.string.submit_button),
-                    onClick = component::onSubmitClicked
+                    onClick = component::onSubmitClicked,
+                    enabled = component.submitButtonState == SubmitButtonState.Valid
                 )
             }
         }
@@ -96,6 +99,8 @@ fun CommonTextField(
     label: String
 ) {
     Column(modifier = modifier.fillMaxWidth()) {
+        val focusRequester = remember { FocusRequester() }
+
         OutlinedTextField(
             value = inputControl.text,
             keyboardOptions = inputControl.keyboardOptions,
@@ -106,6 +111,7 @@ fun CommonTextField(
             visualTransformation = inputControl.visualTransformation,
             modifier = modifier
                 .fillMaxWidth()
+                .focusRequester(focusRequester)
                 .onFocusChanged {
                     inputControl.onFocusChanged(it.isFocused)
                 }
@@ -121,10 +127,10 @@ fun CommonTextField(
 @Composable
 fun PasswordField(modifier: Modifier = Modifier, inputControl: InputControl, label: String) {
     Column(modifier = modifier.fillMaxWidth()) {
+        val focusRequester = remember { FocusRequester() }
         var passwordVisibility by remember { mutableStateOf(false) }
 
         OutlinedTextField(
-            modifier = modifier.fillMaxWidth(),
             value = inputControl.text,
             keyboardOptions = inputControl.keyboardOptions,
             singleLine = inputControl.singleLine,
@@ -146,7 +152,13 @@ fun PasswordField(modifier: Modifier = Modifier, inputControl: InputControl, lab
                 IconButton(onClick = { passwordVisibility = !passwordVisibility }) {
                     Icon(imageVector = image, null)
                 }
-            }
+            },
+            modifier = modifier
+                .fillMaxWidth()
+                .focusRequester(focusRequester)
+                .onFocusChanged {
+                    inputControl.onFocusChanged(it.isFocused)
+                }
         )
 
         Text(
@@ -212,6 +224,8 @@ class FakeFormComponent : FormComponent {
     )
 
     override val termsCheckBox = CheckControl()
+
+    override val submitButtonState = SubmitButtonState.Valid
 
     override fun onSubmitClicked() = Unit
 }

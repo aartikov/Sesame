@@ -2,15 +2,23 @@ package me.aartikov.sesamecomposesample.form
 
 import android.util.Patterns
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import com.arkivanov.decompose.ComponentContext
 import me.aartikov.sesame.compose.form.control.*
 import me.aartikov.sesame.compose.form.validation.control.*
 import me.aartikov.sesame.compose.form.validation.form.*
+import me.aartikov.sesame.compose.form.validation.form.ValidateOnFocusLost
 import me.aartikov.sesame.localizedstring.LocalizedString
 import me.aartikov.sesamecomposesample.R
 import me.aartikov.sesamecomposesample.utils.componentCoroutineScope
+
+enum class SubmitButtonState {
+    Valid,
+    Invalid
+}
 
 class RealFormComponent(
     componentContext: ComponentContext
@@ -65,6 +73,8 @@ class RealFormComponent(
 
     private val formValidator = coroutineScope.formValidator {
 
+        features = listOf(ValidateOnFocusLost)
+
         input(nameInput) {
             isNotBlank(R.string.field_is_blank_error_message)
         }
@@ -100,6 +110,10 @@ class RealFormComponent(
         }
 
         checked(termsCheckBox, R.string.terms_are_accepted_error_message)
+    }
+
+    override val submitButtonState by derivedStateOf {
+         SubmitButtonState.Valid
     }
 
     override fun onSubmitClicked() {
