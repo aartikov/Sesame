@@ -5,9 +5,11 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import com.arkivanov.decompose.ComponentContext
-import me.aartikov.sesame.compose.form.control.*
+import me.aartikov.sesame.compose.form.control.CheckControl
+import me.aartikov.sesame.compose.form.control.InputControl
 import me.aartikov.sesame.compose.form.validation.control.*
-import me.aartikov.sesame.compose.form.validation.form.*
+import me.aartikov.sesame.compose.form.validation.form.checked
+import me.aartikov.sesame.compose.form.validation.form.formValidator
 import me.aartikov.sesame.localizedstring.LocalizedString
 import me.aartikov.sesamecomposesample.R
 import me.aartikov.sesamecomposesample.utils.componentCoroutineScope
@@ -17,7 +19,7 @@ class RealFormComponent(
 ) : ComponentContext by componentContext, FormComponent {
 
     companion object {
-        private const val NAME_MAX_LENGTH = 100
+        private const val NAME_MAX_LENGTH = 30
         private const val PHONE_MAX_LENGTH = 11
         private const val PASSWORD_MIN_LENGTH = 6
         private const val RUS_PHONE_DIGIT_COUNT = 10
