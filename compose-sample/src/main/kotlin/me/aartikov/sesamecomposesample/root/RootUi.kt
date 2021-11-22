@@ -13,6 +13,7 @@ import com.arkivanov.decompose.value.Value
 import me.aartikov.sesame.localizedstring.LocalizedString
 import me.aartikov.sesamecomposesample.counter.CounterUi
 import me.aartikov.sesamecomposesample.dialogs.DialogsUi
+import me.aartikov.sesamecomposesample.form.FormUi
 import me.aartikov.sesamecomposesample.menu.FakeMenuComponent
 import me.aartikov.sesamecomposesample.menu.MenuUi
 import me.aartikov.sesamecomposesample.movies.ui.MoviesUi
@@ -54,6 +55,7 @@ private fun Content(routerState: Value<RouterState<*, RootComponent.Child>>) {
             is RootComponent.Child.Dialogs -> DialogsUi(instance.component)
             is RootComponent.Child.Profile -> ProfileUi(instance.component)
             is RootComponent.Child.Movies -> MoviesUi(instance.component)
+            is RootComponent.Child.Form -> FormUi(instance.component)
         }
     }
 }
