@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
@@ -85,7 +86,9 @@ fun FormUi(
                 MenuButton(
                     text = stringResource(R.string.submit_button),
                     onClick = component::onSubmitClicked,
-                    enabled = component.submitButtonState == SubmitButtonState.Valid
+                    colors = ButtonDefaults.buttonColors(
+                        backgroundColor = colorResource(id = component.submitButtonState.color),
+                    )
                 )
             }
         }

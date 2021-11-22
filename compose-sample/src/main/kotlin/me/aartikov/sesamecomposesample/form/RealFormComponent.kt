@@ -1,6 +1,7 @@
 package me.aartikov.sesamecomposesample.form
 
 import android.util.Patterns
+import androidx.annotation.ColorRes
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -15,9 +16,9 @@ import me.aartikov.sesame.localizedstring.LocalizedString
 import me.aartikov.sesamecomposesample.R
 import me.aartikov.sesamecomposesample.utils.componentCoroutineScope
 
-enum class SubmitButtonState {
-    Valid,
-    Invalid
+enum class SubmitButtonState(@ColorRes val color: Int) {
+    Valid(R.color.green),
+    Invalid(R.color.red)
 }
 
 class RealFormComponent(
@@ -73,7 +74,7 @@ class RealFormComponent(
 
     private val formValidator = coroutineScope.formValidator {
 
-        features = listOf(ValidateOnFocusLost)
+        features = listOf(ValidateOnFocusLost, RevalidateOnValueChanged)
 
         input(nameInput) {
             isNotBlank(R.string.field_is_blank_error_message)
@@ -112,8 +113,10 @@ class RealFormComponent(
         checked(termsCheckBox, R.string.terms_are_accepted_error_message)
     }
 
+    private val dynamicResult = coroutineScope.dynamicValidationResult(formValidator)
+
     override val submitButtonState by derivedStateOf {
-         SubmitButtonState.Valid
+        if (dynamicResult.value.isValid) SubmitButtonState.Valid else SubmitButtonState.Invalid
     }
 
     override fun onSubmitClicked() {

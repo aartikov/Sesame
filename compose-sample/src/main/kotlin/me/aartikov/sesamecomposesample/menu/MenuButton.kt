@@ -1,6 +1,8 @@
 package me.aartikov.sesamecomposesample.menu
 
 import androidx.compose.material.Button
+import androidx.compose.material.ButtonColors
+import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -10,15 +12,15 @@ import me.aartikov.sesamecomposesample.theme.AppTheme
 
 @Composable
 fun MenuButton(
+    modifier: Modifier = Modifier,
     text: String,
     onClick: () -> Unit,
-    enabled: Boolean = true,
-    modifier: Modifier = Modifier
+    colors: ButtonColors = ButtonDefaults.buttonColors(),
 ) {
     Button(
         modifier = modifier,
         onClick = onClick,
-        enabled = enabled
+        colors = colors
     ) {
         Text(
             text = text.uppercase(),
@@ -31,6 +33,6 @@ fun MenuButton(
 @Composable
 fun CounterButtonsPreview() {
     AppTheme {
-        MenuButton("Menu item", onClick = {})
+        MenuButton(text = "Menu item", onClick = {})
     }
 }

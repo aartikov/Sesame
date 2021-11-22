@@ -1,5 +1,6 @@
 package me.aartikov.sesame.compose.form.control
 
+import kotlinx.coroutines.flow.MutableStateFlow
 import me.aartikov.sesame.localizedstring.LocalizedString
 
 /**
@@ -25,4 +26,14 @@ interface ValidatableControl<ValueT> {
      * Is control should be skipped during validation.
      */
     val skipInValidation: Boolean
+
+    /**
+     * Observable changed value event.
+     */
+    val valueChangeEvent: MutableStateFlow<ValueT>
+
+    /**
+     * Observable changed skip in validation value event.
+     */
+    val skipInValidationChangeEvent: MutableStateFlow<Boolean>
 }

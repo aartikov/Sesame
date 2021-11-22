@@ -1,12 +1,10 @@
 package me.aartikov.sesame.compose.form.control
 
-import android.util.Log
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.runtime.*
 import androidx.compose.ui.text.input.VisualTransformation
 import kotlinx.coroutines.flow.MutableStateFlow
 import me.aartikov.sesame.localizedstring.LocalizedString
-import kotlin.reflect.KProperty
 
 class InputControl(
     initialText: String = "",
@@ -44,7 +42,15 @@ class InputControl(
 
     override val value by ::text
 
-    override val skipInValidation by derivedStateOf { !visible || !enabled }
+    override val valueChangeEvent = MutableStateFlow(text)
+
+    override val skipInValidationChangeEvent = MutableStateFlow(false)
+
+    override val skipInValidation by derivedStateOf {
+        val skip = !visible || !enabled
+        skipInValidationChangeEvent.value = skip
+        return@derivedStateOf skip
+    }
 
     init {
         onTextChanged(initialText)
@@ -58,6 +64,7 @@ class InputControl(
                 this.text = text
             }
         }
+        valueChangeEvent.value = this.text
     }
 
     fun onFocusChanged(hasFocus: Boolean) {
