@@ -82,7 +82,8 @@ fun FormUi(
 
                 MenuButton(
                     text = stringResource(R.string.submit_button),
-                    onClick = component::onSubmitClicked
+                    onClick = component::onSubmitClicked,
+                    modifier = Modifier.padding(top = 8.dp)
                 )
             }
         }
