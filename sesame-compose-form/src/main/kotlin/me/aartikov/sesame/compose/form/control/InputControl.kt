@@ -66,6 +66,7 @@ class InputControl(
      */
     fun onTextChanged(text: String) {
         this.text = text
+        valueChangeEvent.value = this.text
     }
 
     fun onFocusChanged(hasFocus: Boolean) {

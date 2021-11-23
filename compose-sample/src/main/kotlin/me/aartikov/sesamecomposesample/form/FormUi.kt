@@ -95,7 +95,7 @@ fun FormUi(
                     onClick = component::onSubmitClicked,
                     colors = ButtonDefaults.buttonColors(
                         backgroundColor = colorResource(id = component.submitButtonState.color),
-                    )
+                    ),
                     modifier = Modifier.padding(top = 8.dp)
                 )
             }
