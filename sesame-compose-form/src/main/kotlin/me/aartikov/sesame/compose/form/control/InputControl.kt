@@ -1,7 +1,10 @@
 package me.aartikov.sesame.compose.form.control
 
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.runtime.*
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.text.input.VisualTransformation
 import kotlinx.coroutines.flow.MutableStateFlow
 import me.aartikov.sesame.localizedstring.LocalizedString
@@ -15,10 +18,16 @@ class InputControl(
     val visualTransformation: VisualTransformation = VisualTransformation.None
 ) : ValidatableControl<String> {
 
+    private var _text by mutableStateOf(correctText(initialText))
+
     /**
      * Current text.
      */
-    var text: String by mutableStateOf("")
+    var text: String
+        get() = _text
+        set(value) {
+            _text = correctText(value)
+        }
 
     /**
      * Is control visible.
@@ -52,22 +61,19 @@ class InputControl(
         return@derivedStateOf skip
     }
 
-    init {
-        onTextChanged(initialText)
-    }
-
+    /**
+     * Called automatically when text is changed on a view side.
+     */
     fun onTextChanged(text: String) {
-        if (text.length < maxLength) {
-            if (textTransformation != null) {
-                this.text = textTransformation.transform(text = text)
-            } else {
-                this.text = text
-            }
-        }
-        valueChangeEvent.value = this.text
+        this.text = text
     }
 
     fun onFocusChanged(hasFocus: Boolean) {
         this.hasFocus.value = hasFocus
+    }
+
+    private fun correctText(text: String): String {
+        val transformedText = textTransformation?.transform(text) ?: text
+        return transformedText.take(maxLength)
     }
 }
