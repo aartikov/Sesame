@@ -1,5 +1,6 @@
 package me.aartikov.sesamecomposesample.form
 
+import kotlinx.coroutines.flow.Flow
 import me.aartikov.sesame.compose.form.control.CheckControl
 import me.aartikov.sesame.compose.form.control.InputControl
 
@@ -19,7 +20,7 @@ interface FormComponent {
 
     val submitButtonState: SubmitButtonState
 
-    val konfettiState: KonfettiState
+    val dropKonfettiEvent: Flow<Unit>
 
     fun onSubmitClicked()
 }

@@ -2,6 +2,7 @@ package me.aartikov.sesame.compose.form.validation.form
 
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.snapshotFlow
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.*
 import me.aartikov.sesame.compose.form.control.ValidatableControl
@@ -25,14 +26,7 @@ private fun callWhenControlEdited(
     control: ValidatableControl<*>,
     callback: () -> Unit
 ) {
-    control.valueChangeEvent
-        .drop(1)
-        .onEach {
-            callback()
-        }
-        .launchIn(coroutineScope)
-
-    control.skipInValidationChangeEvent
+    snapshotFlow { control.value to control.skipInValidation }
         .drop(1)
         .onEach {
             callback()

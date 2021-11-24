@@ -6,7 +6,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.text.input.VisualTransformation
-import kotlinx.coroutines.flow.MutableStateFlow
 import me.aartikov.sesame.localizedstring.LocalizedString
 
 class InputControl(
@@ -42,7 +41,7 @@ class InputControl(
     /**
      * Is control has focus.
      */
-    var hasFocus = MutableStateFlow(false)
+    var hasFocus: Boolean by mutableStateOf(false)
 
     /**
      * Displayed error.
@@ -51,26 +50,17 @@ class InputControl(
 
     override val value by ::text
 
-    override val valueChangeEvent = MutableStateFlow(text)
-
-    override val skipInValidationChangeEvent = MutableStateFlow(false)
-
-    override val skipInValidation by derivedStateOf {
-        val skip = !visible || !enabled
-        skipInValidationChangeEvent.value = skip
-        return@derivedStateOf skip
-    }
+    override val skipInValidation by derivedStateOf { !visible || !enabled }
 
     /**
      * Called automatically when text is changed on a view side.
      */
     fun onTextChanged(text: String) {
         this.text = text
-        valueChangeEvent.value = this.text
     }
 
     fun onFocusChanged(hasFocus: Boolean) {
-        this.hasFocus.value = hasFocus
+        this.hasFocus = hasFocus
     }
 
     private fun correctText(text: String): String {

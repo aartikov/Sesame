@@ -12,10 +12,10 @@ import me.aartikov.sesamecomposesample.theme.AppTheme
 
 @Composable
 fun MenuButton(
-    modifier: Modifier = Modifier,
     text: String,
     onClick: () -> Unit,
-    colors: ButtonColors = ButtonDefaults.buttonColors(),
+    modifier: Modifier = Modifier,
+    colors: ButtonColors = ButtonDefaults.buttonColors()
 ) {
     Button(
         modifier = modifier,

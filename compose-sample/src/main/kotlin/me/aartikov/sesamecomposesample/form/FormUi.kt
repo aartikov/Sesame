@@ -25,6 +25,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.launch
 import me.aartikov.sesame.compose.form.control.CheckControl
 import me.aartikov.sesame.compose.form.control.InputControl
 import me.aartikov.sesamecomposesample.R
@@ -45,6 +49,9 @@ fun FormUi(
         color = MaterialTheme.colors.background
     ) {
         BoxWithConstraints(Modifier.fillMaxSize()) {
+
+            KonfettiWidget(maxWidth,component.dropKonfettiEvent, modifier)
+
             val scrollState = rememberScrollState()
             Column(
                 verticalArrangement = Arrangement.spacedBy(8.dp),
@@ -99,10 +106,6 @@ fun FormUi(
                     modifier = Modifier.padding(top = 8.dp)
                 )
             }
-
-            if (component.konfettiState == KonfettiState.Shown) {
-                KonfettiWidget(maxWidth)
-            }
         }
     }
 }
@@ -140,7 +143,10 @@ fun CommonTextField(
 }
 
 @Composable
-fun KonfettiWidget(width: Dp) {
+fun KonfettiWidget(width: Dp, dropKonfettiEvent: Flow<Unit>, modifier: Modifier = Modifier) {
+
+    val widthPx = with(LocalDensity.current) { width.toPx() }
+    val scope = rememberCoroutineScope()
     val colors = listOf(
         colorResource(id = R.color.orange).toArgb(),
         colorResource(id = R.color.purple).toArgb(),
@@ -148,22 +154,28 @@ fun KonfettiWidget(width: Dp) {
         colorResource(id = R.color.red).toArgb()
     )
 
-    val widthPx = with(LocalDensity.current) { width.toPx() }
-
-    AndroidView(factory = { ctx ->
-        KonfettiView(ctx).apply {
-            build()
-                .addColors(colors)
-                .setDirection(0.0, 359.0)
-                .setSpeed(1f, 5f)
-                .setFadeOutEnabled(true)
-                .setTimeToLive(2000L)
-                .addShapes(Shape.Square, Shape.Circle)
-                .addSizes(Size(12))
-                .setPosition(-50f, widthPx + 50f, -50f, -50f)
-                .streamFor(300, 5000L)
+    AndroidView(
+        modifier = modifier,
+        factory = { context ->
+            KonfettiView(context)
+        },
+    ) { view ->
+        scope.launch {
+            dropKonfettiEvent.collectLatest {
+                view
+                    .build()
+                    .addColors(colors)
+                    .setDirection(0.0, 359.0)
+                    .setSpeed(1f, 5f)
+                    .setFadeOutEnabled(true)
+                    .setTimeToLive(2000L)
+                    .addShapes(Shape.Square, Shape.Circle)
+                    .addSizes(Size(12))
+                    .setPosition(-50f, widthPx + 50f, -50f, -50f)
+                    .streamFor(300, 5000L)
+            }
         }
-    })
+    }
 }
 
 
@@ -269,7 +281,7 @@ class FakeFormComponent : FormComponent {
 
     override val submitButtonState = SubmitButtonState.Valid
 
-    override val konfettiState = KonfettiState.Shown
+    override val dropKonfettiEvent: Flow<Unit> = flow { }
 
     override fun onSubmitClicked() = Unit
 }
