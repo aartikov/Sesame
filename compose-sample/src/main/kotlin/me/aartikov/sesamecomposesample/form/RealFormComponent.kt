@@ -1,18 +1,29 @@
 package me.aartikov.sesamecomposesample.form
 
 import android.util.Patterns
+import androidx.annotation.ColorRes
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.runtime.*
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import com.arkivanov.decompose.ComponentContext
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.receiveAsFlow
 import me.aartikov.sesame.compose.form.control.CheckControl
 import me.aartikov.sesame.compose.form.control.InputControl
 import me.aartikov.sesame.compose.form.validation.control.*
+import me.aartikov.sesame.compose.form.validation.form.*
+import me.aartikov.sesame.compose.form.validation.form.ValidateOnFocusLost
 import me.aartikov.sesame.compose.form.validation.form.checked
 import me.aartikov.sesame.compose.form.validation.form.formValidator
 import me.aartikov.sesame.localizedstring.LocalizedString
 import me.aartikov.sesamecomposesample.R
 import me.aartikov.sesamecomposesample.utils.componentCoroutineScope
+
+enum class SubmitButtonState(@ColorRes val color: Int) {
+    Valid(R.color.green),
+    Invalid(R.color.red)
+}
 
 class RealFormComponent(
     componentContext: ComponentContext
@@ -65,7 +76,13 @@ class RealFormComponent(
 
     override val termsCheckBox = CheckControl()
 
+    private val dropKonfettiChannel = Channel<Unit>(Channel.UNLIMITED)
+
+    override val dropKonfettiEvent = dropKonfettiChannel.receiveAsFlow()
+
     private val formValidator = coroutineScope.formValidator {
+
+        features = listOf(ValidateOnFocusLost, RevalidateOnValueChanged)
 
         input(nameInput) {
             isNotBlank(R.string.field_is_blank_error_message)
@@ -104,10 +121,16 @@ class RealFormComponent(
         checked(termsCheckBox, R.string.terms_are_accepted_error_message)
     }
 
+    private val dynamicResult by coroutineScope.dynamicValidationResult(formValidator)
+
+    override val submitButtonState by derivedStateOf {
+        if (dynamicResult.isValid) SubmitButtonState.Valid else SubmitButtonState.Invalid
+    }
+
     override fun onSubmitClicked() {
         val result = formValidator.validate()
         if (result.isValid) {
-            // TODO: Show konfetti
+            dropKonfettiChannel.trySend(Unit)
         }
     }
 }
