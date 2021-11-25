@@ -59,6 +59,7 @@ class InputControl(
     val scrollToItEvent = scrollToItChannel.receiveAsFlow()
 
     override fun requestFocus() {
+        this.hasFocus = true
         scrollToItChannel.trySend(Unit)
     }
 
