@@ -307,7 +307,7 @@ fun ErrorText(
     Text(
         modifier = modifier.padding(paddingValues),
         text = errorText,
-        style = MaterialTheme.typography.caption.copy(color = MaterialTheme.colors.error),
+        style = MaterialTheme.typography.caption.copy(color = MaterialTheme.colors.error)
     )
 }
 
