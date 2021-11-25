@@ -6,6 +6,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.text.input.VisualTransformation
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.receiveAsFlow
 import me.aartikov.sesame.localizedstring.LocalizedString
 
 class InputControl(
@@ -51,6 +53,14 @@ class InputControl(
     override val value by ::text
 
     override val skipInValidation by derivedStateOf { !visible || !enabled }
+
+    private val scrollToItChannel = Channel<Unit>(Channel.UNLIMITED)
+
+    val scrollToItEvent = scrollToItChannel.receiveAsFlow()
+
+    override fun requestFocus() {
+        scrollToItChannel.trySend(Unit)
+    }
 
     /**
      * Called automatically when text is changed on a view side.

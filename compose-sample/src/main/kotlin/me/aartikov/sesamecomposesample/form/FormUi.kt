@@ -1,5 +1,6 @@
 package me.aartikov.sesamecomposesample.form
 
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
@@ -15,6 +16,8 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.layout.positionInParent
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
@@ -38,6 +41,7 @@ import me.aartikov.sesamecomposesample.utils.resolve
 import nl.dionsegijn.konfetti.KonfettiView
 import nl.dionsegijn.konfetti.models.Shape
 import nl.dionsegijn.konfetti.models.Size
+import kotlin.math.roundToInt
 
 @Composable
 fun FormUi(
@@ -49,7 +53,6 @@ fun FormUi(
         color = MaterialTheme.colors.background
     ) {
         BoxWithConstraints(Modifier.fillMaxSize()) {
-
             KonfettiWidget(maxWidth, component.dropKonfettiEvent, modifier)
 
             val scrollState = rememberScrollState()
@@ -60,41 +63,46 @@ fun FormUi(
                     .verticalScroll(scrollState)
                     .padding(20.dp)
             ) {
-
                 CommonTextField(
                     modifier,
                     component.nameInput,
-                    stringResource(id = R.string.name_hint)
+                    stringResource(id = R.string.name_hint),
+                    scrollState
                 )
 
                 CommonTextField(
                     modifier,
                     component.emailInput,
-                    stringResource(id = R.string.email_hint)
+                    stringResource(id = R.string.email_hint),
+                    scrollState
                 )
 
                 CommonTextField(
                     modifier,
                     component.phoneInput,
-                    stringResource(id = R.string.phone_hint)
+                    stringResource(id = R.string.phone_hint),
+                    scrollState
                 )
 
                 PasswordField(
                     modifier,
                     component.passwordInput,
-                    stringResource(id = R.string.password_hint)
+                    stringResource(id = R.string.password_hint),
+                    scrollState
                 )
 
                 PasswordField(
                     modifier,
                     component.confirmPasswordInput,
-                    stringResource(id = R.string.confirm_password_hint)
+                    stringResource(id = R.string.confirm_password_hint),
+                    scrollState
                 )
 
                 CheckboxField(
                     modifier,
                     component.termsCheckBox,
-                    stringResource(id = R.string.terms_hint)
+                    stringResource(id = R.string.terms_hint),
+                    scrollState
                 )
 
                 MenuButton(
@@ -114,10 +122,24 @@ fun FormUi(
 fun CommonTextField(
     modifier: Modifier = Modifier,
     inputControl: InputControl,
-    label: String
+    label: String,
+    scrollState: ScrollState
 ) {
-    Column(modifier = modifier.fillMaxWidth()) {
+    var currentYCoordinate = 0f
+
+    Column(modifier = modifier
+        .fillMaxWidth()
+        .onGloballyPositioned {
+            currentYCoordinate = it.positionInParent().y
+        }) {
         val focusRequester = remember { FocusRequester() }
+
+        LaunchedEffect(key1 = inputControl) {
+            inputControl.scrollToItEvent.collectLatest {
+                focusRequester.requestFocus()
+                scrollState.scrollTo(currentYCoordinate.roundToInt())
+            }
+        }
 
         OutlinedTextField(
             value = inputControl.text,
@@ -182,8 +204,26 @@ fun KonfettiWidget(width: Dp, dropKonfettiEvent: Flow<Unit>, modifier: Modifier 
 
 
 @Composable
-fun CheckboxField(modifier: Modifier = Modifier, checkControl: CheckControl, label: String) {
-    Column(modifier = modifier.fillMaxWidth()) {
+fun CheckboxField(
+    modifier: Modifier = Modifier,
+    checkControl: CheckControl,
+    label: String,
+    scrollState: ScrollState
+) {
+    var currentYCoordinate = 0f
+
+    Column(modifier = modifier
+        .fillMaxWidth()
+        .onGloballyPositioned {
+            currentYCoordinate = it.positionInParent().y
+        }) {
+
+        LaunchedEffect(key1 = checkControl) {
+            checkControl.scrollToItEvent.collectLatest {
+                scrollState.scrollTo(currentYCoordinate.roundToInt())
+            }
+        }
+
         Row(
             modifier = modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(8.dp)
@@ -205,10 +245,28 @@ fun CheckboxField(modifier: Modifier = Modifier, checkControl: CheckControl, lab
 }
 
 @Composable
-fun PasswordField(modifier: Modifier = Modifier, inputControl: InputControl, label: String) {
-    Column(modifier = modifier.fillMaxWidth()) {
+fun PasswordField(
+    modifier: Modifier = Modifier,
+    inputControl: InputControl,
+    label: String,
+    scrollState: ScrollState
+) {
+    var currentYCoordinate = 0f
+
+    Column(modifier = modifier
+        .fillMaxWidth()
+        .onGloballyPositioned {
+            currentYCoordinate = it.positionInParent().y
+        }) {
         val focusRequester = remember { FocusRequester() }
         var passwordVisibility by remember { mutableStateOf(false) }
+
+        LaunchedEffect(key1 = inputControl) {
+            inputControl.scrollToItEvent.collectLatest {
+                focusRequester.requestFocus()
+                scrollState.scrollTo(currentYCoordinate.roundToInt())
+            }
+        }
 
         OutlinedTextField(
             value = inputControl.text,

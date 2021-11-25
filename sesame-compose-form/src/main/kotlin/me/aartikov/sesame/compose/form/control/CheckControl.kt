@@ -1,6 +1,8 @@
 package me.aartikov.sesame.compose.form.control
 
 import androidx.compose.runtime.*
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.receiveAsFlow
 import me.aartikov.sesame.localizedstring.LocalizedString
 
 class CheckControl(
@@ -30,6 +32,14 @@ class CheckControl(
     override val value by ::checked
 
     override val skipInValidation by derivedStateOf { !visible || !enabled }
+
+    private val scrollToItChannel = Channel<Unit>(Channel.UNLIMITED)
+
+    val scrollToItEvent = scrollToItChannel.receiveAsFlow()
+
+    override fun requestFocus() {
+        scrollToItChannel.trySend(Unit)
+    }
 
     /**
      * Called automatically when checked is changed on a view side.

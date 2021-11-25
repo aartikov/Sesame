@@ -1,11 +1,14 @@
 package me.aartikov.sesame.compose.form.validation.form
 
+import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.snapshotFlow
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.*
 import me.aartikov.sesame.compose.form.control.ValidatableControl
 import me.aartikov.sesame.compose.form.validation.control.ControlValidator
 import me.aartikov.sesame.compose.form.validation.control.InputValidator
+import me.aartikov.sesame.compose.form.validation.control.ValidationResult
 
 /**
  * High level feature for [FormValidator].
@@ -92,5 +95,28 @@ object HideErrorOnValueChanged : FormValidationFeature {
                 control.error = null
             }
             .launchIn(coroutineScope)
+    }
+}
+
+/**
+ * Sets focus on a first invalid control after form validation has been processed.
+ */
+object SetFocusOnFirstInvalidControlAfterValidation : FormValidationFeature {
+
+    override fun install(coroutineScope: CoroutineScope, formValidator: FormValidator) {
+        formValidator.validatedEventFlow
+            .onEach {
+                if (it.displayResult) {
+                    focusOnFirstInvalidControl(it.result)
+                }
+            }
+            .launchIn(coroutineScope)
+    }
+
+    private fun focusOnFirstInvalidControl(validationResult: FormValidationResult) {
+        val firstInvalidControl = validationResult.controlResults.entries
+            .firstOrNull { it.value is ValidationResult.Invalid }?.key
+
+        firstInvalidControl?.requestFocus()
     }
 }

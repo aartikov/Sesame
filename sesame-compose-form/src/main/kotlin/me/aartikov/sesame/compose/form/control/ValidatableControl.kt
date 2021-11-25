@@ -25,4 +25,9 @@ interface ValidatableControl<ValueT> {
      * Is control should be skipped during validation.
      */
     val skipInValidation: Boolean
+
+    /**
+     * Moves focus to a control.
+     */
+    fun requestFocus()
 }

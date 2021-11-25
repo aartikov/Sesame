@@ -2,6 +2,7 @@ package me.aartikov.sesame.compose.form.validation.form
 
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import me.aartikov.sesame.compose.form.control.ValidatableControl
 import me.aartikov.sesame.compose.form.validation.control.ControlValidator
 import me.aartikov.sesame.compose.form.validation.control.ValidationResult
@@ -19,6 +20,11 @@ class FormValidator(
         extraBufferCapacity = 1,
         onBufferOverflow = BufferOverflow.DROP_OLDEST
     )
+
+    /**
+     * Emits [FormValidatedEvent] after each validation.
+     */
+    val validatedEventFlow get() = mutableValidatedEventFlow.asSharedFlow()
 
     /**
      * Validates controls.
