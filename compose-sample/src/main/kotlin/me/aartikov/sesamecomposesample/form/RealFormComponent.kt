@@ -76,9 +76,9 @@ class RealFormComponent(
 
     override val termsCheckBox = CheckControl()
 
-    private val channel = Channel<Unit>(Channel.UNLIMITED)
+    private val dropKonfettiChannel = Channel<Unit>(Channel.UNLIMITED)
 
-    override val dropKonfettiEvent = channel.receiveAsFlow()
+    override val dropKonfettiEvent = dropKonfettiChannel.receiveAsFlow()
 
     private val formValidator = coroutineScope.formValidator {
 
@@ -121,16 +121,16 @@ class RealFormComponent(
         checked(termsCheckBox, R.string.terms_are_accepted_error_message)
     }
 
-    private val dynamicResult = coroutineScope.dynamicValidationResult(formValidator)
+    private val dynamicResult by coroutineScope.dynamicValidationResult(formValidator)
 
     override val submitButtonState by derivedStateOf {
-        if (dynamicResult.value.isValid) SubmitButtonState.Valid else SubmitButtonState.Invalid
+        if (dynamicResult.isValid) SubmitButtonState.Valid else SubmitButtonState.Invalid
     }
 
     override fun onSubmitClicked() {
         val result = formValidator.validate()
-        if(result.isValid) {
-            channel.trySend(Unit)
+        if (result.isValid) {
+            dropKonfettiChannel.trySend(Unit)
         }
     }
 }

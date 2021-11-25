@@ -50,7 +50,7 @@ fun FormUi(
     ) {
         BoxWithConstraints(Modifier.fillMaxSize()) {
 
-            KonfettiWidget(maxWidth,component.dropKonfettiEvent, modifier)
+            KonfettiWidget(maxWidth, component.dropKonfettiEvent, modifier)
 
             val scrollState = rememberScrollState()
             Column(
@@ -157,25 +157,27 @@ fun KonfettiWidget(width: Dp, dropKonfettiEvent: Flow<Unit>, modifier: Modifier 
     AndroidView(
         modifier = modifier,
         factory = { context ->
-            KonfettiView(context)
-        },
-    ) { view ->
-        scope.launch {
-            dropKonfettiEvent.collectLatest {
-                view
-                    .build()
-                    .addColors(colors)
-                    .setDirection(0.0, 359.0)
-                    .setSpeed(1f, 5f)
-                    .setFadeOutEnabled(true)
-                    .setTimeToLive(2000L)
-                    .addShapes(Shape.Square, Shape.Circle)
-                    .addSizes(Size(12))
-                    .setPosition(-50f, widthPx + 50f, -50f, -50f)
-                    .streamFor(300, 5000L)
+            val view = KonfettiView(context)
+
+            scope.launch {
+                dropKonfettiEvent.collectLatest {
+                    view
+                        .build()
+                        .addColors(colors)
+                        .setDirection(0.0, 359.0)
+                        .setSpeed(1f, 5f)
+                        .setFadeOutEnabled(true)
+                        .setTimeToLive(2000L)
+                        .addShapes(Shape.Square, Shape.Circle)
+                        .addSizes(Size(12))
+                        .setPosition(-50f, widthPx + 50f, -50f, -50f)
+                        .streamFor(300, 5000L)
+                }
             }
-        }
-    }
+
+            view
+        },
+    )
 }
 
 
