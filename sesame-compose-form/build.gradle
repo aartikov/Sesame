@@ -1,0 +1,42 @@
+plugins {
+    id "com.android.library"
+    id "kotlin-android"
+}
+
+android {
+    compileSdkVersion libraryConfig.compileSdkVersion
+    buildToolsVersion libraryConfig.buildToolsVersion
+
+    defaultConfig {
+        minSdkVersion libraryConfig.minSdkVersion
+    }
+
+    sourceSets {
+        main.java.srcDirs += "src/main/kotlin"
+        test.java.srcDirs += "src/test/kotlin"
+    }
+
+    buildFeatures {
+        compose true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion versions.compose
+    }
+}
+
+dependencies {
+    api project(':sesame-localized-string')
+    implementation androidx.annotation
+    implementation androidx.lifecycle
+    implementation material
+    implementation coroutines.core
+    implementation 'androidx.compose.foundation:foundation:1.0.3'
+
+    implementation compose.ui
+    implementation compose.material
+
+    testImplementation tests.junit
+    testImplementation tests.coroutinesTest
+}
+
+apply from: "${rootDir}/publish.gradle"

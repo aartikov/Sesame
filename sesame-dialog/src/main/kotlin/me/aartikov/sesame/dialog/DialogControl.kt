@@ -82,3 +82,9 @@ fun <R : Any> DialogControl<Unit, R>.show() = show(Unit)
  * A shortcut to show a dialog for result without custom data.
  */
 suspend fun <R : Any> DialogControl<Unit, R>.showForResult(): R? = showForResult(Unit)
+
+/**
+ * Returns [DialogControl.State.Shown.data] if it is available or null otherwise
+ */
+val <T : Any> DialogControl.State<T>.dataOrNull
+    get() = (this as? DialogControl.State.Shown)?.data

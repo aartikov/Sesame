@@ -1,0 +1,71 @@
+apply plugin: "com.android.application"
+apply plugin: "kotlin-android"
+apply plugin: "kotlin-parcelize"
+
+android {
+    compileSdkVersion 31
+
+    defaultConfig {
+        applicationId "me.aartikov.sesamecomposesample"
+        minSdkVersion 21
+        targetSdkVersion 31
+        versionCode 1
+        versionName "1.0"
+    }
+
+    compileOptions {
+        coreLibraryDesugaringEnabled true
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = '1.8'
+        useIR = true
+        freeCompilerArgs += "-Xopt-in=kotlin.RequiresOptIn"
+    }
+    buildFeatures {
+        compose true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion versions.compose
+    }
+
+    sourceSets {
+        main.java.srcDirs += "src/main/kotlin"
+    }
+}
+
+dependencies {
+    coreLibraryDesugaring desugaring
+
+    implementation project(":sesame-activable")
+    implementation project(":sesame-dialog")
+    implementation project(":sesame-form")
+    implementation project(":sesame-loading")
+    implementation project(":sesame-localized-string")
+    implementation project(":sesame-compose-form")
+
+    implementation androidx.appCompat
+    implementation androidx.activityCompose
+
+    implementation compose.ui
+    implementation compose.material
+    implementation compose.uiTooling
+    implementation "androidx.compose.material:material-icons-extended:1.0.1"
+
+    implementation decompose.core
+    implementation decompose.compose
+
+    implementation coroutines.core
+    implementation coroutines.android
+    implementation dateTime
+
+    implementation coil
+
+    implementation koin
+
+    implementation accompanist.swiperefresh
+
+    implementation konfetti
+}
