@@ -6,6 +6,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.text.input.VisualTransformation
+import kotlinx.coroutines.channels.BufferOverflow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import me.aartikov.sesame.localizedstring.LocalizedString
 
 class InputControl(
@@ -51,6 +54,18 @@ class InputControl(
     override val value by ::text
 
     override val skipInValidation by derivedStateOf { !visible || !enabled }
+
+    private val mutableScrollToItEventFlow = MutableSharedFlow<Unit>(
+        extraBufferCapacity = 1,
+        onBufferOverflow = BufferOverflow.DROP_OLDEST
+    )
+
+    val scrollToItEvent get() = mutableScrollToItEventFlow.asSharedFlow()
+
+    override fun requestFocus() {
+        this.hasFocus = true
+        mutableScrollToItEventFlow.tryEmit(Unit)
+    }
 
     /**
      * Called automatically when text is changed on a view side.

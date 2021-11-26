@@ -82,7 +82,11 @@ class RealFormComponent(
 
     private val formValidator = coroutineScope.formValidator {
 
-        features = listOf(ValidateOnFocusLost, RevalidateOnValueChanged)
+        features = listOf(
+            ValidateOnFocusLost,
+            RevalidateOnValueChanged,
+            SetFocusOnFirstInvalidControlAfterValidation
+        )
 
         input(nameInput) {
             isNotBlank(R.string.field_is_blank_error_message)

@@ -1,6 +1,9 @@
 package me.aartikov.sesamecomposesample.form
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.relocation.BringIntoViewRequester
+import androidx.compose.foundation.relocation.bringIntoViewRequester
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
@@ -49,7 +52,6 @@ fun FormUi(
         color = MaterialTheme.colors.background
     ) {
         BoxWithConstraints(Modifier.fillMaxSize()) {
-
             KonfettiWidget(maxWidth, component.dropKonfettiEvent, modifier)
 
             val scrollState = rememberScrollState()
@@ -58,35 +60,34 @@ fun FormUi(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier
                     .verticalScroll(scrollState)
-                    .padding(20.dp)
+                    .padding(vertical = 20.dp, horizontal = 8.dp)
             ) {
-
                 CommonTextField(
-                    modifier,
+                    modifier.padding(horizontal = 8.dp),
                     component.nameInput,
                     stringResource(id = R.string.name_hint)
                 )
 
                 CommonTextField(
-                    modifier,
+                    modifier.padding(horizontal = 8.dp),
                     component.emailInput,
                     stringResource(id = R.string.email_hint)
                 )
 
                 CommonTextField(
-                    modifier,
+                    modifier.padding(horizontal = 8.dp),
                     component.phoneInput,
                     stringResource(id = R.string.phone_hint)
                 )
 
                 PasswordField(
-                    modifier,
+                    modifier.padding(horizontal = 8.dp),
                     component.passwordInput,
                     stringResource(id = R.string.password_hint)
                 )
 
                 PasswordField(
-                    modifier,
+                    modifier.padding(horizontal = 8.dp),
                     component.confirmPasswordInput,
                     stringResource(id = R.string.confirm_password_hint)
                 )
@@ -110,14 +111,33 @@ fun FormUi(
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun CommonTextField(
     modifier: Modifier = Modifier,
     inputControl: InputControl,
     label: String
 ) {
-    Column(modifier = modifier.fillMaxWidth()) {
+    val bringIntoViewRequester = remember { BringIntoViewRequester() }
+
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .bringIntoViewRequester(bringIntoViewRequester)
+    ) {
         val focusRequester = remember { FocusRequester() }
+
+        if (inputControl.hasFocus) {
+            SideEffect {
+                focusRequester.requestFocus()
+            }
+        }
+
+        LaunchedEffect(key1 = inputControl) {
+            inputControl.scrollToItEvent.collectLatest {
+                bringIntoViewRequester.bringIntoView()
+            }
+        }
 
         OutlinedTextField(
             value = inputControl.text,
@@ -135,10 +155,7 @@ fun CommonTextField(
                 }
         )
 
-        Text(
-            text = inputControl.error?.resolve() ?: "",
-            style = MaterialTheme.typography.caption.copy(color = MaterialTheme.colors.error)
-        )
+        ErrorText(inputControl.error?.resolve() ?: "")
     }
 }
 
@@ -180,13 +197,26 @@ fun KonfettiWidget(width: Dp, dropKonfettiEvent: Flow<Unit>, modifier: Modifier 
     )
 }
 
-
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun CheckboxField(modifier: Modifier = Modifier, checkControl: CheckControl, label: String) {
+fun CheckboxField(
+    modifier: Modifier = Modifier,
+    checkControl: CheckControl,
+    label: String
+) {
+    val bringIntoViewRequester = remember { BringIntoViewRequester() }
+
     Column(modifier = modifier.fillMaxWidth()) {
+
+        LaunchedEffect(key1 = checkControl) {
+            checkControl.scrollToItEvent.collectLatest {
+                bringIntoViewRequester.bringIntoView()
+            }
+        }
+
         Row(
             modifier = modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
+            verticalAlignment = Alignment.CenterVertically
         ) {
             Checkbox(
                 checked = checkControl.checked,
@@ -197,18 +227,41 @@ fun CheckboxField(modifier: Modifier = Modifier, checkControl: CheckControl, lab
             Text(text = label)
         }
 
-        Text(
-            text = checkControl.error?.resolve() ?: "",
-            style = MaterialTheme.typography.caption.copy(color = MaterialTheme.colors.error),
+        ErrorText(
+            checkControl.error?.resolve() ?: "",
+            paddingValues = PaddingValues(horizontal = 16.dp)
         )
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun PasswordField(modifier: Modifier = Modifier, inputControl: InputControl, label: String) {
-    Column(modifier = modifier.fillMaxWidth()) {
+fun PasswordField(
+    modifier: Modifier = Modifier,
+    inputControl: InputControl,
+    label: String
+) {
+    val bringIntoViewRequester = remember { BringIntoViewRequester() }
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .bringIntoViewRequester(bringIntoViewRequester)
+    ) {
         val focusRequester = remember { FocusRequester() }
+
         var passwordVisibility by remember { mutableStateOf(false) }
+
+        if (inputControl.hasFocus) {
+            SideEffect {
+                focusRequester.requestFocus()
+            }
+        }
+
+        LaunchedEffect(key1 = inputControl) {
+            inputControl.scrollToItEvent.collectLatest {
+                bringIntoViewRequester.bringIntoView()
+            }
+        }
 
         OutlinedTextField(
             value = inputControl.text,
@@ -241,11 +294,21 @@ fun PasswordField(modifier: Modifier = Modifier, inputControl: InputControl, lab
                 }
         )
 
-        Text(
-            text = inputControl.error?.resolve() ?: "",
-            style = MaterialTheme.typography.caption.copy(color = MaterialTheme.colors.error),
-        )
+        ErrorText(inputControl.error?.resolve() ?: "")
     }
+}
+
+@Composable
+fun ErrorText(
+    errorText: String,
+    modifier: Modifier = Modifier,
+    paddingValues: PaddingValues = PaddingValues(horizontal = 8.dp)
+) {
+    Text(
+        modifier = modifier.padding(paddingValues),
+        text = errorText,
+        style = MaterialTheme.typography.caption.copy(color = MaterialTheme.colors.error)
+    )
 }
 
 @Preview

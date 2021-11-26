@@ -1,6 +1,9 @@
 package me.aartikov.sesame.compose.form.control
 
 import androidx.compose.runtime.*
+import kotlinx.coroutines.channels.BufferOverflow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import me.aartikov.sesame.localizedstring.LocalizedString
 
 class CheckControl(
@@ -30,6 +33,17 @@ class CheckControl(
     override val value by ::checked
 
     override val skipInValidation by derivedStateOf { !visible || !enabled }
+
+    private val mutableScrollToItEventFlow = MutableSharedFlow<Unit>(
+        extraBufferCapacity = 1,
+        onBufferOverflow = BufferOverflow.DROP_OLDEST
+    )
+
+    val scrollToItEvent get() = mutableScrollToItEventFlow.asSharedFlow()
+
+    override fun requestFocus() {
+        mutableScrollToItEventFlow.tryEmit(Unit)
+    }
 
     /**
      * Called automatically when checked is changed on a view side.
