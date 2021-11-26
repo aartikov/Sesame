@@ -1,8 +1,9 @@
 package me.aartikov.sesame.compose.form.control
 
 import androidx.compose.runtime.*
-import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.channels.BufferOverflow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import me.aartikov.sesame.localizedstring.LocalizedString
 
 class CheckControl(
@@ -33,12 +34,15 @@ class CheckControl(
 
     override val skipInValidation by derivedStateOf { !visible || !enabled }
 
-    private val scrollToItChannel = Channel<Unit>(Channel.UNLIMITED)
+    private val mutableScrollToItEventFlow = MutableSharedFlow<Unit>(
+        extraBufferCapacity = 1,
+        onBufferOverflow = BufferOverflow.DROP_OLDEST
+    )
 
-    val scrollToItEvent = scrollToItChannel.receiveAsFlow()
+    val scrollToItEvent get() = mutableScrollToItEventFlow.asSharedFlow()
 
     override fun requestFocus() {
-        scrollToItChannel.trySend(Unit)
+        mutableScrollToItEventFlow.tryEmit(Unit)
     }
 
     /**

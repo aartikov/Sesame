@@ -125,12 +125,12 @@ fun CommonTextField(
             .fillMaxWidth()
             .bringIntoViewRequester(bringIntoViewRequester)
     ) {
-        val hasFocus by derivedStateOf { inputControl.hasFocus }
-
         val focusRequester = remember { FocusRequester() }
 
-        if (hasFocus) {
-            focusRequester.requestFocus()
+        if (inputControl.hasFocus) {
+            SideEffect {
+                focusRequester.requestFocus()
+            }
         }
 
         LaunchedEffect(key1 = inputControl) {
@@ -249,12 +249,12 @@ fun PasswordField(
     ) {
         val focusRequester = remember { FocusRequester() }
 
-        val hasFocus by derivedStateOf { inputControl.hasFocus }
-
         var passwordVisibility by remember { mutableStateOf(false) }
 
-        if (hasFocus) {
-            focusRequester.requestFocus()
+        if (inputControl.hasFocus) {
+            SideEffect {
+                focusRequester.requestFocus()
+            }
         }
 
         LaunchedEffect(key1 = inputControl) {
