@@ -13,6 +13,7 @@ ext {
             fragment            : "1.2.5",
             coreKtx             : "1.3.2",
             appCompat           : "1.2.0",
+            activityCompose     : "1.3.1",
             androidxAnnotation  : "1.1.0",
             constraintLayout    : "2.0.4",
             swiperefreshlayout  : "1.1.0",
@@ -20,18 +21,23 @@ ext {
             material            : "1.3.0-rc01",
             groupie             : "2.9.0",
             glide               : "4.11.0",
-            hilt                : "2.33-beta",
+            dagger              : "2.38.1",
             viewBindingDelegates: "1.4.1",
             dateTime            : "0.1.1",
             decoro              : "1.5.0",
-            konfetti            : "1.3.2"
+            konfetti            : "1.3.2",
+            compose             : "1.1.0-beta03",
+            decompose           : "0.3.1",
+            coil                : "1.3.2",
+            koin                : "3.1.2",
+            accompanist         : "0.19.0"
     ]
 
     desugaring = "com.android.tools:desugar_jdk_libs:${versions.desugaring}"
 
     tests = [
             junit             : "junit:junit:${versions.junit}",
-            androidxTestCore: "androidx.test:core:${versions.androidxTest}",
+            androidxTestCore  : "androidx.test:core:${versions.androidxTest}",
             androidxTestRunner: "androidx.test:runner:${versions.androidxTest}",
             androidxJunitExt  : "androidx.test.ext:junit:${versions.androidxJunitExt}",
             coroutinesTest    : "org.jetbrains.kotlinx:kotlinx-coroutines-test:${versions.coroutines}",
@@ -48,7 +54,8 @@ ext {
             annotation      : "androidx.annotation:annotation:${versions.androidxAnnotation}",
             constraintLayout: "androidx.constraintlayout:constraintlayout:${versions.constraintLayout}",
             swipeRefresh    : "androidx.swiperefreshlayout:swiperefreshlayout:${versions.swiperefreshlayout}",
-            cardView        : "androidx.cardview:cardview:${versions.cardView}"
+            cardView        : "androidx.cardview:cardview:${versions.cardView}",
+            activityCompose : "androidx.activity:activity-compose:${versions.activityCompose}"
     ]
 
     groupie = [
@@ -57,13 +64,27 @@ ext {
     ]
 
     daggerHilt = [
-            coreAndroid    : "com.google.dagger:hilt-android:${versions.hilt}",
-            androidCompiler: "com.google.dagger:hilt-android-compiler:${versions.hilt}",
+            coreAndroid    : "com.google.dagger:hilt-android:${versions.dagger}",
+            androidCompiler: "com.google.dagger:hilt-android-compiler:${versions.dagger}",
     ]
 
     coroutines = [
             core   : "org.jetbrains.kotlinx:kotlinx-coroutines-core:${versions.coroutines}",
             android: "org.jetbrains.kotlinx:kotlinx-coroutines-android:${versions.coroutines}",
+    ]
+
+    compose = [
+            ui       : "androidx.compose.ui:ui:${versions.compose}",
+            material : "androidx.compose.material:material:${versions.compose}",
+            uiTooling: "androidx.compose.ui:ui-tooling:${versions.compose}"
+    ]
+    decompose = [
+            core   : "com.arkivanov.decompose:decompose:${versions.decompose}",
+            compose: "com.arkivanov.decompose:extensions-compose-jetpack:${versions.decompose}"
+    ]
+
+    accompanist = [
+            swiperefresh: "com.google.accompanist:accompanist-swiperefresh:${versions.accompanist}"
     ]
 
     dateTime = "org.jetbrains.kotlinx:kotlinx-datetime:${versions.dateTime}"
@@ -77,4 +98,9 @@ ext {
     decoro = "ru.tinkoff.decoro:decoro:${versions.decoro}"
 
     konfetti = "nl.dionsegijn:konfetti:${versions.konfetti}"
+
+    coil = "io.coil-kt:coil-compose:${versions.coil}"
+
+    koin = "io.insert-koin:koin-android:${versions.koin}"
+
 }

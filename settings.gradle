@@ -7,4 +7,6 @@ include ':sesame-localized-string'
 include ':sesame-loop'
 include ':sesame-navigation'
 include ':sesame-property'
-include ":sample"
+include ':sample'
+include ':compose-sample'
+include ':sesame-compose-form'
