@@ -169,6 +169,7 @@ fun MoviesUiPreview() {
 class FakeMoviesComponent : MoviesComponent {
 
     override val moviesState: PagedLoading.State<Movie> = PagedLoading.State.Data(
+        0,
         getMovies(),
         PagedLoading.DataStatus.Normal
     )
