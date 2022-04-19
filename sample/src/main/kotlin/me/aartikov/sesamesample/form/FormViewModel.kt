@@ -88,7 +88,7 @@ class FormViewModel @Inject constructor() : BaseViewModel() {
 
         input(confirmPasswordInput) {
             isNotBlank(R.string.field_is_blank_error_message)
-            equalsTo(passwordInput, R.string.passwords_do_not_match)
+            equalsTo(passwordInput, R.string.passwords_do_not_match_error_message)
         }
 
         checked(termsCheckBox, R.string.terms_are_accepted_error_message)

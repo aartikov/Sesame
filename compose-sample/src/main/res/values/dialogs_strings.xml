@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="dialogs_title">Dialogs</string>
+    <string name="show_dialog_button_text">Show Dialog</string>
+    <string name="show_for_result_button_text">Show For Result</string>
+    <string name="dialog_title">Dialog</string>
+    <string name="dialog_message">Some message</string>
+    <string name="dialog_for_result_title">Dialog for result</string>
+    <string name="dialog_message_for_result">Some message for result</string>
+</resources>

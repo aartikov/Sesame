@@ -27,7 +27,7 @@ class DialogControl<T : Any, R : Any> {
      */
     fun show(data: T) {
         if (isShownForResult()) {
-            resultChannel.offer(null)
+            resultChannel.trySend(null)
         }
         mutableStateFlow.value = State.Shown(data, forResult = false)
     }
@@ -39,7 +39,7 @@ class DialogControl<T : Any, R : Any> {
      */
     suspend fun showForResult(data: T): R? {
         if (isShownForResult()) {
-            resultChannel.offer(null)
+            resultChannel.trySend(null)
         }
         mutableStateFlow.value = State.Shown(data, forResult = true)
         return resultChannel.receive()
@@ -50,7 +50,7 @@ class DialogControl<T : Any, R : Any> {
      */
     fun sendResult(result: R) {
         mutableStateFlow.value = State.Hidden
-        this.resultChannel.offer(result)
+        this.resultChannel.trySend(result)
     }
 
     /**
@@ -64,7 +64,7 @@ class DialogControl<T : Any, R : Any> {
         val wasShownForResult = isShownForResult()
         mutableStateFlow.value = State.Hidden
         if (wasShownForResult) {
-            resultChannel.offer(null)
+            resultChannel.trySend(null)
         }
     }
 

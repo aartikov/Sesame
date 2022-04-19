@@ -1,11 +1,17 @@
 package me.aartikov.sesame.compose.form.control
 
-import androidx.compose.runtime.*
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import me.aartikov.sesame.localizedstring.LocalizedString
 
+/**
+ * Logical representation of a control with checkable state (CheckBox, Switch, etc). It allows to manage checked state from ViewModel.
+ */
 class CheckControl(
     initialChecked: Boolean = false
 ) : ValidatableControl<Boolean> {

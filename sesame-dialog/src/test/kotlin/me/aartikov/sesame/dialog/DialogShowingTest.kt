@@ -2,7 +2,6 @@ package me.aartikov.sesame.dialog
 
 import android.app.Dialog
 import androidx.lifecycle.Lifecycle
-import com.nhaarman.mockitokotlin2.*
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runBlockingTest
 import me.aartikov.sesame.dialog.utils.MainDispatcherRule
@@ -10,6 +9,7 @@ import me.aartikov.sesame.dialog.utils.TestDialogObserver
 import org.junit.Assert.assertEquals
 import org.junit.Rule
 import org.junit.Test
+import org.mockito.kotlin.*
 
 class DialogShowingTest {
 
@@ -40,7 +40,7 @@ class DialogShowingTest {
         dialogObserver.dialogObserverLifecycleOwner.moveToState(Lifecycle.State.CREATED)
         dialogControl.show()
 
-        verifyZeroInteractions(mockedDialog)
+        verifyNoInteractions(mockedDialog)
     }
 
     @Test
@@ -139,7 +139,7 @@ class DialogShowingTest {
         dialogObserver.dialogObserverLifecycleOwner.moveToState(Lifecycle.State.CREATED)
         val job = launch { dialogControl.showForResult() }
 
-        verifyZeroInteractions(mockedDialog)
+        verifyNoInteractions(mockedDialog)
         job.cancel()
     }
 

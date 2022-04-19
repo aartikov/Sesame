@@ -18,7 +18,7 @@ class NavigationMessageQueue {
      * @see bind for more details.
      */
     fun send(message: NavigationMessage) {
-        channel.offer(message)
+        channel.trySend(message)
     }
 }
 

@@ -3,7 +3,6 @@ package me.aartikov.sesame.property
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
 import kotlin.reflect.KProperty0
 
 /**

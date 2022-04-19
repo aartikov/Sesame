@@ -1,8 +1,8 @@
 package me.aartikov.sesame.activable
 
+import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleObserver
-import androidx.lifecycle.OnLifecycleEvent
+import androidx.lifecycle.LifecycleOwner
 
 /**
  * Binds [Activable] to Android [Lifecycle]: onStart is translated to [Activable.onActive], onStop to [Activable.onInactive].
@@ -11,15 +11,13 @@ fun Activable.bindToLifecycle(lifecycle: Lifecycle) {
     lifecycle.addObserver(ActivableLifecycleObserver(this))
 }
 
-private class ActivableLifecycleObserver(private val activable: Activable) : LifecycleObserver {
+private class ActivableLifecycleObserver(private val activable: Activable) : DefaultLifecycleObserver {
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_START)
-    fun onStart() {
+    override fun onStart(owner: LifecycleOwner) {
         activable.onActive()
     }
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
-    fun onStop() {
+    override fun onStop(owner: LifecycleOwner) {
         activable.onInactive()
     }
 }

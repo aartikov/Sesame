@@ -73,7 +73,7 @@ open class Loop<StateT, ActionT, EffectT>(
      * Sends action for processing
      */
     fun dispatch(action: ActionT) {
-        actionChannel.offer(action)
+        actionChannel.trySend(action)
     }
 
     private suspend fun startActionSources(scope: CoroutineScope) {

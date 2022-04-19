@@ -237,7 +237,7 @@ fun <T : Any> PagedLoading(
 ): PagedLoading<T> {
     val loader = object : PagedLoader<T> {
         override suspend fun loadFirstPage(fresh: Boolean): Page<T> =
-            loadPage(PagingInfo(0, emptyList<T>()))
+            loadPage(PagingInfo(0, emptyList()))
 
         override suspend fun loadNextPage(pagingInfo: PagingInfo<T>): Page<T> = loadPage(pagingInfo)
     }
