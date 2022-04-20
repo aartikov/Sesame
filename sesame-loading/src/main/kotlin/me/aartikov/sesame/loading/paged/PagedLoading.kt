@@ -19,7 +19,7 @@ interface PagedLoader<T : Any> {
     /**
      * Loads the next page.
      * @param pagingInfo information about the already loaded pages. See: [PagingInfo].
-     * @return page with data.
+     * @return data for the next page. Empty list means that the end of data is reached.
      */
     suspend fun loadNextPage(pagingInfo: PagingInfo<T>): Page<T>
 }
@@ -50,10 +50,12 @@ interface PagedLoading<T : Any> {
 
         /**
          * Non-empty list has been loaded.
+         * @property pageCount count of loaded pages.
          * @property data not empty list, sequentially merged data of the all loaded pages.
          * @property status see: [DataStatus].
          */
         data class Data<T>(
+            val pageCount: Int,
             val data: List<T>,
             val status: DataStatus = DataStatus.Normal
         ) : State<T>() {
@@ -234,7 +236,8 @@ fun <T : Any> PagedLoading(
     dataMerger: DataMerger<T> = SimpleDataMerger()
 ): PagedLoading<T> {
     val loader = object : PagedLoader<T> {
-        override suspend fun loadFirstPage(fresh: Boolean): Page<T> = loadPage(PagingInfo(emptyList()))
+        override suspend fun loadFirstPage(fresh: Boolean): Page<T> =
+            loadPage(PagingInfo(0, emptyList()))
 
         override suspend fun loadNextPage(pagingInfo: PagingInfo<T>): Page<T> = loadPage(pagingInfo)
     }
@@ -249,6 +252,6 @@ fun <T, R> PagedLoading.State<T>.mapData(transform: (List<T>) -> List<R>): Paged
         PagedLoading.State.Empty -> PagedLoading.State.Empty
         PagedLoading.State.Loading -> PagedLoading.State.Loading
         is PagedLoading.State.Error -> PagedLoading.State.Error(throwable)
-        is PagedLoading.State.Data -> PagedLoading.State.Data(transform(data), status)
+        is PagedLoading.State.Data -> PagedLoading.State.Data(pageCount, transform(data), status)
     }
 }

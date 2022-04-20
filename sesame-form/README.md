@@ -15,7 +15,7 @@ class FormViewModel : ViewModel(), PropertyHost {
 }
 ```
 
-2. Create controls. There are plenty of settings in `InputControl` (see [the sample](https://github.com/aartikov/Sesame/tree/master/sesame-form) for more details).
+2. Create controls. There are plenty of settings in `InputControl` (see [the sample](https://github.com/aartikov/Sesame/blob/master/sample/src/main/kotlin/me/aartikov/sesamesample/form/FormViewModel.kt) for more details).
 
 ```kotlin
 class FormViewModel : ViewModel(), PropertyHost {
@@ -60,7 +60,7 @@ After it is done controls and UI will be bound with two-way binding. When you ch
 
 ## Form validation
 
-1. Create a form validator in ViewModel (see more complex validation in [the sample](https://github.com/aartikov/Sesame/tree/master/sesame-form)):
+1. Create a form validator in ViewModel (see more complex validation in [the sample](https://github.com/aartikov/Sesame/blob/master/sample/src/main/kotlin/me/aartikov/sesamesample/form/FormViewModel.kt)):
 
 ```kotlin
     private val formValidator = formValidator {

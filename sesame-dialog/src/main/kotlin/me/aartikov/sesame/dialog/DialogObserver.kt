@@ -3,7 +3,6 @@ package me.aartikov.sesame.dialog
 import android.app.Dialog
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
-import kotlinx.coroutines.flow.collect
 
 /**
  * Allows to bind a [DialogControl] to [Dialog] and send dialog results.

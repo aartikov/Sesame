@@ -50,9 +50,9 @@ dependencies {
     implementation androidx.activityCompose
 
     implementation compose.ui
-    implementation compose.material
     implementation compose.uiTooling
-    implementation "androidx.compose.material:material-icons-extended:1.0.1"
+    implementation compose.material
+    implementation compose.materialIcons
 
     implementation decompose.core
     implementation decompose.compose

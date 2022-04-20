@@ -11,7 +11,7 @@ class Command<T> internal constructor() {
     val flow = channel.receiveAsFlow()
 
     internal fun send(command: T) {
-        channel.offer(command)
+        channel.trySend(command)
     }
 }
 

@@ -1,7 +1,6 @@
 package me.aartikov.sesame.property
 
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.dropWhile
 import kotlinx.coroutines.launch
 import kotlin.reflect.KProperty0

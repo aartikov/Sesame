@@ -11,6 +11,9 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import me.aartikov.sesame.localizedstring.LocalizedString
 
+/**
+ * Logical representation of an input field. It allows to configure an input field and manage its state from ViewModel.
+ */
 class InputControl(
     initialText: String = "",
     val singleLine: Boolean = true,
@@ -68,7 +71,7 @@ class InputControl(
     }
 
     /**
-     * Called automatically when text is changed on a view side.
+     * Should be called when text is changed on a view side.
      */
     fun onTextChanged(text: String) {
         this.text = text

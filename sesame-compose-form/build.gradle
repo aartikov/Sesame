@@ -5,7 +5,6 @@ plugins {
 
 android {
     compileSdkVersion libraryConfig.compileSdkVersion
-    buildToolsVersion libraryConfig.buildToolsVersion
 
     defaultConfig {
         minSdkVersion libraryConfig.minSdkVersion
@@ -30,10 +29,9 @@ dependencies {
     implementation androidx.lifecycle
     implementation material
     implementation coroutines.core
-    implementation 'androidx.compose.foundation:foundation:1.0.3'
 
+    implementation compose.foundation
     implementation compose.ui
-    implementation compose.material
 
     testImplementation tests.junit
     testImplementation tests.coroutinesTest

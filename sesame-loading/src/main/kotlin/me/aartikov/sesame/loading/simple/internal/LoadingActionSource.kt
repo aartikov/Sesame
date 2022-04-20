@@ -1,7 +1,6 @@
 package me.aartikov.sesame.loading.simple.internal
 
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
 import me.aartikov.sesame.loading.simple.isEmpty
 import me.aartikov.sesame.loop.ActionSource
 

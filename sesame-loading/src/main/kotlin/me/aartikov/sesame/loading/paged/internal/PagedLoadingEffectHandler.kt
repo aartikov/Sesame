@@ -19,6 +19,7 @@ internal class PagedLoadingEffectHandler<T : Any>(private val loader: PagedLoade
             is Effect.LoadFirstPage -> loadFirstPage(effect.fresh, actionConsumer)
             is Effect.LoadNextPage -> loadNextPage(effect.pagingInfo, actionConsumer)
             is Effect.CancelLoading -> cancelLoading()
+            else -> Unit
         }
     }
 
