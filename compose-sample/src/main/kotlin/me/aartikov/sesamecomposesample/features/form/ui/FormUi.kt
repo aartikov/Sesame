@@ -23,9 +23,9 @@ import me.aartikov.sesame.compose.form.control.InputControl
 import me.aartikov.sesamecomposesample.R
 import me.aartikov.sesamecomposesample.core.theme.AppTheme
 import me.aartikov.sesamecomposesample.features.form.ui.widgets.CheckboxField
-import me.aartikov.sesamecomposesample.features.form.ui.widgets.CommonTextField
 import me.aartikov.sesamecomposesample.features.form.ui.widgets.KonfettiWidget
 import me.aartikov.sesamecomposesample.features.form.ui.widgets.PasswordTextField
+import me.aartikov.sesamecomposesample.features.form.ui.widgets.TextField
 import me.aartikov.sesamecomposesample.features.menu.ui.MenuButton
 
 @Composable
@@ -48,40 +48,39 @@ fun FormUi(
                     .verticalScroll(scrollState)
                     .padding(vertical = 20.dp, horizontal = 8.dp)
             ) {
-                CommonTextField(
-                    modifier.padding(horizontal = 8.dp),
+                TextField(
                     component.nameInput,
-                    stringResource(id = R.string.name_hint)
+                    label = stringResource(id = R.string.name_hint),
+                    modifier = Modifier.padding(horizontal = 8.dp)
                 )
 
-                CommonTextField(
-                    modifier.padding(horizontal = 8.dp),
+                TextField(
                     component.emailInput,
-                    stringResource(id = R.string.email_hint)
+                    label = stringResource(id = R.string.email_hint),
+                    modifier = Modifier.padding(horizontal = 8.dp)
                 )
 
-                CommonTextField(
-                    modifier.padding(horizontal = 8.dp),
+                TextField(
                     component.phoneInput,
-                    stringResource(id = R.string.phone_hint)
+                    label = stringResource(id = R.string.phone_hint),
+                    modifier = Modifier.padding(horizontal = 8.dp)
                 )
 
                 PasswordTextField(
-                    modifier.padding(horizontal = 8.dp),
                     component.passwordInput,
-                    stringResource(id = R.string.password_hint)
+                    label = stringResource(id = R.string.password_hint),
+                    modifier = Modifier.padding(horizontal = 8.dp)
                 )
 
                 PasswordTextField(
-                    modifier.padding(horizontal = 8.dp),
                     component.confirmPasswordInput,
-                    stringResource(id = R.string.confirm_password_hint)
+                    label = stringResource(id = R.string.confirm_password_hint),
+                    modifier = Modifier.padding(horizontal = 8.dp)
                 )
 
                 CheckboxField(
-                    modifier,
                     component.termsCheckBox,
-                    stringResource(id = R.string.terms_hint)
+                    label = stringResource(id = R.string.terms_hint)
                 )
 
                 MenuButton(

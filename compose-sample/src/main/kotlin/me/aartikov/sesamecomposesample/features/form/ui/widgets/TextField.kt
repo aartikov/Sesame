@@ -21,10 +21,10 @@ import me.aartikov.sesamecomposesample.core.utils.resolve
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun CommonTextField(
-    modifier: Modifier = Modifier,
+fun TextField(
     inputControl: InputControl,
-    label: String
+    label: String,
+    modifier: Modifier = Modifier
 ) {
     val bringIntoViewRequester = remember { BringIntoViewRequester() }
 

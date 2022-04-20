@@ -21,9 +21,9 @@ import me.aartikov.sesamecomposesample.core.utils.resolve
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun CheckboxField(
-    modifier: Modifier = Modifier,
     checkControl: CheckControl,
-    label: String
+    label: String,
+    modifier: Modifier = Modifier
 ) {
     val bringIntoViewRequester = remember { BringIntoViewRequester() }
 

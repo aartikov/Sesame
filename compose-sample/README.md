@@ -1,12 +1,8 @@
-# Sample
-The sample application consists of several screens. Each screen demonstrates certain Sesame feature.
+# Compose Sample
+[The compose sample](https://github.com/aartikov/Sesame/tree/master/compose-sample) shows how to use Sesame with Jetpack Compose and [Decompose](https://github.com/arkivanov/Decompose). Each screen demonstrates certain Sesame feature.
 
-COUNTER - shows how to use properties and commands from [property](https://github.com/aartikov/Sesame/tree/master/sesame-property).  
+COUNTER - shows that we don't need [property](https://github.com/aartikov/Sesame/tree/master/sesame-property) to manage Jetpack Compose state. `mutableStateOf` and `derivedStateOf` are used instead.  
 PROFILE - loads ordinary data with [loading](https://github.com/aartikov/Sesame/tree/master/sesame-loading).  
 DIALOGS - shows how to use [dialog](https://github.com/aartikov/Sesame/tree/master/sesame-dialog) and [localized string](https://github.com/aartikov/Sesame/tree/master/sesame-localized-string).  
 MOVIES - loads paged data with [loading](https://github.com/aartikov/Sesame/tree/master/sesame-loading).  
-CLOCK - shows how to use [activable](https://github.com/aartikov/Sesame/tree/master/sesame-activable).  
-FORM - validates input fields with [form](https://github.com/aartikov/Sesame/tree/master/sesame-form).  
-The whole app - demonstrates [navigation](https://github.com/aartikov/Sesame/tree/master/sesame-navigation).  
-
-There is no sample for [loop](https://github.com/aartikov/Sesame/tree/master/sesame-loop). See [LoadingLoop](https://github.com/aartikov/Sesame/blob/master/sesame-loading/src/main/kotlin/me/aartikov/sesame/loading/simple/internal/LoadingLoop.kt) and [PagedLoadingLoop](https://github.com/aartikov/Sesame/blob/master/sesame-loading/src/main/kotlin/me/aartikov/sesame/loading/paged/internal/PagedLoadingLoop.kt) as good examples how to use it.
+FORM - validates input fields with [compose-form](https://github.com/aartikov/Sesame/tree/master/sesame-compose-form).  

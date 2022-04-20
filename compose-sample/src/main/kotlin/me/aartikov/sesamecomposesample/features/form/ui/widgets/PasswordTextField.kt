@@ -25,9 +25,9 @@ import me.aartikov.sesamecomposesample.core.utils.resolve
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun PasswordTextField(
-    modifier: Modifier = Modifier,
     inputControl: InputControl,
-    label: String
+    label: String,
+    modifier: Modifier = Modifier
 ) {
     val bringIntoViewRequester = remember { BringIntoViewRequester() }
     Column(

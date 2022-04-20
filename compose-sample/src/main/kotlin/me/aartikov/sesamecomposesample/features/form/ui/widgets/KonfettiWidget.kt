@@ -18,7 +18,11 @@ import nl.dionsegijn.konfetti.models.Size
 
 
 @Composable
-fun KonfettiWidget(width: Dp, dropKonfettiEvent: Flow<Unit>, modifier: Modifier = Modifier) {
+fun KonfettiWidget(
+    width: Dp,
+    dropKonfettiEvent: Flow<Unit>,
+    modifier: Modifier = Modifier
+) {
 
     val widthPx = with(LocalDensity.current) { width.toPx() }
     val scope = rememberCoroutineScope()

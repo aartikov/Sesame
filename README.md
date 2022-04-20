@@ -15,20 +15,22 @@ Some Sesame features are inspired by [RxPM](https://github.com/dmdevgo/RxPM) lib
 [loop](https://github.com/aartikov/Sesame/tree/master/sesame-loop) - provides a simple MVI implementation.  
 [localized string](https://github.com/aartikov/Sesame/tree/master/sesame-localized-string) - helps to deal with string resources.  
 [form](https://github.com/aartikov/Sesame/tree/master/sesame-form) - provides input field validation.  
+[compose-form](https://github.com/aartikov/Sesame/tree/master/sesame-compose-form) - same as [form](https://github.com/aartikov/Sesame/tree/master/sesame-form) but for Jetpack Compose.  
 
 Sesame components are separate modules. Use only that you like.
 
 ## Gradle Setup
 ```gradle
 dependencies {
-    implementation 'com.github.aartikov:sesame-property:1.4.0-beta1'
-    implementation 'com.github.aartikov:sesame-dialog:1.4.0-beta1'
-    implementation 'com.github.aartikov:sesame-navigation:1.4.0-beta1'
-    implementation 'com.github.aartikov:sesame-activable:1.4.0-beta1'
-    implementation 'com.github.aartikov:sesame-loading:1.4.0-beta1'
-    implementation 'com.github.aartikov:sesame-loop:1.4.0-beta1'
-    implementation 'com.github.aartikov:sesame-localized-string:1.4.0-beta1'
-    implementation 'com.github.aartikov:sesame-form:1.4.0-beta1'
+    implementation 'com.github.aartikov:sesame-property:1.5.0'
+    implementation 'com.github.aartikov:sesame-dialog:1.5.0'
+    implementation 'com.github.aartikov:sesame-navigation:1.5.0'
+    implementation 'com.github.aartikov:sesame-activable:1.5.0'
+    implementation 'com.github.aartikov:sesame-loading:1.5.0'
+    implementation 'com.github.aartikov:sesame-loop:1.5.0'
+    implementation 'com.github.aartikov:sesame-localized-string:1.5.0'
+    implementation 'com.github.aartikov:sesame-form:1.5.0'
+    implementation 'com.github.aartikov:sesame-compose-form:1.5.0'
 }
 ```
 
@@ -44,6 +46,15 @@ FORM - validates input fields with [form](https://github.com/aartikov/Sesame/tre
 The whole app - demonstrates [navigation](https://github.com/aartikov/Sesame/tree/master/sesame-navigation).  
 
 There is no sample for [loop](https://github.com/aartikov/Sesame/tree/master/sesame-loop). See [LoadingLoop](https://github.com/aartikov/Sesame/blob/master/sesame-loading/src/main/kotlin/me/aartikov/sesame/loading/simple/internal/LoadingLoop.kt) and [PagedLoadingLoop](https://github.com/aartikov/Sesame/blob/master/sesame-loading/src/main/kotlin/me/aartikov/sesame/loading/paged/internal/PagedLoadingLoop.kt) as good examples how to use it.
+
+## Compose Sample
+[The compose sample](https://github.com/aartikov/Sesame/tree/master/compose-sample) shows how to use Sesame with Jetpack Compose and [Decompose](https://github.com/arkivanov/Decompose). Each screen demonstrates certain Sesame feature.
+
+COUNTER - shows that we don't need [property](https://github.com/aartikov/Sesame/tree/master/sesame-property) to manage Jetpack Compose state. `mutableStateOf` and `derivedStateOf` are used instead.  
+PROFILE - loads ordinary data with [loading](https://github.com/aartikov/Sesame/tree/master/sesame-loading).  
+DIALOGS - shows how to use [dialog](https://github.com/aartikov/Sesame/tree/master/sesame-dialog) and [localized string](https://github.com/aartikov/Sesame/tree/master/sesame-localized-string).  
+MOVIES - loads paged data with [loading](https://github.com/aartikov/Sesame/tree/master/sesame-loading).  
+FORM - validates input fields with [compose-form](https://github.com/aartikov/Sesame/tree/master/sesame-compose-form).  
 
 ## Contact the author
 Artur Artikov <a href="mailto:a.artikov@gmail.com">a.artikov@gmail.com</a>
