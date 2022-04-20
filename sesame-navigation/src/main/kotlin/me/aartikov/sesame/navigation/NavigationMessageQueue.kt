@@ -1,6 +1,9 @@
 package me.aartikov.sesame.navigation
 
-import androidx.lifecycle.*
+import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
@@ -53,14 +56,12 @@ fun NavigationMessageQueue.bind(
 private fun resumedAsFlow(lifecycle: Lifecycle): Flow<Boolean> {
     val resumed = MutableStateFlow(lifecycle.currentState == Lifecycle.State.RESUMED)
 
-    lifecycle.addObserver(object : LifecycleObserver {
-        @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
-        fun onResume() {
+    lifecycle.addObserver(object : DefaultLifecycleObserver {
+        override fun onResume(owner: LifecycleOwner) {
             resumed.value = true
         }
 
-        @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
-        fun onPause() {
+        override fun onPause(owner: LifecycleOwner) {
             resumed.value = false
         }
     })
