@@ -21,7 +21,7 @@ class FormViewModel : ViewModel() {
 }
 ```
 
-1. Add UI (see implementation of `TextField` and `CheckboxField` in [the sample](https://github.com/aartikov/Sesame/blob/master/compose-sample/src/main/kotlin/me/aartikov/sesamecomposesample/features/form/ui/widgets/)):
+2. Add UI (see implementation of `TextField` and `CheckboxField` in [the sample](https://github.com/aartikov/Sesame/blob/master/compose-sample/src/main/kotlin/me/aartikov/sesamecomposesample/features/form/ui/widgets/)):
 ```kotlin
     TextField(
         viewModel.nameInput,
