@@ -29,6 +29,7 @@ viewModelScope.launch {
 }
 ```
 
+#### For Android View
 4. Implement `DialogObserver` in `Activity` or `Fragment`.
 ```kotlin
 class DialogsFragment : Fragment(), DialogObserver {
@@ -57,4 +58,53 @@ override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
             .create()
     }
 }
+```
+
+#### For Jetpack Compose
+4. Write a util function `ShowDialog`:
+```kotlin
+@Composable
+fun <T : Any, R : Any> ShowDialog(
+    dialogControl: DialogControl<T, R>,
+    dialog: @Composable (data: T) -> Unit
+) {
+    val state by dialogControl.stateFlow.collectAsState()
+    state.dataOrNull?.let { data ->
+        dialog(data)
+    }
+}
+```
+5. Display a dialog:
+```kotlin
+@Composable
+fun Dialog(dialog: DialogControl<String, DialogResult>) {
+    ShowDialog(dialog) { message ->
+        AlertDialog(
+            title = {
+                DialogTitle(stringResource(R.string.dialog_title))
+            },
+            text = {
+                DialogText(message)
+            },
+            confirmButton = {
+                DialogButton(
+                    text = stringResource(R.string.ok_button),
+                    onClick = {
+                        dialog.sendResult(DialogResult.Ok)
+                    }
+                )
+            },
+            dismissButton = {
+                DialogButton(
+                    text = stringResource(R.string.cancel_button),
+                    onClick = {
+                        dialog.sendResult(DialogResult.Cancel)
+                    }
+                )
+            },
+            onDismissRequest = dialog::dismiss
+        )
+    }
+}
+
 ```
