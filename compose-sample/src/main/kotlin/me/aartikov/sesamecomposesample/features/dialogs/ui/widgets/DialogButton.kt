@@ -23,7 +23,7 @@ fun DialogButton(
 
 @Preview
 @Composable
-fun CounterButtonsPreview() {
+fun DialogButtonPreview() {
     AppTheme {
         DialogButton("Cancel", onClick = {})
     }
