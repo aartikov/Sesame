@@ -2,6 +2,8 @@
 
 Provides observable properties and one-time commands.
 
+**Note**: you don't need this module in Jetpack Compose project. Use `mutableStateOf` and `derivedStateOf` instead.
+
 ## Core concepts
 
 *Observable property* - a property that notifies about its changes.

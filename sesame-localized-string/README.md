@@ -29,6 +29,8 @@ Sesame provides several implementations of `LocalizedString` and methods to crea
 `localizedString1 + localizedString2` - concatenates two `LocalizedString`s.
 
 ## Resolve localized string
+
+#### Android View
 Use `resolve` method:
 ```kotlin
 val value = someLocalizedString.resolve(context)
@@ -37,6 +39,21 @@ val value = someLocalizedString.resolve(context)
 Or `TextView` extension property:
 ```kotlin
 textView.localizedText = someLocalizedString
+```
+
+#### Jetpack Compose
+Write a util function:
+```kotlin
+@Composable
+fun LocalizedString.resolve(): String {
+    LocalConfiguration.current // required to recompose when a locale is changed
+    return resolve(LocalContext.current).toString()
+}
+``` 
+
+Use it:
+```
+Text(someLocalizedString.resolve())
 ```
 
 ## Best practice

@@ -1,6 +1,8 @@
 # Form
 Provides input field validation.
 
+**Note**: in Jetpack Compose projects use [Compose Form](https://github.com/aartikov/Sesame/tree/master/sesame-compose-form) instead.
+
 ## Controls
 Controls are building blocks for validatable forms. Sesame provides `InputControl` to input text values and `CheckControl` to input boolean values. Controls are logical representation of UI elements. They should be created in ViewModel and bound to real UI elements in View.
 

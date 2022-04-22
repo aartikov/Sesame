@@ -1,6 +1,8 @@
 # Loading
 Helps to manage state for data loading.
 
+**Note**: there is an alternative library of the same author called [Replica](https://github.com/aartikov/Replica).
+
 ## How to use?
 
 ### Ordinary loading

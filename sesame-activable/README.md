@@ -2,6 +2,8 @@
 
 Equips View Models with a very simple lifecycle.
 
+**Note**: you don't need this library if you use [Decompose](https://github.com/arkivanov/Decompose). A Decompose component has its own lifecycle.
+
 ## Why does View Model need a lifecycle?
 Despite that View Model should be abstracted away from the corresponding View (Activity or Fragment) it still needs to be aware of Android lifecycle. It is the common case when View Model subscribes to a Repository in order to update UI whenever something is changed in a database. But it is wasteful to keep a database subcription when a screen is placed to a backstack or the whole application is in background. It is better to subscribe and unsubscribe according to a lifecycle.
 
